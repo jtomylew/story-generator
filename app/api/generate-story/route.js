@@ -42,7 +42,7 @@ Please format the story with proper paragraphs and make it easy to read aloud.`;
 
     // Call OpenAI API
     const completion = await openai.chat.completions.create({
-      model: "gpt-4",
+      model: process.env.MODEL_NAME || "gpt-4o",
       messages: [
         {
           role: "system",

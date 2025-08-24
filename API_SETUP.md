@@ -9,9 +9,14 @@ To use the `/api/generate-story` endpoint, you need to configure your OpenAI API
 
 ```env
 OPENAI_API_KEY=your_openai_api_key_here
+MODEL_NAME=gpt-4o
 ```
 
 You can get your API key from: https://platform.openai.com/api-keys
+
+**Optional Configuration:**
+- `MODEL_NAME`: The OpenAI model to use (defaults to `gpt-4o` if not set)
+  - Examples: `gpt-4o`, `gpt-4`, `gpt-3.5-turbo`
 
 ## API Usage
 
