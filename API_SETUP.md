@@ -25,16 +25,23 @@ You can get your API key from: https://platform.openai.com/api-keys
 **Request Body:**
 ```json
 {
-  "newsStory": "Your news story text here..."
+  "newsStory": "Your news story text here...",
+  "readingLevel": "Elementary (ages 7-10)"
 }
 ```
+
+**Reading Level Options:**
+- `"Preschool (ages 3-5)"` - Very simple vocabulary, short sentences, lots of repetition
+- `"Early Elementary (ages 5-7)"` - Simple vocabulary, short sentences, some repetition
+- `"Elementary (ages 7-10)"` - Age-appropriate vocabulary, varied sentence structures
 
 **Success Response:**
 ```json
 {
   "success": true,
   "story": "Generated allegorical story for children...",
-  "originalNewsStory": "Original news story text..."
+  "originalNewsStory": "Original news story text...",
+  "readingLevel": "Elementary (ages 7-10)"
 }
 ```
 
@@ -54,7 +61,8 @@ const response = await fetch('/api/generate-story', {
     'Content-Type': 'application/json',
   },
   body: JSON.stringify({
-    newsStory: 'Scientists discover a new species of butterfly in the Amazon rainforest.'
+    newsStory: 'Scientists discover a new species of butterfly in the Amazon rainforest.',
+    readingLevel: 'Elementary (ages 7-10)'
   })
 });
 

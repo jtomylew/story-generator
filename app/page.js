@@ -4,6 +4,7 @@ import { useState } from 'react';
 
 export default function Home() {
   const [newsStory, setNewsStory] = useState('');
+  const [readingLevel, setReadingLevel] = useState('Elementary (ages 7-10)');
   const [generatedStory, setGeneratedStory] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
@@ -24,7 +25,10 @@ export default function Home() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ newsStory: newsStory.trim() }),
+        body: JSON.stringify({ 
+          newsStory: newsStory.trim(),
+          readingLevel: readingLevel
+        }),
       });
 
       const data = await response.json();
@@ -34,6 +38,7 @@ export default function Home() {
       }
 
       setGeneratedStory(data.story);
+      // You could also store the reading level if needed for display
     } catch (err) {
       setError(err.message || 'An error occurred while generating the story');
     } finally {
@@ -56,17 +61,43 @@ export default function Home() {
 
         {/* Input Section */}
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mb-8">
-          <label htmlFor="newsStory" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
-            News Article
-          </label>
-          <textarea
-            id="newsStory"
-            value={newsStory}
-            onChange={(e) => setNewsStory(e.target.value)}
-            placeholder="Paste a news article here..."
-            className="w-full h-32 p-4 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white resize-none"
-            disabled={isLoading}
-          />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* News Article Input */}
+            <div>
+              <label htmlFor="newsStory" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+                News Article
+              </label>
+              <textarea
+                id="newsStory"
+                value={newsStory}
+                onChange={(e) => setNewsStory(e.target.value)}
+                placeholder="Paste a news article here..."
+                className="w-full h-32 p-4 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white resize-none"
+                disabled={isLoading}
+              />
+            </div>
+
+            {/* Reading Level Selection */}
+            <div>
+              <label htmlFor="readingLevel" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+                Reading Level
+              </label>
+              <select
+                id="readingLevel"
+                value={readingLevel}
+                onChange={(e) => setReadingLevel(e.target.value)}
+                className="w-full p-4 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                disabled={isLoading}
+              >
+                <option value="Preschool (ages 3-5)">Preschool (ages 3-5)</option>
+                <option value="Early Elementary (ages 5-7)">Early Elementary (ages 5-7)</option>
+                <option value="Elementary (ages 7-10)">Elementary (ages 7-10)</option>
+              </select>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                Select the appropriate reading level for your audience
+              </p>
+            </div>
+          </div>
           
           <div className="mt-4 flex justify-between items-center">
             <div className="text-sm text-gray-500 dark:text-gray-400">
@@ -142,6 +173,7 @@ export default function Home() {
               <button
                 onClick={() => {
                   setNewsStory('');
+                  setReadingLevel('Elementary (ages 7-10)');
                   setGeneratedStory('');
                   setError('');
                 }}
