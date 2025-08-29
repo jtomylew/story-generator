@@ -47,127 +47,172 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
-            Story Generator
-          </h1>
-          <p className="text-lg text-gray-600 dark:text-gray-300">
-            Transform news articles into magical allegorical stories for children
-          </p>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-green-50 to-orange-50">
+      {/* Header */}
+      <header className="bg-gradient-to-r from-blue-600 via-green-600 to-orange-500 text-white shadow-lg">
+        <div className="container mx-auto px-4 py-6">
+          <div className="text-center">
+            <h1 className="text-4xl md:text-5xl font-bold mb-2 flex items-center justify-center gap-3">
+              <span className="text-3xl md:text-4xl">📚</span>
+              Story Weaver
+              <span className="text-3xl md:text-4xl">✨</span>
+            </h1>
+            <p className="text-lg md:text-xl text-blue-100 font-medium">
+              Transform news into magical tales for young minds
+            </p>
+          </div>
         </div>
+      </header>
 
+      <div className="container mx-auto px-4 py-8 max-w-6xl">
         {/* Input Section */}
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mb-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-8 mb-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* News Article Input */}
-            <div>
-              <label htmlFor="newsStory" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+            <div className="lg:col-span-2">
+              <label htmlFor="newsStory" className="block text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                <span className="text-2xl">📰</span>
                 News Article
               </label>
               <textarea
                 id="newsStory"
                 value={newsStory}
                 onChange={(e) => setNewsStory(e.target.value)}
-                placeholder="Paste a news article here..."
-                className="w-full h-32 p-4 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white resize-none"
+                placeholder="Paste a news article here and watch it transform into a magical story..."
+                className="w-full h-40 p-6 border-2 border-blue-200 rounded-xl focus:ring-4 focus:ring-blue-300 focus:border-blue-400 bg-white/90 resize-none text-gray-700 placeholder-gray-400 transition-all duration-300 shadow-inner"
                 disabled={isLoading}
               />
             </div>
 
             {/* Reading Level Selection */}
-            <div>
-              <label htmlFor="readingLevel" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
-                Reading Level
-              </label>
-              <select
-                id="readingLevel"
-                value={readingLevel}
-                onChange={(e) => setReadingLevel(e.target.value)}
-                className="w-full p-4 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-                disabled={isLoading}
-              >
-                <option value="Preschool (ages 3-5)">Preschool (ages 3-5)</option>
-                <option value="Early Elementary (ages 5-7)">Early Elementary (ages 5-7)</option>
-                <option value="Elementary (ages 7-10)">Elementary (ages 7-10)</option>
-              </select>
-              <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
-                Select the appropriate reading level for your audience
-              </p>
+            <div className="space-y-6">
+              <div>
+                <label htmlFor="readingLevel" className="block text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                  <span className="text-2xl">🎯</span>
+                  Reading Level
+                </label>
+                <select
+                  id="readingLevel"
+                  value={readingLevel}
+                  onChange={(e) => setReadingLevel(e.target.value)}
+                  className="w-full p-4 border-2 border-green-200 rounded-xl focus:ring-4 focus:ring-green-300 focus:border-green-400 bg-white/90 text-gray-700 transition-all duration-300 shadow-inner"
+                  disabled={isLoading}
+                >
+                  <option value="Preschool (ages 3-5)">👶 Preschool (ages 3-5)</option>
+                  <option value="Early Elementary (ages 5-7)">🎒 Early Elementary (ages 5-7)</option>
+                  <option value="Elementary (ages 7-10)">📖 Elementary (ages 7-10)</option>
+                </select>
+                <p className="text-sm text-gray-600 mt-3 leading-relaxed">
+                  Choose the perfect reading level for your young audience
+                </p>
+              </div>
+
+              {/* Generate Button */}
+              <div className="pt-4">
+                <button
+                  onClick={handleGenerateStory}
+                  disabled={isLoading || !newsStory.trim()}
+                  className="w-full px-8 py-4 bg-gradient-to-r from-blue-500 to-green-500 hover:from-blue-600 hover:to-green-600 disabled:from-gray-400 disabled:to-gray-500 text-white font-bold text-lg rounded-xl transition-all duration-300 transform hover:scale-105 disabled:transform-none shadow-lg hover:shadow-xl flex items-center justify-center gap-3"
+                >
+                  {isLoading ? (
+                    <>
+                      <div className="w-6 h-6 border-3 border-white border-t-transparent rounded-full animate-spin"></div>
+                      <span>Weaving Magic...</span>
+                    </>
+                  ) : (
+                    <>
+                      <span className="text-2xl">✨</span>
+                      <span>Weave Story</span>
+                    </>
+                  )}
+                </button>
+              </div>
+
+              {/* Character Counter */}
+              <div className="text-center">
+                <div className="text-sm text-gray-600">
+                  <span className="font-semibold">{newsStory.length}</span> characters
+                </div>
+              </div>
             </div>
-          </div>
-          
-          <div className="mt-4 flex justify-between items-center">
-            <div className="text-sm text-gray-500 dark:text-gray-400">
-              {newsStory.length} characters
-            </div>
-            <button
-              onClick={handleGenerateStory}
-              disabled={isLoading || !newsStory.trim()}
-              className="px-6 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-medium rounded-lg transition-colors duration-200 flex items-center gap-2"
-            >
-              {isLoading ? (
-                <>
-                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                  Generating...
-                </>
-              ) : (
-                <>
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                  </svg>
-                  Generate Story
-                </>
-              )}
-            </button>
           </div>
         </div>
 
         {/* Error Display */}
         {error && (
-          <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 mb-6">
-            <div className="flex items-center gap-2">
-              <svg className="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <span className="text-red-700 dark:text-red-400 font-medium">Error</span>
+          <div className="bg-red-50 border-2 border-red-200 rounded-xl p-6 mb-8 animate-fade-in">
+            <div className="flex items-center gap-3">
+              <span className="text-2xl">⚠️</span>
+              <div>
+                <h3 className="text-red-800 font-semibold text-lg">Oops!</h3>
+                <p className="text-red-700 mt-1">{error}</p>
+              </div>
             </div>
-            <p className="text-red-600 dark:text-red-300 mt-1">{error}</p>
+          </div>
+        )}
+
+        {/* Loading State */}
+        {isLoading && (
+          <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-12 mb-8 animate-fade-in">
+            <div className="text-center">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-500 to-green-500 rounded-full mb-6">
+                <div className="w-8 h-8 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+              </div>
+              <h3 className="text-2xl font-bold text-gray-800 mb-2">Creating Your Story</h3>
+              <p className="text-gray-600 text-lg">
+                Our magical weavers are crafting a special tale just for you...
+              </p>
+              <div className="mt-6 flex justify-center gap-2">
+                <div className="w-3 h-3 bg-blue-500 rounded-full animate-bounce"></div>
+                <div className="w-3 h-3 bg-green-500 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
+                <div className="w-3 h-3 bg-orange-500 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
+              </div>
+            </div>
           </div>
         )}
 
         {/* Generated Story Display */}
         {generatedStory && (
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
-            <div className="flex items-center gap-2 mb-4">
-              <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Generated Story</h2>
-            </div>
-            
-            <div className="prose prose-lg max-w-none dark:prose-invert">
-              <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 border-l-4 border-blue-500">
-                <div className="whitespace-pre-wrap text-gray-800 dark:text-gray-200 leading-relaxed">
-                  {generatedStory}
+          <div className="animate-fade-in">
+            <div className="bg-gradient-to-br from-orange-50 to-yellow-50 rounded-2xl shadow-2xl border-2 border-orange-200 p-8 mb-6">
+              <div className="flex items-center gap-3 mb-6">
+                <span className="text-3xl">📖</span>
+                <h2 className="text-3xl font-bold text-gray-800">Your Magical Story</h2>
+                <span className="text-3xl">✨</span>
+              </div>
+              
+              {/* Storybook Page */}
+              <div className="bg-white rounded-xl shadow-lg border-2 border-orange-300 p-8 md:p-12">
+                <div className="prose prose-lg max-w-none">
+                  <div className="text-gray-800 leading-relaxed text-lg md:text-xl">
+                    <div className="whitespace-pre-wrap font-serif">
+                      {generatedStory}
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Storybook Decoration */}
+                <div className="mt-8 pt-6 border-t-2 border-orange-200">
+                  <div className="flex items-center justify-center gap-4 text-orange-600">
+                    <span className="text-2xl">❦</span>
+                    <span className="text-sm font-serif italic">The End</span>
+                    <span className="text-2xl">❦</span>
+                  </div>
                 </div>
               </div>
             </div>
 
-            <div className="mt-6 flex gap-3">
+            {/* Action Buttons */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button
                 onClick={() => {
                   navigator.clipboard.writeText(generatedStory);
                   // You could add a toast notification here
                 }}
-                className="px-4 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-lg transition-colors duration-200 flex items-center gap-2"
+                className="px-8 py-4 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center gap-3"
               >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                </svg>
-                Copy Story
+                <span className="text-xl">📋</span>
+                <span>Copy Story</span>
               </button>
               
               <button
@@ -177,32 +222,34 @@ export default function Home() {
                   setGeneratedStory('');
                   setError('');
                 }}
-                className="px-4 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-lg transition-colors duration-200 flex items-center gap-2"
+                className="px-8 py-4 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center gap-3"
               >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                </svg>
-                Start Over
+                <span className="text-xl">🔄</span>
+                <span>Start New Story</span>
               </button>
             </div>
           </div>
         )}
-
-        {/* Loading State */}
-        {isLoading && (
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
-            <div className="flex items-center justify-center gap-3">
-              <div className="w-6 h-6 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-              <span className="text-gray-700 dark:text-gray-300 font-medium">
-                Creating your magical story...
-              </span>
-            </div>
-            <p className="text-center text-gray-500 dark:text-gray-400 mt-2">
-              This may take a few moments
-            </p>
-          </div>
-        )}
       </div>
+
+      {/* Footer */}
+      <footer className="bg-gradient-to-r from-blue-600 via-green-600 to-orange-500 text-white py-8 mt-16">
+        <div className="container mx-auto px-4 text-center">
+          <p className="text-lg font-medium">
+            ✨ Weaving stories that spark imagination and wonder ✨
+          </p>
+        </div>
+      </footer>
+
+      <style jsx>{`
+        @keyframes fade-in {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+          animation: fade-in 0.6s ease-out;
+        }
+      `}</style>
     </div>
   );
 }
