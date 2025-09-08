@@ -26,8 +26,10 @@ export default function Home() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ 
-          newsStory: newsStory.trim(),
-          readingLevel: readingLevel
+          articleText: newsStory.trim(),
+          readingLevel: readingLevel === 'Preschool (ages 3-5)' ? 'preschool' :
+                       readingLevel === 'Early Elementary (ages 5-7)' ? 'early-elementary' :
+                       'elementary'
         }),
       });
 

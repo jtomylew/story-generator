@@ -1,49 +1,28 @@
+import { NextResponse } from "next/server";
+import { env } from "@/lib/env";
+import { GenerateReq, formatZodIssues } from "@/lib/schema";
 import OpenAI from 'openai';
 
 // Initialize OpenAI client
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+const openai = new OpenAI({ apiKey: env.OPENAI_API_KEY });
 
-export async function POST(request) {
+export async function POST(req) {
   try {
-    // Parse the request body
-    const { newsStory, readingLevel = 'Elementary (ages 7-10)' } = await request.json();
-
-    // Validate input
-    if (!newsStory || typeof newsStory !== 'string') {
-      return Response.json(
-        { error: 'News story text is required and must be a string' },
+    const raw = await req.json();
+    const parsed = GenerateReq.safeParse(raw);
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: "BadRequest", issues: formatZodIssues(parsed.error) },
         { status: 400 }
       );
     }
+    const { articleText, readingLevel } = parsed.data;
 
-    // Validate reading level
-    const validReadingLevels = [
-      'Preschool (ages 3-5)',
-      'Early Elementary (ages 5-7)',
-      'Elementary (ages 7-10)'
-    ];
-    
-    if (!validReadingLevels.includes(readingLevel)) {
-      return Response.json(
-        { error: 'Invalid reading level selected' },
-        { status: 400 }
-      );
-    }
-
-    // Check if OpenAI API key is configured
-    if (!process.env.OPENAI_API_KEY) {
-      return Response.json(
-        { error: 'OpenAI API key is not configured' },
-        { status: 500 }
-      );
-    }
 
     // Create age-appropriate prompt based on reading level
     const getAgeSpecificPrompt = (level) => {
       switch (level) {
-        case 'Preschool (ages 3-5)':
+        case 'preschool':
           return `Create a very simple allegorical story for preschoolers (ages 3-5). The story should:
 - Use very simple words and short sentences (2-4 words per sentence)
 - Include lots of repetition and rhyming
@@ -54,7 +33,7 @@ export async function POST(request) {
 - Be perfect for reading aloud to very young children
 - Use bright, simple imagery and happy endings`;
         
-        case 'Early Elementary (ages 5-7)':
+        case 'early-elementary':
           return `Create an allegorical story for early elementary children (ages 5-7). The story should:
 - Use simple vocabulary and short sentences
 - Include some repetition and rhythm
@@ -65,7 +44,7 @@ export async function POST(request) {
 - Be engaging for beginning readers
 - Use descriptive but simple language`;
         
-        case 'Elementary (ages 7-10)':
+        case 'elementary':
           return `Create an allegorical story for elementary children (ages 7-10). The story should:
 - Use age-appropriate vocabulary with some challenging words
 - Include varied sentence structures
@@ -88,7 +67,7 @@ export async function POST(request) {
       }
     };
 
-    const prompt = `Based on this news story: "${newsStory}"
+    const prompt = `Based on this news story: "${articleText}"
 
 ${getAgeSpecificPrompt(readingLevel)}
 
@@ -115,17 +94,17 @@ Please format the story with proper paragraphs and make it easy to read aloud.`;
     const generatedStory = completion.choices[0]?.message?.content;
 
     if (!generatedStory) {
-      return Response.json(
+      return NextResponse.json(
         { error: 'Failed to generate story' },
         { status: 500 }
       );
     }
 
     // Return the generated story
-    return Response.json({
+    return NextResponse.json({
       success: true,
       story: generatedStory,
-      originalNewsStory: newsStory,
+      originalNewsStory: articleText,
       readingLevel: readingLevel
     });
 
@@ -134,28 +113,28 @@ Please format the story with proper paragraphs and make it easy to read aloud.`;
 
     // Handle specific OpenAI errors
     if (error.status === 401) {
-      return Response.json(
+      return NextResponse.json(
         { error: 'Invalid OpenAI API key' },
         { status: 401 }
       );
     }
 
     if (error.status === 429) {
-      return Response.json(
+      return NextResponse.json(
         { error: 'Rate limit exceeded. Please try again later.' },
         { status: 429 }
       );
     }
 
     if (error.status === 500) {
-      return Response.json(
+      return NextResponse.json(
         { error: 'OpenAI service is currently unavailable' },
         { status: 503 }
       );
     }
 
     // Generic error response
-    return Response.json(
+    return NextResponse.json(
       { error: 'An error occurred while generating the story' },
       { status: 500 }
     );
@@ -164,21 +143,21 @@ Please format the story with proper paragraphs and make it easy to read aloud.`;
 
 // Handle unsupported HTTP methods
 export async function GET() {
-  return Response.json(
+  return NextResponse.json(
     { error: 'Method not allowed. Use POST to generate a story.' },
     { status: 405 }
   );
 }
 
 export async function PUT() {
-  return Response.json(
+  return NextResponse.json(
     { error: 'Method not allowed. Use POST to generate a story.' },
     { status: 405 }
   );
 }
 
 export async function DELETE() {
-  return Response.json(
+  return NextResponse.json(
     { error: 'Method not allowed. Use POST to generate a story.' },
     { status: 405 }
   );
