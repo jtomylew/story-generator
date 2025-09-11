@@ -6,7 +6,7 @@
  */
 
 import React from "react";
-import { Dialog } from "../components/Dialog";
+import { Dialog } from "../Dialog";
 import * as SubframeUtils from "../utils";
 
 interface DialogLayoutRootProps extends React.ComponentProps<typeof Dialog> {

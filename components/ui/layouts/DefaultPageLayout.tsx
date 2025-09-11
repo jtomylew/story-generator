@@ -23,10 +23,10 @@ import { FeatherTent } from "@subframe/core";
 import { FeatherUser } from "@subframe/core";
 import { FeatherWebhook } from "@subframe/core";
 import * as SubframeCore from "@subframe/core";
-import { Avatar } from "../components/Avatar";
-import { DropdownMenu } from "../components/DropdownMenu";
-import { IconButton } from "../components/IconButton";
-import { SidebarWithSections } from "../components/SidebarWithSections";
+import { Avatar } from "../Avatar";
+import { DropdownMenu } from "../DropdownMenu";
+import { IconButton } from "../IconButton";
+import { SidebarWithSections } from "../SidebarWithSections";
 import * as SubframeUtils from "../utils";
 
 interface DefaultPageLayoutRootProps
