@@ -301,6 +301,53 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 - **Outcome**: Existing app now fully leverages design system with 0 TypeScript errors and preserved functionality
 - **Files**: `app/globals.css`, `components/StoryForm.tsx`, `components/StoryOutput.tsx`
 
+### ADR-017: External AI Tool Integration & Sync ✅
+
+**Week 2, Day 4**
+
+- **Decision**: Enforce a single mapping between external AI tools (Subframe, Lovable, v0, etc.) and our repo so changes always land in the same files.
+- **Canonical structure**:
+    - `src/components/ui/*` (atoms / shadcn over Radix)
+    - `src/components/patterns/*` (molecules)
+    - `src/components/screens/*` (screens/sections)
+    - Stories colocated or under `stories/*` (consistent per component family)
+- **Subframe policy**:
+    - Subframe edits its own project; we pull into the repo via CLI.
+    - Sync root: `./src/components` (set during `npx @subframe/cli init`).
+    - Subframe must **update in place** using our canonical paths.
+    - Tailwind config/tokens remain the source of truth in the repo.
+- **Guardrails**:
+    - Lint: block foreign UI libs via `no-restricted-imports`.
+    - Token discipline: no inline hex or arbitrary px values.
+    - A11y: Radix semantics; visible focus; `<Label htmlFor>`; aria-*.
+    - Each changed component requires/upgrades a Storybook story.
+- **CI/Local checks**:
+    - Require `npm run typecheck` to pass.
+    - Build Storybook (or run dev) on PRs touching `src/components/**`.
+    - Optional: Chromatic visual diffs.
+- **CLI & scripts** (add to `package.json`):
+    ```json
+    {
+      "scripts": {
+        "typecheck": "tsc --noEmit",
+        "storybook": "storybook dev -p 6006",
+        "build-storybook": "storybook build",
+        "find:strays": "rg -n \"(src/subframe|^components/|^subframe/)\" src || true",
+        "find:raw-primitives": "rg -n \"<(button|input|select|textarea)(\\\\s|>)\" src/components --glob '!src/components/ui/**' || true"
+      }
+    }
+    ```
+- **Workflow**:
+    1. Edit/design in Subframe (target explicit canonical paths)
+    2. Pull to repo: `npx @subframe/cli@latest sync --all`
+    3. Verify locally: `npm run typecheck && npm run storybook && npm run dev`
+    4. Fix/organize imports; ensure DS compliance; commit PR → Vercel deploys
+    - **Status**: Adopted
+    - **Note**: If you don't have ripgrep `rg`, swap those scripts for grep equivalents or omit
+- **Rationale**: Prevents component library conflicts and ensures consistent development experience across AI tools
+- **Outcome**: Successfully integrated Subframe component library while maintaining existing functionality and design system contracts
+- **Files**: `components/ui/`, `tsconfig.json`, `package.json`, `.subframe/sync.json`
+
 ---
 
 ## Current Status & Technical Debt
@@ -317,6 +364,7 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 - ✅ Professional documentation and version control
 - ✅ Design system foundation with tokenized styling and UI primitives
 - ✅ Design system cascade across existing app with preserved functionality
+- ✅ External AI tool integration (Subframe) with canonical component structure
 
 **Known limitations & planned mitigations**
 
