@@ -1,7 +1,7 @@
 "use client";
 /*
  * Documentation:
- * Link Button — https://app.subframe.com/library?component=Link+Button_a4ee726a-774c-4091-8c49-55b659356024
+ * Link Button — https://app.subframe.com/1e76ad462093/library?component=Link+Button_a4ee726a-774c-4091-8c49-55b659356024
  */
 
 import React from "react";

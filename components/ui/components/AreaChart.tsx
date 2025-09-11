@@ -1,7 +1,7 @@
 "use client";
 /*
  * Documentation:
- * Area Chart — https://app.subframe.com/library?component=Area+Chart_8aa1e7b3-5db6-4a62-aa49-137ced21a231
+ * Area Chart — https://app.subframe.com/1e76ad462093/library?component=Area+Chart_8aa1e7b3-5db6-4a62-aa49-137ced21a231
  */
 
 import React from "react";
@@ -27,12 +27,12 @@ const AreaChartRoot = React.forwardRef<
       ref={ref}
       stacked={stacked}
       colors={[
-        "#737373",
-        "#e5e5e5",
-        "#262626",
-        "#d4d4d4",
-        "#404040",
-        "#a3a3a3",
+        "#3b82f6",
+        "#bfdbfe",
+        "#2563eb",
+        "#93c5fd",
+        "#1d4ed8",
+        "#60a5fa",
       ]}
       {...otherProps}
     />

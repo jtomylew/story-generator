@@ -1,7 +1,7 @@
 "use client";
 /*
  * Documentation:
- * Switch — https://app.subframe.com/library?component=Switch_7a464794-9ea9-4040-b1de-5bfb2ce599d9
+ * Switch — https://app.subframe.com/1e76ad462093/library?component=Switch_7a464794-9ea9-4040-b1de-5bfb2ce599d9
  */
 
 import React from "react";

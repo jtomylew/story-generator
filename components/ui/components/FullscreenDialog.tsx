@@ -1,7 +1,7 @@
 "use client";
 /*
  * Documentation:
- * Fullscreen Dialog — https://app.subframe.com/library?component=Fullscreen+Dialog_3f094173-71de-4378-a09a-05c482f7a137
+ * Fullscreen Dialog — https://app.subframe.com/1e76ad462093/library?component=Fullscreen+Dialog_3f094173-71de-4378-a09a-05c482f7a137
  */
 
 import React from "react";
