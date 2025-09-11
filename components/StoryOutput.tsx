@@ -1,7 +1,8 @@
+// @subframe/sync-disable
 'use client';
 
 import type { RequestState } from '@/lib/ui-types';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui';
 
 interface StoryOutputProps {
   state: RequestState;
@@ -112,6 +113,8 @@ export default function StoryOutput({ state, onReset }: StoryOutputProps) {
           
           <Button
             onClick={onReset}
+            variant="brand-primary"
+            size="large"
             className="px-8 py-4 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold rounded-xl motion-medium transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center gap-3"
           >
             <span className="text-xl">🔄</span>

@@ -1,9 +1,10 @@
+// @subframe/sync-disable
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
 import type { GenerateReq, ReadingLevel } from '@/lib/types';
-import { Button } from '@/components/ui/button';
-import { Select } from '@/components/ui/select';
+import { Button } from '@/components/ui';
+// import { Select } from '@/components/ui';
 
 interface StoryFormProps {
   onSubmit: (req: GenerateReq) => void;
@@ -94,7 +95,7 @@ export default function StoryForm({
                 <span className="text-2xl">🎯</span>
                 Reading Level
               </label>
-              <Select
+              <select
                 id="readingLevel"
                 value={readingLevel}
                 onChange={(e) => setReadingLevel(e.target.value as ReadingLevel)}
@@ -104,7 +105,7 @@ export default function StoryForm({
                 <option value="preschool">👶 Preschool (ages 3-5)</option>
                 <option value="early-elementary">🎒 Early Elementary (ages 5-7)</option>
                 <option value="elementary">📖 Elementary (ages 7-10)</option>
-              </Select>
+              </select>
               <p className="text-sm text-muted mt-3 leading-relaxed">
                 Choose the perfect reading level for your young audience
               </p>
@@ -115,6 +116,8 @@ export default function StoryForm({
               <Button
                 type="submit"
                 disabled={!canSubmit}
+                variant="brand-primary"
+                size="large"
                 className="w-full px-8 py-4 bg-gradient-to-r from-blue-500 to-green-500 hover:from-blue-600 hover:to-green-600 disabled:from-gray-400 disabled:to-gray-500 text-white font-bold text-lg rounded-xl motion-medium transform hover:scale-105 disabled:transform-none shadow-lg hover:shadow-xl flex items-center justify-center gap-3"
                 aria-busy={isSubmitting}
               >

@@ -1,10 +1,6 @@
 'use client'
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Skeleton } from '@/components/ui/skeleton'
-import { Button } from '@/components/ui/button'
-import { Spinner } from '@/components/ui/spinner'
-import { Badge } from '@/components/ui/badge'
+// import { Card, CardContent, CardDescription, CardHeader, CardTitle, Skeleton, Button, Spinner, Badge } from '@/components/ui'
 
 interface StoryPreviewPlaceholderProps {
   isLoading?: boolean
@@ -12,109 +8,85 @@ interface StoryPreviewPlaceholderProps {
   className?: string
 }
 
-export function StoryPreviewPlaceholder({ 
-  isLoading = false, 
-  hasError = false, 
-  className 
-}: StoryPreviewPlaceholderProps) {
-  if (isLoading) {
+export function StoryPreviewPlaceholder({ isLoading = false, hasError = false, className }: StoryPreviewPlaceholderProps) {
+  if (hasError) {
     return (
-      <Card className={className}>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Spinner size="sm" />
-            Creating Your Story
-          </CardTitle>
-          <CardDescription>
-            Our magical weavers are crafting a special tale just for you...
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex gap-2">
-            <Badge variant="secondary">Preschool</Badge>
-            <Skeleton className="h-6 w-20" />
-          </div>
-          <div className="space-y-3">
-            <Skeleton className="h-4 w-full" />
-            <Skeleton className="h-4 w-full" />
-            <Skeleton className="h-4 w-3/4" />
-            <Skeleton className="h-4 w-full" />
-            <Skeleton className="h-4 w-5/6" />
-          </div>
-          <div className="flex justify-center gap-2">
-            <div className="w-3 h-3 bg-primary rounded-full animate-bounce"></div>
-            <div className="w-3 h-3 bg-secondary rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-            <div className="w-3 h-3 bg-accent rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-          </div>
-        </CardContent>
-      </Card>
+      <div className={`border border-red-200 rounded-lg p-6 bg-red-50 ${className}`}>
+        <div className="mb-4">
+          <h3 className="text-lg font-semibold text-red-800 flex items-center gap-2">
+            <span className="text-xl">⚠️</span>
+            Error Generating Story
+          </h3>
+          <p className="text-sm text-red-600">
+            Something went wrong while creating your story
+          </p>
+        </div>
+        <button className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors">
+          Try Again
+        </button>
+      </div>
     )
   }
 
-  if (hasError) {
+  if (isLoading) {
     return (
-      <Card className={className}>
-        <CardHeader>
-          <CardTitle className="text-destructive">Oops! Something went wrong</CardTitle>
-          <CardDescription>
-            We encountered an error while generating your story
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="p-4 border border-destructive/20 bg-destructive/5 rounded-lg">
-            <p className="text-sm text-destructive">
-              Please try again or contact support if the problem persists.
-            </p>
+      <div className={`border rounded-lg p-6 ${className}`}>
+        <div className="mb-4">
+          <h3 className="text-lg font-semibold flex items-center gap-2">
+            <div className="w-4 h-4 border-2 border-green-500 border-t-transparent rounded-full animate-spin" />
+            Crafting Your Story...
+          </h3>
+          <p className="text-sm text-muted-foreground">
+            Our story weavers are working their magic
+          </p>
+        </div>
+        <div className="space-y-4">
+          <div className="space-y-2">
+            <div className="h-4 w-[150px] bg-gray-200 rounded animate-pulse" />
+            <div className="h-4 w-[200px] bg-gray-200 rounded animate-pulse" />
+            <div className="h-4 w-[180px] bg-gray-200 rounded animate-pulse" />
           </div>
-          <Button 
-            variant="outline" 
-            className="w-full transition-all duration-[var(--motion-medium)] ease-[var(--ease-out)]"
-          >
-            Try Again
-          </Button>
-        </CardContent>
-      </Card>
+          <div className="space-y-2">
+            <div className="h-4 w-full bg-gray-200 rounded animate-pulse" />
+            <div className="h-4 w-full bg-gray-200 rounded animate-pulse" />
+            <div className="h-4 w-3/4 bg-gray-200 rounded animate-pulse" />
+          </div>
+          <div className="space-y-2">
+            <div className="h-4 w-full bg-gray-200 rounded animate-pulse" />
+            <div className="h-4 w-5/6 bg-gray-200 rounded animate-pulse" />
+          </div>
+        </div>
+      </div>
     )
   }
 
   return (
-    <Card className={className}>
-      <CardHeader>
-        <CardTitle>Your Magical Story</CardTitle>
-        <CardDescription>
-          Generated stories will appear here
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="flex gap-2">
-          <Badge variant="secondary">Reading Level</Badge>
-          <Skeleton className="h-6 w-20" />
+    <div className={`border rounded-lg p-6 ${className}`}>
+      <div className="mb-4">
+        <h3 className="text-lg font-semibold flex items-center gap-2">
+          <span className="text-2xl">📖</span>
+          Generated Story
+        </h3>
+        <p className="text-sm text-muted-foreground">
+          Your magical story will appear here
+        </p>
+      </div>
+      <div className="space-y-4">
+        <div className="space-y-2">
+          <div className="h-4 w-[150px] bg-gray-200 rounded animate-pulse" />
+          <div className="h-4 w-[200px] bg-gray-200 rounded animate-pulse" />
+          <div className="h-4 w-[180px] bg-gray-200 rounded animate-pulse" />
         </div>
-        <div className="space-y-3">
-          <Skeleton className="h-4 w-full" />
-          <Skeleton className="h-4 w-full" />
-          <Skeleton className="h-4 w-3/4" />
-          <Skeleton className="h-4 w-full" />
-          <Skeleton className="h-4 w-5/6" />
-          <Skeleton className="h-4 w-full" />
-          <Skeleton className="h-4 w-2/3" />
+        <div className="space-y-2">
+          <div className="h-4 w-full bg-gray-200 rounded animate-pulse" />
+          <div className="h-4 w-full bg-gray-200 rounded animate-pulse" />
+          <div className="h-4 w-3/4 bg-gray-200 rounded animate-pulse" />
         </div>
-        <div className="flex gap-2 pt-4">
-          <Button 
-            disabled 
-            className="flex-1 transition-all duration-[var(--motion-medium)] ease-[var(--ease-out)]"
-          >
-            Copy Story
-          </Button>
-          <Button 
-            variant="outline" 
-            disabled 
-            className="flex-1 transition-all duration-[var(--motion-medium)] ease-[var(--ease-out)]"
-          >
-            Share
-          </Button>
+        <div className="space-y-2">
+          <div className="h-4 w-full bg-gray-200 rounded animate-pulse" />
+          <div className="h-4 w-5/6 bg-gray-200 rounded animate-pulse" />
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   )
 }

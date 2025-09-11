@@ -1,9 +1,6 @@
 'use client'
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Skeleton } from '@/components/ui/skeleton'
-import { Button } from '@/components/ui/button'
-import { Spinner } from '@/components/ui/spinner'
+// import { Card, CardContent, CardDescription, CardHeader, CardTitle, Skeleton, Button, Spinner } from '@/components/ui'
 
 interface StoryFormPlaceholderProps {
   isLoading?: boolean
@@ -13,55 +10,55 @@ interface StoryFormPlaceholderProps {
 export function StoryFormPlaceholder({ isLoading = false, className }: StoryFormPlaceholderProps) {
   if (isLoading) {
     return (
-      <Card className={className}>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Spinner size="sm" />
+      <div className={`border rounded-lg p-6 ${className}`}>
+        <div className="mb-4">
+          <h3 className="text-lg font-semibold flex items-center gap-2">
+            <div className="w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
             Generating Story...
-          </CardTitle>
-          <CardDescription>
+          </h3>
+          <p className="text-sm text-muted-foreground">
             Our magical weavers are crafting your story
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
+          </p>
+        </div>
+        <div className="space-y-4">
           <div className="space-y-2">
-            <Skeleton className="h-4 w-[100px]" />
-            <Skeleton className="h-32 w-full" />
+            <div className="h-4 w-[100px] bg-gray-200 rounded animate-pulse" />
+            <div className="h-32 w-full bg-gray-200 rounded animate-pulse" />
           </div>
           <div className="space-y-2">
-            <Skeleton className="h-4 w-[120px]" />
-            <Skeleton className="h-10 w-full" />
+            <div className="h-4 w-[120px] bg-gray-200 rounded animate-pulse" />
+            <div className="h-10 w-full bg-gray-200 rounded animate-pulse" />
           </div>
-          <Skeleton className="h-10 w-32" />
-        </CardContent>
-      </Card>
+          <div className="h-10 w-32 bg-gray-200 rounded animate-pulse" />
+        </div>
+      </div>
     )
   }
 
   return (
-    <Card className={className}>
-      <CardHeader>
-        <CardTitle>Story Generator Form</CardTitle>
-        <CardDescription>
+    <div className={`border rounded-lg p-6 ${className}`}>
+      <div className="mb-4">
+        <h3 className="text-lg font-semibold">Story Generator Form</h3>
+        <p className="text-sm text-muted-foreground">
           Paste a news article and select a reading level to generate a magical story
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-4">
+        </p>
+      </div>
+      <div className="space-y-4">
         <div className="space-y-2">
-          <Skeleton className="h-4 w-[100px]" />
-          <Skeleton className="h-32 w-full" />
+          <div className="h-4 w-[100px] bg-gray-200 rounded animate-pulse" />
+          <div className="h-32 w-full bg-gray-200 rounded animate-pulse" />
         </div>
         <div className="space-y-2">
-          <Skeleton className="h-4 w-[120px]" />
-          <Skeleton className="h-10 w-full" />
+          <div className="h-4 w-[120px] bg-gray-200 rounded animate-pulse" />
+          <div className="h-10 w-full bg-gray-200 rounded animate-pulse" />
         </div>
-        <Button 
+        <button 
           disabled 
-          className="w-full transition-all duration-[var(--motion-medium)] ease-[var(--ease-out)]"
+          className="w-full px-4 py-2 bg-gray-300 rounded transition-all duration-300"
         >
           Generate Story
-        </Button>
-      </CardContent>
-    </Card>
+        </button>
+      </div>
+    </div>
   )
 }
