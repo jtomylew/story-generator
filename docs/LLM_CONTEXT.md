@@ -206,6 +206,38 @@ When implementing or scaffolding UI, add **hooks/slots** for microinteractions b
 **Radix-first a11y:**
 - Use Radix primitives (Dialog, Tooltip, Toast) for focus trapping/ARIA; style via shadcn.
 
+### Tool Adapters (Agnostic + Subframe-specific)
+
+**Always-on rules for any AI tool (Cursor, Subframe, Lovable, v0):**
+- Update **existing files in place**; do **not** create duplicates.
+- Canonical paths:
+  - Atoms (primitives): `src/components/ui/*`
+  - Molecules (patterns): `src/components/patterns/*`
+  - Screens: `src/components/screens/*`
+- Imports must be `@/components/ui/*` (shadcn over Radix).
+- Styling must use Tailwind **tokens** from `/styles/tokens.css` + `tailwind.config.ts`. No inline hex or arbitrary px.
+- A11y: Radix semantics; keep focus rings; connect `<Label htmlFor>`; add aria-*.
+- Microinteractions: use motion tokens (`--motion-fast/medium/slow`, `--ease-*`), `<Spinner />`, `<Skeleton />`.
+
+**Subframe adapter (when using Subframe):**
+- Subframe project path must mirror repo structure. Treat these as the *only* valid paths:
+  - `src/components/ui/*`
+  - `src/components/patterns/*`
+  - `src/components/screens/*`
+- When asked to **“update in place”**, overwrite those exact files/paths.
+- Do **not** modify Tailwind config; respect tokens as the source of truth.
+- If a file should never be overwritten, it will include at top:
+	- ```ts
+  // @subframe/sync-disable
+	  ```
+
+**Standard Task Header (paste before any request):**
+> Use `/docs/LLM_CONTEXT.md` + ADR-014/ADR-015.  
+> **Update existing files in place** at the explicit paths I list.  
+> Use `@/components/ui/*` primitives and Tailwind tokens.  
+> Add or update a Storybook story (default + one variant).  
+> Preserve logic and APIs; no new libraries.
+
 ## Status snapshot (update as you go)
 - ✅ MVP shipped: paste → select level → generate → read; deployed on Vercel
 - ✅ Zod env + request validation complete
