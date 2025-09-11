@@ -1,21 +1,27 @@
+import "server-only";
+export const runtime = "nodejs";
+
 import { NextResponse } from "next/server";
 import { GenerateReq, formatZodIssues } from "@/lib/schema";
 import { openai } from "@/lib/openai";
+import type { ApiError } from "@/lib/ui-types";
 
-export async function POST(req) {
+export async function POST(req: Request) {
   try {
     const raw = await req.json();
     const parsed = GenerateReq.safeParse(raw);
     if (!parsed.success) {
-      return NextResponse.json(
-        { error: "BadRequest", issues: formatZodIssues(parsed.error) },
-        { status: 400 }
-      );
+      const error: ApiError = {
+        message: "Invalid request data",
+        code: "BAD_REQUEST",
+        issues: formatZodIssues(parsed.error)
+      };
+      return NextResponse.json(error, { status: 400 });
     }
     const { articleText, readingLevel } = parsed.data;
 
     // Create age-appropriate prompt based on reading level
-    const getAgeSpecificPrompt = (level) => {
+    const getAgeSpecificPrompt = (level: string) => {
       switch (level) {
         case 'preschool':
           return `Create a very simple allegorical story for preschoolers (ages 3-5). The story should:
@@ -89,10 +95,11 @@ Please format the story with proper paragraphs and make it easy to read aloud.`;
     const generatedStory = completion.choices[0]?.message?.content;
 
     if (!generatedStory) {
-      return NextResponse.json(
-        { error: 'Failed to generate story' },
-        { status: 500 }
-      );
+      const error: ApiError = {
+        message: 'Failed to generate story',
+        code: 'INTERNAL_ERROR'
+      };
+      return NextResponse.json(error, { status: 500 });
     }
 
     // Return the generated story
@@ -103,57 +110,64 @@ Please format the story with proper paragraphs and make it easy to read aloud.`;
       readingLevel: readingLevel
     });
 
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error generating story:', error);
 
     // Handle specific OpenAI errors
     if (error.status === 401) {
-      return NextResponse.json(
-        { error: 'Invalid OpenAI API key' },
-        { status: 401 }
-      );
+      const apiError: ApiError = {
+        message: 'Invalid OpenAI API key',
+        code: 'INTERNAL_ERROR'
+      };
+      return NextResponse.json(apiError, { status: 401 });
     }
 
     if (error.status === 429) {
-      return NextResponse.json(
-        { error: 'Rate limit exceeded. Please try again later.' },
-        { status: 429 }
-      );
+      const apiError: ApiError = {
+        message: 'Rate limit exceeded. Please try again later.',
+        code: 'RATE_LIMITED'
+      };
+      return NextResponse.json(apiError, { status: 429 });
     }
 
     if (error.status === 500) {
-      return NextResponse.json(
-        { error: 'OpenAI service is currently unavailable' },
-        { status: 503 }
-      );
+      const apiError: ApiError = {
+        message: 'OpenAI service is currently unavailable',
+        code: 'INTERNAL_ERROR'
+      };
+      return NextResponse.json(apiError, { status: 503 });
     }
 
     // Generic error response
-    return NextResponse.json(
-      { error: 'An error occurred while generating the story' },
-      { status: 500 }
-    );
+    const apiError: ApiError = {
+      message: 'An error occurred while generating the story',
+      code: 'INTERNAL_ERROR'
+    };
+    return NextResponse.json(apiError, { status: 500 });
   }
 }
 
 // Handle unsupported HTTP methods
 export async function GET() {
-  return NextResponse.json(
-    { error: 'Method not allowed. Use POST to generate a story.' },
-    { status: 405 }
-  );
+  const error: ApiError = {
+    message: 'Method not allowed. Use POST to generate a story.',
+    code: 'BAD_REQUEST'
+  };
+  return NextResponse.json(error, { status: 405 });
 }
 
 export async function PUT() {
-  return NextResponse.json(
-    { error: 'Method not allowed. Use POST to generate a story.' },
-    { status: 405 }
-  );
+  const error: ApiError = {
+    message: 'Method not allowed. Use POST to generate a story.',
+    code: 'BAD_REQUEST'
+  };
+  return NextResponse.json(error, { status: 405 });
 }
 
 export async function DELETE() {
-  return NextResponse.json(
-    { error: 'Method not allowed. Use POST to generate a story.' },
-    { status: 405 }
-  );
+  const error: ApiError = {
+    message: 'Method not allowed. Use POST to generate a story.',
+    code: 'BAD_REQUEST'
+  };
+  return NextResponse.json(error, { status: 405 });
 }

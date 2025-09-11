@@ -40,6 +40,31 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 
 ---
 
+## Week 2 Summary ✅
+
+**Goals**
+
+- Establish professional code quality and type safety
+- Implement robust error handling and request lifecycle management
+- Create scalable architecture foundation
+
+**What we shipped**
+
+- ✅ Environment validation: Zod schema validation with server-only imports
+- ✅ API contract validation: Comprehensive request/response schemas with structured errors
+- ✅ Type-safe architecture: Full TypeScript migration with RequestState union types
+- ✅ Request lifecycle: AbortController implementation for memory safety
+- ✅ Centralized services: OpenAI client abstraction with validated environment
+- ✅ Documentation: ADR-based decision tracking and project documentation
+- ✅ GitHub integration: Professional commit history and version control
+
+**Status snapshot**
+
+- Built: type-safe, production-ready architecture with proper error handling
+- Gaps: component extraction, prompt externalization, caching, persistence, analytics
+
+---
+
 ## Architecture Decision Records (ADRs)
 
 ### ADR-001: Framework Selection (Next.js + Tailwind) ✅
@@ -146,26 +171,36 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 - **Learning outcome**: Successfully implemented comprehensive API validation with clear error messages
 - **Files**: `lib/schema.ts`, updated `app/api/generate-story/route.js`, updated `app/page.js`
 
-### ADR-009: Component Architecture 🔜
+### ADR-009: Type-Safe Architecture with Request State Management ✅
 
-**Week 2, Day 2**
+**Week 2, Day 1**
 
-- **Decision**: Extract UI into StoryForm and StoryOutput components with TypeScript
-- **Previous state**: Monolithic page component with mixed concerns
-- **Rationale**: Reusability, easier testing, clearer separation of concerns
-- **TypeScript benefit**: Better props validation and development experience
-- **Learning objective**: Understanding React component patterns and TypeScript integration
-- **Files**: `components/StoryForm.tsx`, `components/StoryOutput.tsx`
+- **Decision**: Implement comprehensive type system with RequestState union and centralized services
+- **Previous limitation**: Mixed JavaScript/TypeScript with no request lifecycle management
+- **Implementation**:
+    - Created `lib/types.ts` for type-only exports from Zod schemas
+    - Created `lib/ui-types.ts` with `RequestState` union and `ApiError` interface
+    - Created `lib/openai.ts` with centralized OpenAI client using validated env
+    - Refactored `app/page.js` → `app/page.tsx` with full TypeScript
+    - Implemented `AbortController` for request cancellation and cleanup
+    - Created consistent `/api/generate` endpoint
+    - Added proper error mapping to `ApiError` shape
+- **Rationale**: Type safety, better error handling, request lifecycle management, memory safety
+- **Learning outcome**: Successfully implemented professional-grade type-safe architecture
+- **Files**: `lib/types.ts`, `lib/ui-types.ts`, `lib/openai.ts`, `app/page.tsx`, `app/api/generate/route.js`
 
-### ADR-010: OpenAI Client Abstraction 🔜
+### ADR-010: OpenAI Client Abstraction ✅
 
-**Week 2, Day 3**
+**Week 2, Day 1**
 
 - **Decision**: Centralized OpenAI client configuration in `lib/openai.ts`
 - **Previous limitation**: API client setup repeated in route handlers
-- **Implementation**: Configured client using validated environment variables from ADR-007
+- **Implementation**: 
+    - Created `lib/openai.ts` with server-only import
+    - Configured client using validated environment variables from ADR-007
+    - Updated all API routes to use centralized client
 - **Rationale**: Single source of truth for AI configuration; easier testing and modification
-- **Future considerations**: Support for multiple models and providers
+- **Learning outcome**: Successfully centralized OpenAI client with proper environment validation
 - **Files**: `lib/openai.ts`, updated API routes
 
 ### ADR-011: Prompt Management Strategy 🔜
@@ -206,9 +241,13 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 
 **Completed capabilities**
 
-- Functional story generation with three reading levels
-- Responsive web interface with kid-friendly design
-- Production deployment with automated CI/CD
+- ✅ Functional story generation with three reading levels
+- ✅ Responsive web interface with kid-friendly design
+- ✅ Production deployment with automated CI/CD
+- ✅ Type-safe architecture with comprehensive error handling
+- ✅ Request lifecycle management with memory safety
+- ✅ Environment validation and centralized service configuration
+- ✅ Professional documentation and version control
 
 **Known limitations & planned mitigations**
 
@@ -218,6 +257,9 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 - **Word-range drift** → Post-check word count & structure; regenerate if out of bounds (Week 2) 🔜
 - **Manual paste only** → Add URL ingestion with article extraction (Week 4: Readability.js) 🔜
 - **No analytics/monitoring** → Add error tracking and usage analytics (Week 4: Sentry + PostHog) 🔜
+- **Monolithic page component** → Extract StoryForm and StoryOutput components (Week 2: ADR-011) 🔜
+- **Hardcoded prompts** → Externalize to markdown files for versioning (Week 2: ADR-011) 🔜
+- **No response validation** → Implement GenerateRes schema validation before returning (Week 2) 🔜
 
 ---
 
@@ -226,11 +268,11 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 **Week 2: Code Quality & Organization**
 
 1. Environment + request validation (ADR-007/008) ✅
-2. Component extraction + TypeScript improvements (ADR-009) 🔜
-3. OpenAI client abstraction (ADR-010) 🔜
-4. Prompt file extraction (ADR-011) 🔜
-5. API response improvements + word count validation 🔜
-6. Documentation completion (ADR-012) ✅
+2. Type-safe architecture + request state management (ADR-009) ✅
+3. OpenAI client abstraction (ADR-010) ✅
+4. Documentation completion (ADR-012) ✅
+5. Component extraction + prompt externalization (ADR-011) 🔜
+6. API response validation + word count validation 🔜
 7. Testing and redeployment 🔜
 
 **Week 3: Data & User Features**
@@ -251,6 +293,7 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 
 ## Changelog (append-only)
 
+- **Week 2, Day 1**: Completed ADR-009/010 - implemented comprehensive type-safe architecture with RequestState union, centralized OpenAI client, AbortController for request cancellation, and full TypeScript migration; committed to GitHub ✅
 - **Week 2, Day 1**: Completed ADR-007/008/012 - implemented environment validation, API schema validation, and documentation structure; all marked as complete ✅
 - **Week 2, Day 1**: Added ADR-007/008 for environment and request validation; marked as in progress
 - **Week 1 completion**: Deployed MVP; recorded ADR-001 through ADR-006
