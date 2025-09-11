@@ -2,7 +2,7 @@ Allegorical News → Kids' 5-Minute Stories
 ## Executive Summary
 * ***What**: Web app that turns news articles into age-appropriate allegorical stories for kids under 10  
 * **Tech Stack**: Next.js + TypeScript + OpenAI API + Vercel  
-* **Current Status**: ✅ MVP deployed; ⏳ Component architecture and validation  
+* **Current Status**: ✅ MVP deployed; ✅ Design system foundation and cascade complete  
 * **API**: POST /api/generate {articleText, readingLevel} → {story, metadata}  
 * **Next**: Prompt files, caching, database persistence
 
@@ -161,9 +161,57 @@ export const runtime = "nodejs";
 6. Post-check: enforce word range, verify exactly 2 questions, tone guardrails
 7. Persist/cache payload (cache 24h; DB optional)
 8. Respond with JSON + headers
+## Design System Contract (AI instructions)
+
+When generating or refactoring code, **always follow these rules**:
+
+- **Imports**: Use only `@/components/ui/*` (shadcn/ui primitives built on Radix).  
+- **Composition**:  
+  - Atoms → `ui`  
+  - Molecules → `patterns`  
+  - Screens/Sections → `screens`  
+- **Styling**: Use Tailwind utilities mapped to tokens (defined in `tailwind.config.js` and `/styles/tokens.css`).  
+  - Never use raw hex codes or arbitrary spacing values.  
+- **Accessibility**:  
+  - Maintain ARIA labels, keyboard focus, semantic roles.  
+  - Respect Radix behavior for dialogs, tooltips, menus, etc.  
+- **Documentation**: Add/update a Storybook story for every component created or modified.  
+- **Typing**: Strong TypeScript types only (`no any`).  
+- **Error/Loading states**: Provide at least one variant story for each component.  
+- **If missing primitive**: Propose a new component in `/components/ui` and document it in Storybook.
+
+**Default expectation**: Any request to “build a new screen” or “refactor UI” must comply with this contract. If ambiguity arises, default to ADR-014 in `DECISIONS.md`.  
+### Microinteraction Contract (placeholders-first)
+
+When implementing or scaffolding UI, add **hooks/slots** for microinteractions but keep visuals minimal.
+
+**Motion tokens (use, don’t hardcode):**
+- `--motion-fast: 120ms`
+- `--motion-medium: 200ms`
+- `--motion-slow: 320ms`
+- `--ease-standard: cubic-bezier(0.2, 0, 0, 1)`
+- `--ease-emphasized: cubic-bezier(0.2, 0, 0, 1.2)`
+
+**Default behaviors (opt-in later):**
+- Hover/press: Tailwind `transition-*` with `duration-[var(--motion-fast)]` and `ease-[var(--ease-standard)]`.
+- Focus: visible ring via DS tokens; never remove outlines.
+- Loading: use `<Spinner />` or `<Skeleton />` placeholders (no ad-hoc spinners).
+- Feedback: use `useToast()` (shadcn) placeholders for success/error; no custom toasts.
+- Entry/Exit: basic Tailwind opacity/translate; for complex sequences, prefer Framer Motion **only** when specified.
+- Respect reduced motion: wrap any animated sequences in `@media (prefers-reduced-motion: reduce)` fallbacks.
+
+**Scaffold-only props** (okay to stub now):
+- `isLoading`, `isActive`, `isPressed`, `isInvalid`, `hasChanges` → render states; animation optional for now.
+
+**Radix-first a11y:**
+- Use Radix primitives (Dialog, Tooltip, Toast) for focus trapping/ARIA; style via shadcn.
+
 ## Status snapshot (update as you go)
 - ✅ MVP shipped: paste → select level → generate → read; deployed on Vercel
-- ⏳ Zod env + request validation (in progress or done)
+- ✅ Zod env + request validation complete
+- ✅ Type-safe architecture with RequestState management
+- ✅ Design system foundation with tokenized styling and UI primitives
+- ✅ Design system cascade across existing app with preserved functionality
 - 🔜 Prompts moved to files; load via fs
 - 🔜 Cache (24h) by (hash, level)
 - 🔜 Post-checks (word range, exactly 2 questions)
@@ -202,6 +250,7 @@ export const runtime = "nodejs";
 - When implementing a task, cite the sections you follow (e.g., "API contract", "Prompt files")
 - Prefer small, isolated diffs to keep 20–30 min cadence
 - If something is ambiguous, propose a default and update /docs/DECISIONS.md
+
 # LLM Test Instruction Style Guide
 
 When you (the LLM) provide tests, **always** follow this structure. Be explicit about **where** to run actions and **what** result to expect.

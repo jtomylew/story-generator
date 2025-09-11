@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import type { GenerateReq, ReadingLevel } from '@/lib/types';
+import { Button } from '@/components/ui/button';
+import { Select } from '@/components/ui/select';
 
 interface StoryFormProps {
   onSubmit: (req: GenerateReq) => void;
@@ -57,7 +59,7 @@ export default function StoryForm({
           <div className="lg:col-span-2">
             <label 
               htmlFor="articleText" 
-              className="block text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2"
+              className="block text-lg font-semibold text-fg mb-4 flex items-center gap-2"
             >
               <span className="text-2xl">📰</span>
               News Article
@@ -68,7 +70,7 @@ export default function StoryForm({
               onChange={(e) => setArticleText(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder="Paste a news article here and watch it transform into a magical story..."
-              className={`w-full h-40 p-6 border-2 rounded-xl focus:ring-4 focus:border-blue-400 bg-white/90 resize-none text-gray-700 placeholder-gray-400 transition-all duration-300 shadow-inner ${
+              className={`w-full h-40 p-6 border-2 rounded-xl focus:ring-4 focus:border-blue-400 bg-white/90 resize-none text-fg placeholder-muted-foreground motion-medium shadow-inner ${
                 error ? 'border-red-300 focus:ring-red-300' : 'border-blue-200 focus:ring-blue-300'
               }`}
               disabled={isSubmitting}
@@ -87,33 +89,33 @@ export default function StoryForm({
             <div>
               <label 
                 htmlFor="readingLevel" 
-                className="block text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2"
+                className="block text-lg font-semibold text-fg mb-4 flex items-center gap-2"
               >
                 <span className="text-2xl">🎯</span>
                 Reading Level
               </label>
-              <select
+              <Select
                 id="readingLevel"
                 value={readingLevel}
                 onChange={(e) => setReadingLevel(e.target.value as ReadingLevel)}
-                className="w-full p-4 border-2 border-green-200 rounded-xl focus:ring-4 focus:ring-green-300 focus:border-green-400 bg-white/90 text-gray-700 transition-all duration-300 shadow-inner"
+                className="w-full p-4 border-2 border-green-200 rounded-xl focus:ring-4 focus:ring-green-300 focus:border-green-400 bg-white/90 text-fg motion-medium shadow-inner"
                 disabled={isSubmitting}
               >
                 <option value="preschool">👶 Preschool (ages 3-5)</option>
                 <option value="early-elementary">🎒 Early Elementary (ages 5-7)</option>
                 <option value="elementary">📖 Elementary (ages 7-10)</option>
-              </select>
-              <p className="text-sm text-gray-600 mt-3 leading-relaxed">
+              </Select>
+              <p className="text-sm text-muted mt-3 leading-relaxed">
                 Choose the perfect reading level for your young audience
               </p>
             </div>
 
             {/* Generate Button */}
             <div className="pt-4">
-              <button
+              <Button
                 type="submit"
                 disabled={!canSubmit}
-                className="w-full px-8 py-4 bg-gradient-to-r from-blue-500 to-green-500 hover:from-blue-600 hover:to-green-600 disabled:from-gray-400 disabled:to-gray-500 text-white font-bold text-lg rounded-xl transition-all duration-300 transform hover:scale-105 disabled:transform-none shadow-lg hover:shadow-xl flex items-center justify-center gap-3"
+                className="w-full px-8 py-4 bg-gradient-to-r from-blue-500 to-green-500 hover:from-blue-600 hover:to-green-600 disabled:from-gray-400 disabled:to-gray-500 text-white font-bold text-lg rounded-xl motion-medium transform hover:scale-105 disabled:transform-none shadow-lg hover:shadow-xl flex items-center justify-center gap-3"
                 aria-busy={isSubmitting}
               >
                 {isSubmitting ? (
@@ -127,12 +129,12 @@ export default function StoryForm({
                     <span>Weave Story</span>
                   </>
                 )}
-              </button>
+              </Button>
             </div>
 
             {/* Character Counter */}
             <div className="text-center">
-              <div className="text-sm text-gray-600">
+              <div className="text-sm text-muted">
                 <span className="font-semibold">{articleText.length}</span> characters
                 {articleText.length >= 50 && (
                   <span className="text-green-600 ml-2">✓</span>

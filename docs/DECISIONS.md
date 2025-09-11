@@ -252,6 +252,55 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 - **Learning outcome**: Established professional documentation habits with clear decision tracking
 - **Files**: `docs/DECISIONS.md`
 
+### ADR-014: Design System Contract ✅
+
+**Week 2, Day 3**
+
+- **Decision**: All UI development must follow a strict design system contract based on Tailwind CSS, Radix Primitives, and shadcn/ui components.
+- **Implementation rules**:
+    - **Atoms**: Only import primitives from `@/components/ui/*` (shadcn wrappers around Radix).
+    - **Molecules/Patterns**: Create in `@/components/patterns/*`.
+    - **Screens/Sections**: Compose in `@/components/screens/*`.
+    - **Styling**: Use Tailwind utilities mapped to tokens (colors, spacing, typography, radius, shadow) from `tailwind.config.js` and `/styles/tokens.css`. No inline hex values or arbitrary spacing.
+    - **Accessibility**: Ensure keyboard navigation, focus rings, ARIA attributes, and Radix semantics are preserved.
+    - **Documentation**: Every component requires a Storybook story with at least a "default" state and one variant (e.g. loading, error).
+- **Rationale**: Guarantees design consistency, accessibility, and maintainability while enabling AI tools (Cursor) to compose reliably from a known library.
+- **Outcome**: New screens and features will scale cleanly, reduce visual drift, and avoid one-off component duplication.
+- **Files**: `components/ui/`, `components/patterns/`, `components/screens/`, `tailwind.config.js`, `/styles/tokens.css`, `.storybook/`
+
+### ADR-015: Microinteraction Strategy ✅
+
+**Week 2, Day 3**
+
+- **Decision**: Adopt a placeholders-first microinteraction strategy using Tailwind transitions + DS tokens, Radix/shadcn semantics, and optional Framer Motion for complex sequences.
+- **Rationale**: Gives immediate UX affordances without deep animation work; keeps a11y correct; creates consistent hooks AI can compose later.
+- **Implementation Rules**:
+    - Motion tokens live in `/styles/tokens.css`; no hardcoded durations/easings in components.
+    - Use Tailwind transitions with `duration-[var(--motion-*)]` and `ease-[var(--ease-*)]`.
+    - Loading/skeleton placeholders standardized via `<Spinner />` and `<Skeleton />`.
+    - Feedback via shadcn `useToast()` only.
+    - Prefer Radix primitives for focus & ARIA; wrap visuals in shadcn.
+    - Enable reduced-motion fallbacks.
+- **Scope**: Applies to all atoms/molecules/screens. Complex motion requires explicit note in PR/ADR.
+- **Files**: `/styles/tokens.css`, `components/ui/spinner.tsx`, `components/ui/skeleton.tsx`
+
+### ADR-016: Design System Cascade Implementation ✅
+
+**Week 2, Day 3**
+
+- **Decision**: Systematically cascade the design system across the existing app following ADR-014 and ADR-015 guidelines.
+- **Implementation**:
+    - **Phase 1**: Added Tailwind compat layer with color aliases and motion utilities for gradual migration
+    - **Phase 2**: Replaced raw HTML primitives with shadcn/ui components (Button, Select) while preserving functionality
+    - **Phase 3**: Verified pattern components already used design system primitives properly
+    - **Phase 4**: Confirmed Storybook integration and ran comprehensive tests
+- **Tokenization**: Replaced hardcoded colors (`text-gray-800` → `text-fg`) and motion (`duration-300` → `motion-medium`)
+- **Primitive Swap**: Converted `<button>` → `<Button>` and `<select>` → `<Select>` with proper imports
+- **Guardrails**: Maintained business logic, avoided non-trivial refactors, preserved accessibility
+- **Rationale**: Bridge existing app with new design system foundation while maintaining functionality
+- **Outcome**: Existing app now fully leverages design system with 0 TypeScript errors and preserved functionality
+- **Files**: `app/globals.css`, `components/StoryForm.tsx`, `components/StoryOutput.tsx`
+
 ---
 
 ## Current Status & Technical Debt
@@ -266,6 +315,8 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 - ✅ Environment validation and centralized service configuration
 - ✅ Modular component architecture with proper separation of concerns
 - ✅ Professional documentation and version control
+- ✅ Design system foundation with tokenized styling and UI primitives
+- ✅ Design system cascade across existing app with preserved functionality
 
 **Known limitations & planned mitigations**
 
@@ -311,6 +362,7 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 
 ## Changelog (append-only)
 
+- **Week 2, Day 3**: Completed ADR-014/015/016 - implemented design system foundation with tokenized styling, UI primitives, and systematic cascade across existing app; replaced raw HTML with shadcn/ui components while preserving functionality; added motion defaults and accessibility features; all tests passing ✅
 - **Week 2, Day 2**: Completed ADR-011 - extracted StoryForm and StoryOutput components with proper contracts, accessibility, and TypeScript support; converted API route to TypeScript with runtime export; fixed path aliases; committed to GitHub ✅
 - **Week 2, Day 1**: Completed ADR-009/010 - implemented comprehensive type-safe architecture with RequestState union, centralized OpenAI client, AbortController for request cancellation, and full TypeScript migration; committed to GitHub ✅
 - **Week 2, Day 1**: Completed ADR-007/008/012 - implemented environment validation, API schema validation, and documentation structure; all marked as complete ✅
