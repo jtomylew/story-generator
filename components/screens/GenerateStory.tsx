@@ -111,7 +111,7 @@ export function GenerateStory({ className }: GenerateStoryProps) {
       <footer className="bg-gradient-to-r from-blue-600 via-green-600 to-orange-500 text-white py-8 mt-16">
         <div className="container mx-auto px-4 text-center">
           <p className="text-lg font-medium">
-            ✨ Weaving stories that spark imagination and wonder ✨
+            ✨ Weaving stories that spark imagination and wonder - test ✨
           </p>
         </div>
       </footer>
