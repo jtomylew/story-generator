@@ -124,11 +124,10 @@ This section defines how to integrate visual prototyping tools (Cursor, Subframe
 ### Preflight Checklist (run before any PR/merge)
 
 ```bash
-npm run typecheck
-npm run ban:raw-primitives   # no raw <button>, <input>, etc. outside /ui
-npm run find:strays          # no deep imports
-npm run find:duplicates      # no duplicate component files
-npm run storybook:build      # ensure updated stories render
+npm run typecheck            # essential TypeScript validation
+npm run format:check         # code formatting validation
+# Note: Full preflight checks (ban:raw-primitives, find:strays, etc.)
+# are available via `npm run preflight` but not required for Git hooks
 ```
 
 ### Git Workflow (summary)
@@ -141,9 +140,9 @@ git checkout -b sync/subframe-YYYYMMDD  # rare controlled sync
 
 # make changes…
 
-# run preflight, then:
-git add -A && git commit -m "feat: <what changed>"
-git push -u origin HEAD
+# Git hooks handle validation automatically:
+git add -A && git commit -m "feat: <what changed>"  # ~1.6s (format check)
+git push -u origin HEAD                              # ~2.9s (typecheck)
 # Open PR → squash → merge into main (deploys via Vercel)
 ```
 

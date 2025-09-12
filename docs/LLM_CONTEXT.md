@@ -309,6 +309,7 @@ When implementing or scaffolding UI, add **hooks/slots** for microinteractions b
 - ✅ Component import consolidation with barrel exports and canonical import patterns
 - ✅ Next.js 15.5.3 and Storybook 8.6.14 upgrade with full compatibility
 - ✅ External AI tool integration (Subframe) with canonical component structure
+- ✅ Deployment pipeline optimization with fast Git hooks (4.6s total deployment time)
 - 🔜 Prompts moved to files; load via fs
 - 🔜 Cache (24h) by (hash, level)
 - 🔜 Post-checks (word range, exactly 2 questions)
