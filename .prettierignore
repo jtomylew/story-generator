@@ -1,8 +1,0 @@
-node_modules/
-.next/
-out/
-build/
-storybook-static/
-.sb-out/
-*.tsbuildinfo
-next-env.d.ts

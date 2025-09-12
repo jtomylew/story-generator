@@ -422,24 +422,27 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 - **Learning outcome**: Successfully implemented professional-grade automation with comprehensive violation detection
 - **Files**: `package.json`, `.husky/`, `.github/workflows/`, `eslint.config.mjs`, `.gitignore`, `docs/AI_UI_Guide.md`, `docs/LLM_CONTEXT.md`
 
-### ADR-021: Storybook Technical Debt Resolution 🔜
+### ADR-021: Storybook Removal Decision ✅
 
 **Week 2, Day 6**
 
-- **Decision**: Temporarily exclude Storybook build from preflight checks due to Next.js 15.5.3 + Storybook 8.6.14 compatibility issue.
+- **Decision**: Remove Storybook entirely due to Next.js 15.5.3 + Storybook 8.6.14 compatibility issues.
 - **Issue**: Webpack hook compatibility problem causing "Cannot read properties of undefined (reading 'tap')" error in both dev and build modes.
-- **Current workaround**:
-  - Modified preflight script to exclude `storybook:build` check
-  - Added `preflight:full` script for complete checks when Storybook is fixed
-  - Added webpack cache workaround attempt (unsuccessful)
-- **Resolution options**:
-  1. **Upgrade to Storybook 9.x** (requires resolving peer dependency conflicts)
-  2. **Downgrade Next.js to 14.x** (requires React version compatibility)
-  3. **Wait for Storybook 8.6.15+** with Next.js 15.5.3 compatibility
-- **Impact**: Storybook stories cannot be built or served, affecting component documentation and development workflow.
-- **Priority**: Medium - affects development experience but not production functionality.
-- **Timeline**: Week 3 resolution planned.
-- **Files**: `package.json`, `.storybook/main.ts`, `docs/DECISIONS.md`
+- **Attempted solutions**:
+  - Tried upgrading to Storybook 9.x (addon version conflicts)
+  - Tried removing incompatible addons (core issue persisted)
+  - Tried webpack cache workaround (unsuccessful)
+- **Final resolution**: Complete removal of Storybook from the project
+- **Implementation**:
+  - Removed all Storybook packages and dependencies
+  - Deleted `.storybook/` configuration directory
+  - Removed all `*.stories.tsx` files
+  - Updated `package.json` scripts (removed `storybook` and `storybook:build`)
+  - Updated ESLint configuration (removed Storybook ignores)
+  - Removed `.prettierignore` (was only for Storybook)
+- **Impact**: Component inspection now relies on main application at `http://localhost:3000`
+- **Rationale**: Compatibility issues were blocking development workflow; main app provides sufficient component testing
+- **Files**: `package.json`, `eslint.config.mjs`, removed `.storybook/`, removed `*.stories.tsx`
 
 ---
 
@@ -473,7 +476,6 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 - **No analytics/monitoring** → Add error tracking and usage analytics (Week 4: Sentry + PostHog) 🔜
 - **Hardcoded prompts** → Externalize to markdown files for versioning (Week 2: ADR-013) 🔜
 - **No response validation** → Implement GenerateRes schema validation before returning (Week 2) 🔜
-- **Storybook build failure** → Next.js 15.5.3 + Storybook 8.6.14 webpack compatibility issue (Week 3: upgrade to Storybook 9.x or downgrade Next.js to 14.x) 🔜
 
 ---
 
@@ -508,7 +510,7 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 
 ## Changelog (append-only)
 
-- **Week 2, Day 6**: Completed ADR-020/021 - implemented workflow preflight automation with comprehensive violation detection, Git hooks, CI/CD enforcement, and updated documentation; fixed component import violations to use canonical barrel exports; documented Storybook technical debt with temporary workaround; all preflight checks passing except Storybook build (known compatibility issue) ✅
+- **Week 2, Day 6**: Completed ADR-020/021 - implemented workflow preflight automation with comprehensive violation detection, Git hooks, CI/CD enforcement, and updated documentation; fixed component import violations to use canonical barrel exports; removed Storybook entirely due to Next.js 15.5.3 compatibility issues; all preflight checks passing ✅
 - **Week 2, Day 5**: Completed ADR-018/019 - implemented component import consolidation with barrel exports and canonical import patterns; upgraded to Next.js 15.5.3 and Storybook 8.6.14; fixed font compatibility issues; all TypeScript compilation, builds, and dev server tests passing ✅
 - **Week 2, Day 4**: Completed ADR-017 - integrated Subframe component library with canonical structure; resolved import conflicts and component organization; maintained design system contracts ✅
 - **Week 2, Day 3**: Completed ADR-014/015/016 - implemented design system foundation with tokenized styling, UI primitives, and systematic cascade across existing app; replaced raw HTML with shadcn/ui components while preserving functionality; added motion defaults and accessibility features; all tests passing ✅

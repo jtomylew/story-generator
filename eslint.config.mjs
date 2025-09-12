@@ -18,8 +18,6 @@ const eslintConfig = [
       "out/**",
       "build/**",
       "next-env.d.ts",
-      "storybook-static/**",
-      ".sb-out/**",
     ],
   },
   {

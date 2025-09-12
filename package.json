@@ -16,12 +16,9 @@
     "find:strays": "grep -R \"from ['\\\"]@/components/[^'\\\"]\" components src --include='*.ts' --include='*.tsx' || true",
     "find:duplicates": "find components -type f \\( -name '*.tsx' -o -name '*.ts' \\) -not -name 'index.ts' -print0 | xargs -0 -I {} basename {} | sort | uniq -d",
     "find:similar": "grep -R \"export\\s\\+\\(default\\s\\+\\)\\?function\\s\\+.*\\(Form\\|Card\\|Button\\|Field\\)\" components --include='*.tsx' | cut -d: -f1 | sort | uniq",
-    "//:storybook": "— Storybook sanity —",
-    "storybook": "storybook dev -p 6006",
-    "storybook:build": "storybook build -o .sb-out",
     "//:pipelines": "— Preflight gate before PRs —",
     "preflight": "npm run typecheck && npm run lint && npm run format:check && npm run ban:raw-primitives && npm run find:strays && npm run find:duplicates",
-    "preflight:full": "npm run typecheck && npm run lint && npm run format:check && npm run ban:raw-primitives && npm run find:strays && npm run find:duplicates && npm run storybook:build",
+    "preflight:full": "npm run typecheck && npm run lint && npm run format:check && npm run ban:raw-primitives && npm run find:strays && npm run find:duplicates",
     "prepare": "husky install"
   },
   "dependencies": {
@@ -46,9 +43,6 @@
   "devDependencies": {
     "@babel/types": "^7.28.4",
     "@eslint/eslintrc": "^3",
-    "@storybook/addon-a11y": "^8.6.14",
-    "@storybook/addon-essentials": "^8.6.14",
-    "@storybook/addon-interactions": "^8.6.14",
     "@storybook/nextjs": "^8.6.14",
     "@storybook/react": "^8.6.14",
     "@tailwindcss/postcss": "^4",
