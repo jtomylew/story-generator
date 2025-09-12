@@ -442,6 +442,7 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
   - Removed `.prettierignore` (was only for Storybook)
 - **Impact**: Component inspection now relies on main application at `http://localhost:3000`
 - **Rationale**: Compatibility issues were blocking development workflow; main app provides sufficient component testing
+- **Reinstallation**: See `docs/STORYBOOK_REINSTALL.md` for easy reinstallation when compatibility issues are resolved
 - **Files**: `package.json`, `eslint.config.mjs`, removed `.storybook/`, removed `*.stories.tsx`
 
 ---
