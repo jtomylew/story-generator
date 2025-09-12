@@ -120,7 +120,7 @@ export default function Home() {
         <div className="container mx-auto px-4 text-center">
           <p className="text-lg text-gray-600 font-medium flex items-center justify-center gap-2">
             <span className="text-blue-500">✨</span>
-            Weaving stories that spark imagination and wonder - test
+            Weaving stories that spark imagination and wonder - deployment test
             <span className="text-blue-500">✨</span>
           </p>
         </div>
