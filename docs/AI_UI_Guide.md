@@ -27,7 +27,7 @@ It summarizes the design system contract from `/docs/LLM_CONTEXT.md` and ADR-014
   - Use `<Spinner />` and `<Skeleton />` for loading/placeholder states
   - Respect `prefers-reduced-motion`
 - **Typing**: Strong TypeScript only (no `any`).
-- **Documentation**: Add or update Storybook stories for each component (default + at least one variant).
+- **Documentation**: Add or update Storybook stories for each component (default + at least one variant). _Note: Storybook temporarily disabled due to Next.js 15.5.3 compatibility issues - test via main application at `http://localhost:3000`._
 
 ---
 
@@ -56,7 +56,7 @@ Update components/ui/button.tsx.
 
 - Add microinteractions using motion tokens
 - Preserve shadcn structure and exports
-- Update its Storybook story with default, disabled, and loading states
+- Update its Storybook story with default, disabled, and loading states (temporarily test via main app)
 
 ### Refine a Pattern
 
@@ -64,7 +64,7 @@ Create or refine components/patterns/StoryForm.tsx.
 
 - Compose from @/components/ui/\* only
 - Keep props strongly typed
-- Add Storybook story with default and error states
+- Add Storybook story with default and error states (temporarily test via main app)
 
 ### Refine a Screen
 
@@ -73,7 +73,7 @@ Refine components/screens/GenerateStory.tsx.
 - Improve spacing and hierarchy using Tailwind tokens
 - Extract StoryForm and StoryPreview into components/patterns/
 - Compose them back into GenerateStory.tsx
-- Add or update Storybook stories for screen + patterns
+- Add or update Storybook stories for screen + patterns (temporarily test via main app)
 
 ### Update Tokens / Theme
 
@@ -88,7 +88,7 @@ Ensure inputs, dialogs, and tooltips follow Radix semantics.
 
 - Add <Label htmlFor/> to inputs
 - Ensure focus rings and aria-\* attributes
-- Update Storybook stories with accessibility notes
+- Update Storybook stories with accessibility notes (temporarily test via main app)
 
 ---
 
@@ -167,7 +167,7 @@ Constraints:
 - Update THIS file in place: <path/to/file.tsx>.
 - Compose from primitives in components/ui/* and patterns in components/patterns/*.
 - Do not create new folders or files. Do not add new deps.
-- Add/Update a Storybook story for this component (default + one variant).
+- Add/Update a Storybook story for this component (default + one variant). *Temporarily test via main app.*
 
 Task:
 <what to change / screenshot reference / behavior>
@@ -182,7 +182,7 @@ After change: explain the diff briefly.
 When an AI tool makes changes, ask it to also:
 
 1. Run `npm run typecheck` → confirm 0 errors.
-2. Run `npm run storybook` → confirm updated components render.
+2. Run `npm run dev` → confirm updated components render.
 3. Run `npm run dev` → confirm app boots on `http://localhost:3000`.
 4. Summarize which files changed and why.
 
