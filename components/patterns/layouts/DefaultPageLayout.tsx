@@ -23,11 +23,11 @@ import { FeatherTent } from "@subframe/core";
 import { FeatherUser } from "@subframe/core";
 import { FeatherWebhook } from "@subframe/core";
 import * as SubframeCore from "@subframe/core";
-import { Avatar } from "../Avatar";
-import { DropdownMenu } from "../DropdownMenu";
-import { IconButton } from "../IconButton";
-import { SidebarWithSections } from "../SidebarWithSections";
-import * as SubframeUtils from "../utils";
+import { Avatar } from "../../ui/Avatar";
+import { DropdownMenu } from "../../ui/DropdownMenu";
+import { IconButton } from "../../ui/IconButton";
+import { SidebarWithSections } from "../../ui/SidebarWithSections";
+import * as SubframeUtils from "../../ui/utils";
 
 interface DefaultPageLayoutRootProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -57,6 +57,7 @@ const DefaultPageLayoutRoot = React.forwardRef<
           <img
             className="h-6 flex-none object-cover"
             src="https://res.cloudinary.com/subframe/image/upload/v1711417507/shared/y2rsnhq3mex4auk54aye.png"
+            alt="Logo"
           />
         }
         footer={

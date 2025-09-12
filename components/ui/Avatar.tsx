@@ -72,6 +72,7 @@ const AvatarRoot = React.forwardRef<HTMLDivElement, AvatarRootProps>(
         ) : null}
         {image ? (
           <img
+            alt="Avatar"
             className={SubframeUtils.twClassNames(
               "h-8 w-8 flex-none object-cover absolute",
               {

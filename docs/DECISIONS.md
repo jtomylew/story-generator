@@ -307,13 +307,13 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 
 - **Decision**: Enforce a single mapping between external AI tools (Subframe, Lovable, v0, etc.) and our repo so changes always land in the same files.
 - **Canonical structure**:
-    - `src/components/ui/*` (atoms / shadcn over Radix)
-    - `src/components/patterns/*` (molecules)
-    - `src/components/screens/*` (screens/sections)
+    - `components/ui/*` (atoms / shadcn over Radix)
+    - `components/patterns/*` (molecules)
+    - `components/screens/*` (screens/sections)
     - Stories colocated or under `stories/*` (consistent per component family)
 - **Subframe policy**:
     - Subframe edits its own project; we pull into the repo via CLI.
-    - Sync root: `./src/components` (set during `npx @subframe/cli init`).
+    - Sync root: `./components` (set during `npx @subframe/cli init`).
     - Subframe must **update in place** using our canonical paths.
     - Tailwind config/tokens remain the source of truth in the repo.
 - **Guardrails**:
@@ -348,6 +348,52 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 - **Outcome**: Successfully integrated Subframe component library while maintaining existing functionality and design system contracts
 - **Files**: `components/ui/`, `tsconfig.json`, `package.json`, `.subframe/sync.json`
 
+### ADR-018: Component Import Consolidation & Barrel Exports ✅
+
+**Week 2, Day 5**
+
+- **Decision**: Implement barrel exports and consolidate all component imports to use a single canonical import pattern.
+- **Previous limitation**: Mixed import patterns with deep paths and inconsistent component exports causing TypeScript errors and import confusion.
+- **Implementation**:
+    - Created root barrel export `components/index.ts` that re-exports all components from ui, patterns, and screens
+    - Updated all layer-specific barrel exports (`components/ui/index.ts`, `components/patterns/index.ts`, `components/screens/index.ts`) to use consistent named exports
+    - Converted all components from default exports to named exports for consistency
+    - Updated all imports throughout the codebase to use the canonical pattern: `import { ComponentName } from '@/components'`
+    - Fixed TypeScript path aliases in `tsconfig.json` to resolve component imports correctly
+    - Updated all Storybook stories to use the new named export pattern
+- **Canonical import pattern**:
+    ```typescript
+    // ✅ Correct - use root barrel
+    import { Button, StoryForm, GenerateStory } from '@/components'
+    
+    // ❌ Avoid - deep paths
+    import { StoryForm } from '@/components/patterns/StoryForm'
+    ```
+- **Rationale**: Simplifies imports, reduces coupling, enables easier refactoring, and provides a single source of truth for component exports
+- **Learning outcome**: Successfully implemented professional-grade import consolidation with zero TypeScript errors
+- **Files**: `components/index.ts`, `components/ui/index.ts`, `components/patterns/index.ts`, `components/screens/index.ts`, all component files, all story files, `tsconfig.json`
+
+### ADR-019: Next.js & Storybook Version Upgrade ✅
+
+**Week 2, Day 5**
+
+- **Decision**: Upgrade to Next.js 15.5.3 and Storybook 8.6.14 for better compatibility and latest features.
+- **Previous limitation**: Next.js 14.2.5 had compatibility issues with Storybook and missing manifest files causing 500 errors.
+- **Implementation**:
+    - Upgraded Next.js from 14.2.5 to 15.5.3 (latest stable)
+    - Upgraded Storybook from mixed versions to 8.6.14 (compatible with Next.js 15.5.3)
+    - Fixed font compatibility issues by replacing `Geist` fonts with `Inter` and `JetBrains_Mono` for stable cross-version support
+    - Updated `app/layout.js` to use compatible font imports and proper className references
+    - Cleaned up version conflicts by removing all Storybook packages and reinstalling consistently
+    - Verified all functionality works with the new versions
+- **Compatibility matrix**:
+    - Next.js 15.5.3 + React 19.1.0 + Storybook 8.6.14 = ✅ Working
+    - Next.js 14.2.5 + React 18.2.0 + Storybook 8.6.14 = ❌ Font issues
+    - Next.js 15.5.3 + React 19.1.0 + Storybook 9.x = ❌ Package conflicts
+- **Rationale**: Latest stable versions provide better performance, security, and compatibility while maintaining all existing functionality
+- **Learning outcome**: Successfully upgraded to latest stable versions with zero breaking changes
+- **Files**: `package.json`, `package-lock.json`, `app/layout.js`
+
 ---
 
 ## Current Status & Technical Debt
@@ -365,6 +411,8 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 - ✅ Design system foundation with tokenized styling and UI primitives
 - ✅ Design system cascade across existing app with preserved functionality
 - ✅ External AI tool integration (Subframe) with canonical component structure
+- ✅ Component import consolidation with barrel exports and canonical import patterns
+- ✅ Next.js 15.5.3 and Storybook 8.6.14 upgrade with full compatibility
 
 **Known limitations & planned mitigations**
 
@@ -410,6 +458,8 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 
 ## Changelog (append-only)
 
+- **Week 2, Day 5**: Completed ADR-018/019 - implemented component import consolidation with barrel exports and canonical import patterns; upgraded to Next.js 15.5.3 and Storybook 8.6.14; fixed font compatibility issues; all TypeScript compilation, builds, and dev server tests passing ✅
+- **Week 2, Day 4**: Completed ADR-017 - integrated Subframe component library with canonical structure; resolved import conflicts and component organization; maintained design system contracts ✅
 - **Week 2, Day 3**: Completed ADR-014/015/016 - implemented design system foundation with tokenized styling, UI primitives, and systematic cascade across existing app; replaced raw HTML with shadcn/ui components while preserving functionality; added motion defaults and accessibility features; all tests passing ✅
 - **Week 2, Day 2**: Completed ADR-011 - extracted StoryForm and StoryOutput components with proper contracts, accessibility, and TypeScript support; converted API route to TypeScript with runtime export; fixed path aliases; committed to GitHub ✅
 - **Week 2, Day 1**: Completed ADR-009/010 - implemented comprehensive type-safe architecture with RequestState union, centralized OpenAI client, AbortController for request cancellation, and full TypeScript migration; committed to GitHub ✅

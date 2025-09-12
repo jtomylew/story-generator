@@ -6,8 +6,8 @@
  */
 
 import React from "react";
-import { Drawer } from "../Drawer";
-import * as SubframeUtils from "../utils";
+import { Drawer } from "../../ui/Drawer";
+import * as SubframeUtils from "../../ui/utils";
 
 interface DrawerLayoutRootProps extends React.ComponentProps<typeof Drawer> {
   children?: React.ReactNode;

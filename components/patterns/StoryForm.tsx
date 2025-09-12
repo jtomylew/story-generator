@@ -4,7 +4,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import type { GenerateReq, ReadingLevel } from '@/lib/types';
 import { Button } from '@/components/ui';
-// import { Select } from '@/components/ui';
 
 interface StoryFormProps {
   onSubmit: (req: GenerateReq) => void;
@@ -13,7 +12,7 @@ interface StoryFormProps {
   defaultLevel?: ReadingLevel;
 }
 
-export default function StoryForm({ 
+export function StoryForm({ 
   onSubmit, 
   isSubmitting = false, 
   defaultText = '', 
@@ -71,7 +70,7 @@ export default function StoryForm({
               onChange={(e) => setArticleText(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder="Paste a news article here and watch it transform into a magical story..."
-              className={`w-full h-40 p-6 border-2 rounded-xl focus:ring-4 focus:border-blue-400 bg-white/90 resize-none text-fg placeholder-muted-foreground motion-medium shadow-inner ${
+              className={`w-full h-40 p-6 border-2 rounded-xl focus:ring-4 focus:border-blue-400 bg-white/90 resize-none text-fg placeholder-muted-foreground motion-medium shadow-inner transition duration-[var(--motion-fast)] ease-[var(--ease-standard)] ${
                 error ? 'border-red-300 focus:ring-red-300' : 'border-blue-200 focus:ring-blue-300'
               }`}
               disabled={isSubmitting}
@@ -99,7 +98,7 @@ export default function StoryForm({
                 id="readingLevel"
                 value={readingLevel}
                 onChange={(e) => setReadingLevel(e.target.value as ReadingLevel)}
-                className="w-full p-4 border-2 border-green-200 rounded-xl focus:ring-4 focus:ring-green-300 focus:border-green-400 bg-white/90 text-fg motion-medium shadow-inner"
+                className="w-full p-4 border-2 border-green-200 rounded-xl focus:ring-4 focus:ring-green-300 focus:border-green-400 bg-white/90 text-fg motion-medium shadow-inner transition duration-[var(--motion-fast)] ease-[var(--ease-standard)]"
                 disabled={isSubmitting}
               >
                 <option value="preschool">👶 Preschool (ages 3-5)</option>

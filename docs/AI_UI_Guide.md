@@ -13,9 +13,9 @@ It summarizes the design system contract from `/docs/LLM_CONTEXT.md` and ADR-014
 
 - **Imports**: Use only `@/components/ui/*` primitives (shadcn over Radix).  
 - **Composition layers**:
-  - Atoms → `src/components/ui/*`
-  - Molecules → `src/components/patterns/*`
-  - Screens → `src/components/screens/*`
+  - Atoms → `components/ui/*`
+  - Molecules → `components/patterns/*`
+  - Screens → `components/screens/*`
 - **Styling**: Tailwind utilities mapped to tokens in `/styles/tokens.css` and `tailwind.config.ts`.  
   - No inline hex colors or arbitrary px spacing.  
 - **Accessibility**:
@@ -30,14 +30,14 @@ It summarizes the design system contract from `/docs/LLM_CONTEXT.md` and ADR-014
 - **Documentation**: Add or update Storybook stories for each component (default + at least one variant).
 
 ---
-## 2. Mapping Table (Subframe --> Rep DS)
+## 2. Mapping Table (Subframe → Repo DS)
 
-| **Subframe Construct** | **Repo Equivalent**           | **Target Path in Repo**                                               | **Notes**                                                                                              |
-| ---------------------- | ----------------------------- | --------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| **Pages**              | Screens                       | `src/components/screens/*`                                            | One per top-level route (e.g. `generate-story.tsx`). Pages should be thin and compose patterns.        |
-| **Components**         | UI Primitives **or** Patterns | `src/components/ui/*` (atoms) `src/components/patterns/*` (molecules) | If atomic (button, input, card) → UI. If composed block (form, preview) → Patterns.                    |
-| **Themes**             | Tokens                        | `/styles/tokens.css` + `tailwind.config.ts`                           | Subframe themes are sketches; source of truth = repo tokens. Apply manually if useful.                 |
-| **Templates**          | Patterns **or** Screens       | `src/components/patterns/*` `src/components/screens/*`                | If small reusable layout → Pattern. If full-page scaffold → Screen. Don’t create a “templates” folder. |
+| **Subframe Construct** | **Repo Equivalent** | **Target Path in Repo** | **Notes** |
+|-------------------------|---------------------|--------------------------|-----------|
+| **Pages**              | Screens             | `components/screens/*` | One per top-level route (e.g. `GenerateStory.tsx`). Screens compose patterns. |
+| **Components**         | UI Primitives **or** Patterns | `components/ui/*` (atoms) <br> `components/patterns/*` (molecules) | Atomic (button, input, card) → UI. Composed block (form, preview) → Patterns. |
+| **Themes**             | Tokens              | `/styles/tokens.css` + `tailwind.config.(ts|js)` | Subframe themes are sketches; source of truth = repo tokens. Apply manually if useful. |
+| **Templates**          | Patterns **or** Screens | `components/patterns/*` <br> `components/screens/*` | Small reusable layout → Pattern. Full-page scaffold → Screen. Do not create a "templates" folder. |
 ## 3. Prompt Templates
 
 Use these when asking an AI tool to make changes.  
@@ -47,21 +47,21 @@ Use these when asking an AI tool to make changes.
 
 ### Refine a Primitive
 ### Refine a Primitive
-Update src/components/ui/button.tsx.
+Update components/ui/button.tsx.
 - Add microinteractions using motion tokens
 - Preserve shadcn structure and exports
 - Update its Storybook story with default, disabled, and loading states
 ### Refine a Pattern
-Create or refine src/components/patterns/StoryForm.tsx.
+Create or refine components/patterns/StoryForm.tsx.
 - Compose from @/components/ui/* only
 - Keep props strongly typed
 - Add Storybook story with default and error states
 ### Refine a Screen 
-Refine src/components/screens/generate-story.tsx.
+Refine components/screens/GenerateStory.tsx.
 
 - Improve spacing and hierarchy using Tailwind tokens
-- Extract StoryForm and StoryPreview into src/components/patterns/
-- Compose them back into generate-story.tsx
+- Extract StoryForm and StoryPreview into components/patterns/
+- Compose them back into GenerateStory.tsx
 - Add or update Storybook stories for screen + patterns
 
 ### Update Tokens / Theme

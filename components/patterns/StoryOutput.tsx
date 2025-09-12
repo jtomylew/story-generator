@@ -9,7 +9,7 @@ interface StoryOutputProps {
   onReset: () => void;
 }
 
-export default function StoryOutput({ state, onReset }: StoryOutputProps) {
+export function StoryOutput({ state, onReset }: StoryOutputProps) {
   // Idle state - nothing to render
   if (state.status === 'idle') {
     return null;

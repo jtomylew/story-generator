@@ -23,11 +23,13 @@ Turn a current news article (pasted text for now) into a gentle, age-appropriate
 ---
 
 ## Tech stack (current + near-term)
-- **Framework:** Next.js (App Router) + Tailwind CSS
-- **Language:** TypeScript (migrating if not already)
+- **Framework:** Next.js 15.5.3 (App Router) + Tailwind CSS
+- **Language:** TypeScript (fully migrated)
 - **AI provider:** OpenAI API (model configurable per environment)
 - **Hosting:** Vercel (auto-deploy from GitHub)
 - **Validation:** Zod (env + request/response schemas)
+- **UI Components:** shadcn/ui + Radix primitives with barrel exports
+- **Documentation:** Storybook 8.6.14
 - **Prompts:** Markdown files loaded server-side (`fs`)
 - **Optional (planned):** Upstash Redis (cache), Supabase/Vercel Postgres (persistence), Sentry/PostHog (telemetry)
 
@@ -53,14 +55,26 @@ Keep real secrets in `.env.local` (git-ignored). Commit a template in `.env.exam
 
 ---
 
-## Repository layout (target)
+## Repository layout (current)
 ```
 /app
   /page.tsx
   /api/generate/route.ts  # POST {articleText, readingLevel} → story payload
 /components
-  StoryForm.tsx
-  StoryOutput.tsx
+  /index.ts              # Root barrel export
+  /ui/                   # shadcn/ui primitives (atoms)
+    /index.ts            # UI barrel export
+    /Button.tsx
+    /Avatar.tsx
+    /... (other primitives)
+  /patterns/             # Molecules
+    /index.ts            # Patterns barrel export
+    /StoryForm.tsx
+    /StoryOutput.tsx
+    /layouts/
+  /screens/              # Screens/Sections
+    /index.ts            # Screens barrel export
+    /GenerateStory.tsx
 /lib
   env.ts          # Zod-validated env access (server-only)
   openai.ts       # OpenAI client wrapper
@@ -87,9 +101,21 @@ Keep real secrets in `.env.local` (git-ignored). Commit a template in `.env.exam
 {
   "compilerOptions": {
     "baseUrl": ".",
-    "paths": { "@/*": ["./*"] }
+    "paths": { 
+      "@/*": ["./*"],
+      "@/components/*": ["components/*"]
+    }
   }
 }
+```
+
+**Import pattern:** Use canonical barrel imports:
+```typescript
+// ✅ Correct - use root barrel
+import { Button, StoryForm, GenerateStory } from '@/components'
+
+// ❌ Avoid - deep paths
+import { StoryForm } from '@/components/patterns/StoryForm'
 ```
 
 ## API Contract
@@ -211,19 +237,20 @@ When implementing or scaffolding UI, add **hooks/slots** for microinteractions b
 **Always-on rules for any AI tool (Cursor, Subframe, Lovable, v0):**
 - Update **existing files in place**; do **not** create duplicates.
 - Canonical paths:
-  - Atoms (primitives): `src/components/ui/*`
-  - Molecules (patterns): `src/components/patterns/*`
-  - Screens: `src/components/screens/*`
+  - Atoms (primitives): `components/ui/*`
+  - Molecules (patterns): `components/patterns/*`
+  - Screens: `components/screens/*`
 - Imports must be `@/components/ui/*` (shadcn over Radix).
 - Styling must use Tailwind **tokens** from `/styles/tokens.css` + `tailwind.config.ts`. No inline hex or arbitrary px.
 - A11y: Radix semantics; keep focus rings; connect `<Label htmlFor>`; add aria-*.
 - Microinteractions: use motion tokens (`--motion-fast/medium/slow`, `--ease-*`), `<Spinner />`, `<Skeleton />`.
+- **Subframe note**: Subframe edits are pulled via CLI; it must target the canonical paths above. To prevent overwrites, a file may include `// @subframe/sync-disable` at the top.
 
 **Subframe adapter (when using Subframe):**
 - Subframe project path must mirror repo structure. Treat these as the *only* valid paths:
-  - `src/components/ui/*`
-  - `src/components/patterns/*`
-  - `src/components/screens/*`
+  - `components/ui/*`
+  - `components/patterns/*`
+  - `components/screens/*`
 - When asked to **“update in place”**, overwrite those exact files/paths.
 - Do **not** modify Tailwind config; respect tokens as the source of truth.
 - If a file should never be overwritten, it will include at top:
@@ -244,6 +271,9 @@ When implementing or scaffolding UI, add **hooks/slots** for microinteractions b
 - ✅ Type-safe architecture with RequestState management
 - ✅ Design system foundation with tokenized styling and UI primitives
 - ✅ Design system cascade across existing app with preserved functionality
+- ✅ Component import consolidation with barrel exports and canonical import patterns
+- ✅ Next.js 15.5.3 and Storybook 8.6.14 upgrade with full compatibility
+- ✅ External AI tool integration (Subframe) with canonical component structure
 - 🔜 Prompts moved to files; load via fs
 - 🔜 Cache (24h) by (hash, level)
 - 🔜 Post-checks (word range, exactly 2 questions)
