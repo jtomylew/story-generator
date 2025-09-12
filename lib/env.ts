@@ -4,7 +4,9 @@ import { z } from "zod";
 const EnvSchema = z.object({
   OPENAI_API_KEY: z.string().min(1, "Missing OPENAI_API_KEY"),
   NEXT_PUBLIC_APP_NAME: z.string().default("Story Weaver"),
-  NODE_ENV: z.enum(["development","test","production"]).default("development"),
+  NODE_ENV: z
+    .enum(["development", "test", "production"])
+    .default("development"),
   DATABASE_URL: z.string().url().optional(),
   UPSTASH_REDIS_REST_URL: z.string().url().optional(),
   UPSTASH_REDIS_REST_TOKEN: z.string().optional(),
@@ -22,8 +24,13 @@ const parsed = EnvSchema.safeParse({
 });
 
 if (!parsed.success) {
-  console.error("❌ Invalid environment variables:", parsed.error.flatten().fieldErrors);
-  throw new Error("Invalid environment variables. See server logs for details.");
+  console.error(
+    "❌ Invalid environment variables:",
+    parsed.error.flatten().fieldErrors,
+  );
+  throw new Error(
+    "Invalid environment variables. See server logs for details.",
+  );
 }
 
 export const env = parsed.data;

@@ -15,6 +15,7 @@ MODEL_NAME=gpt-4o
 You can get your API key from: https://platform.openai.com/api-keys
 
 **Optional Configuration:**
+
 - `MODEL_NAME`: The OpenAI model to use (defaults to `gpt-4o` if not set)
   - Examples: `gpt-4o`, `gpt-4`, `gpt-3.5-turbo`
 
@@ -23,6 +24,7 @@ You can get your API key from: https://platform.openai.com/api-keys
 ### Endpoint: `POST /api/generate-story`
 
 **Request Body:**
+
 ```json
 {
   "newsStory": "Your news story text here...",
@@ -31,11 +33,13 @@ You can get your API key from: https://platform.openai.com/api-keys
 ```
 
 **Reading Level Options:**
+
 - `"Preschool (ages 3-5)"` - Very simple vocabulary, short sentences, lots of repetition
 - `"Early Elementary (ages 5-7)"` - Simple vocabulary, short sentences, some repetition
 - `"Elementary (ages 7-10)"` - Age-appropriate vocabulary, varied sentence structures
 
 **Success Response:**
+
 ```json
 {
   "success": true,
@@ -46,6 +50,7 @@ You can get your API key from: https://platform.openai.com/api-keys
 ```
 
 **Error Response:**
+
 ```json
 {
   "error": "Error message description"
@@ -55,15 +60,16 @@ You can get your API key from: https://platform.openai.com/api-keys
 ### Example Usage
 
 ```javascript
-const response = await fetch('/api/generate-story', {
-  method: 'POST',
+const response = await fetch("/api/generate-story", {
+  method: "POST",
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
   body: JSON.stringify({
-    newsStory: 'Scientists discover a new species of butterfly in the Amazon rainforest.',
-    readingLevel: 'Elementary (ages 7-10)'
-  })
+    newsStory:
+      "Scientists discover a new species of butterfly in the Amazon rainforest.",
+    readingLevel: "Elementary (ages 7-10)",
+  }),
 });
 
 const data = await response.json();

@@ -20,6 +20,16 @@ const eslintConfig = [
       "next-env.d.ts",
     ],
   },
+  {
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: ["@/components/*/*"],
+        },
+      ],
+    },
+  },
 ];
 
 export default eslintConfig;
