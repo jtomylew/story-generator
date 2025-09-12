@@ -43,27 +43,14 @@
   "devDependencies": {
     "@babel/types": "^7.28.4",
     "@eslint/eslintrc": "^3",
-    "@storybook/nextjs": "^8.6.14",
-    "@storybook/react": "^8.6.14",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^24.3.1",
     "@types/react": "^19.1.12",
     "eslint": "^9",
     "eslint-config-next": "15.5.0",
     "husky": "^8.0.0",
-    "lint-staged": "^15.2.0",
     "prettier": "^3.6.2",
-    "storybook": "^8.6.14",
     "tailwindcss": "^4",
     "typescript": "^5.9.2"
-  },
-  "lint-staged": {
-    "*.{ts,tsx}": [
-      "eslint --fix --max-warnings=0",
-      "prettier --write"
-    ],
-    "*.{js,jsx,json,md}": [
-      "prettier --write"
-    ]
   }
 }
