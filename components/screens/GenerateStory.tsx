@@ -1,80 +1,87 @@
-'use client'
+"use client";
 
-import { useState, useCallback } from 'react'
-import type { GenerateReq } from '@/lib/types'
-import type { RequestState, ApiError } from '@/lib/ui-types'
-import { StoryForm, StoryOutput } from '@/components'
+import { useState, useCallback } from "react";
+import type { GenerateReq } from "@/lib/types";
+import type { RequestState, ApiError } from "@/lib/ui-types";
+import { StoryForm, StoryOutput } from "@/components";
 
 interface GenerateStoryProps {
-  className?: string
+  className?: string;
 }
 
 export function GenerateStory({ className }: GenerateStoryProps) {
-  const [requestState, setRequestState] = useState<RequestState>({ status: 'idle' })
+  const [requestState, setRequestState] = useState<RequestState>({
+    status: "idle",
+  });
 
   const handleSubmit = useCallback(async (req: GenerateReq) => {
-    const abortController = new AbortController()
-    
-    setRequestState({ status: 'loading', req })
+    const abortController = new AbortController();
+
+    setRequestState({ status: "loading", req });
 
     try {
-      const response = await fetch('/api/generate', {
-        method: 'POST',
+      const response = await fetch("/api/generate", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(req),
         signal: abortController.signal,
-      })
+      });
 
-      const data = await response.json()
+      const data = await response.json();
 
       if (!response.ok) {
         const error: ApiError = {
-          message: data.message || 'An error occurred',
-          code: data.code || (response.status === 400 ? 'BAD_REQUEST' : 
-                response.status === 429 ? 'RATE_LIMITED' : 
-                'INTERNAL_ERROR'),
-          issues: data.issues
-        }
-        
-        setRequestState({ status: 'error', req, error })
-        return
+          message: data.message || "An error occurred",
+          code:
+            data.code ||
+            (response.status === 400
+              ? "BAD_REQUEST"
+              : response.status === 429
+                ? "RATE_LIMITED"
+                : "INTERNAL_ERROR"),
+          issues: data.issues,
+        };
+
+        setRequestState({ status: "error", req, error });
+        return;
       }
 
       const res = {
         story: data.story,
         ageBand: req.readingLevel,
         newsSummary: data.originalNewsStory,
-        sourceHash: '',
-        model: process.env.MODEL_NAME || 'gpt-4o',
+        sourceHash: "",
+        model: process.env.MODEL_NAME || "gpt-4o",
         safety: { flagged: false, reasons: [] },
         cached: false,
-        createdAt: new Date().toISOString()
-      }
+        createdAt: new Date().toISOString(),
+      };
 
-      setRequestState({ status: 'success', req, res })
-
+      setRequestState({ status: "success", req, res });
     } catch (err: any) {
-      if (err.name === 'AbortError') {
-        return
+      if (err.name === "AbortError") {
+        return;
       }
 
       const error: ApiError = {
-        message: err.message || 'Network error occurred',
-        code: 'INTERNAL_ERROR'
-      }
+        message: err.message || "Network error occurred",
+        code: "INTERNAL_ERROR",
+      };
 
-      setRequestState({ status: 'error', req, error })
+      setRequestState({ status: "error", req, error });
     }
-  }, [])
+  }, []);
 
   const resetForm = () => {
-    setRequestState({ status: 'idle' })
-  }
+    setRequestState({ status: "idle" });
+  };
 
   return (
-    <div className={`min-h-screen bg-gradient-to-br from-blue-50 via-green-50 to-orange-50 ${className}`}>
+    <div
+      className={`min-h-screen bg-gradient-to-br from-blue-50 via-green-50 to-orange-50 ${className}`}
+    >
       {/* Header */}
       <header className="bg-gradient-to-r from-blue-600 via-green-600 to-orange-500 text-white shadow-lg">
         <div className="container mx-auto px-4 py-6">
@@ -92,15 +99,12 @@ export function GenerateStory({ className }: GenerateStoryProps) {
       </header>
 
       <div className="container mx-auto px-4 py-8 max-w-6xl">
-        <StoryForm 
+        <StoryForm
           onSubmit={handleSubmit}
-          isSubmitting={requestState.status === 'loading'}
+          isSubmitting={requestState.status === "loading"}
         />
-        
-        <StoryOutput 
-          state={requestState}
-          onReset={resetForm}
-        />
+
+        <StoryOutput state={requestState} onReset={resetForm} />
       </div>
 
       {/* Footer */}
@@ -112,5 +116,5 @@ export function GenerateStory({ className }: GenerateStoryProps) {
         </div>
       </footer>
     </div>
-  )
+  );
 }

@@ -19,7 +19,7 @@ const BarChartRoot = React.forwardRef<
   BarChartRootProps
 >(function BarChartRoot(
   { stacked = false, className, ...otherProps }: BarChartRootProps,
-  ref
+  ref,
 ) {
   return (
     <SubframeCore.BarChart

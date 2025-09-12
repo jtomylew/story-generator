@@ -30,7 +30,7 @@ const AlertRoot = React.forwardRef<HTMLDivElement, AlertRootProps>(
       className,
       ...otherProps
     }: AlertRootProps,
-    ref
+    ref,
   ) {
     return (
       <div
@@ -46,7 +46,7 @@ const AlertRoot = React.forwardRef<HTMLDivElement, AlertRootProps>(
             "border border-solid border-brand-100 bg-brand-50":
               variant === "brand",
           },
-          className
+          className,
         )}
         ref={ref}
         {...otherProps}
@@ -61,7 +61,7 @@ const AlertRoot = React.forwardRef<HTMLDivElement, AlertRootProps>(
                   "text-success-800": variant === "success",
                   "text-error-800": variant === "error",
                   "text-brand-800": variant === "brand",
-                }
+                },
               )}
             >
               {icon}
@@ -77,7 +77,7 @@ const AlertRoot = React.forwardRef<HTMLDivElement, AlertRootProps>(
                     "text-success-900": variant === "success",
                     "text-error-900": variant === "error",
                     "text-brand-900": variant === "brand",
-                  }
+                  },
                 )}
               >
                 {title}
@@ -92,7 +92,7 @@ const AlertRoot = React.forwardRef<HTMLDivElement, AlertRootProps>(
                     "text-success-800": variant === "success",
                     "text-error-800": variant === "error",
                     "text-brand-800": variant === "brand",
-                  }
+                  },
                 )}
               >
                 {description}
@@ -105,7 +105,7 @@ const AlertRoot = React.forwardRef<HTMLDivElement, AlertRootProps>(
         </div>
       </div>
     );
-  }
+  },
 );
 
 export const Alert = AlertRoot;

@@ -29,13 +29,13 @@ const Step = React.forwardRef<HTMLDivElement, StepProps>(function Step(
     className,
     ...otherProps
   }: StepProps,
-  ref
+  ref,
 ) {
   return (
     <div
       className={SubframeUtils.twClassNames(
         "group/b094efab flex h-full w-full items-start gap-3",
-        className
+        className,
       )}
       ref={ref}
       {...otherProps}
@@ -43,19 +43,19 @@ const Step = React.forwardRef<HTMLDivElement, StepProps>(function Step(
       <div
         className={SubframeUtils.twClassNames(
           "flex flex-col items-center gap-1 self-stretch",
-          { "h-auto w-auto flex-none": lastStep }
+          { "h-auto w-auto flex-none": lastStep },
         )}
       >
         <div
           className={SubframeUtils.twClassNames(
             "flex h-2 w-0.5 flex-none flex-col items-center gap-2 bg-neutral-border",
-            { "h-2 w-0.5 flex-none": lastStep, hidden: firstStep }
+            { "h-2 w-0.5 flex-none": lastStep, hidden: firstStep },
           )}
         />
         <div
           className={SubframeUtils.twClassNames(
             "flex h-7 w-7 flex-none items-center justify-center overflow-hidden rounded-full bg-neutral-100",
-            { "bg-brand-100": variant === "active" || variant === "completed" }
+            { "bg-brand-100": variant === "active" || variant === "completed" },
           )}
         >
           {stepNumber ? (
@@ -66,7 +66,7 @@ const Step = React.forwardRef<HTMLDivElement, StepProps>(function Step(
                   "text-body-bold font-body-bold text-brand-700":
                     variant === "active",
                   hidden: variant === "completed",
-                }
+                },
               )}
             >
               {stepNumber}
@@ -75,21 +75,21 @@ const Step = React.forwardRef<HTMLDivElement, StepProps>(function Step(
           <FeatherCheck
             className={SubframeUtils.twClassNames(
               "hidden text-heading-3 font-heading-3 text-default-font",
-              { "inline-flex text-brand-700": variant === "completed" }
+              { "inline-flex text-brand-700": variant === "completed" },
             )}
           />
         </div>
         <div
           className={SubframeUtils.twClassNames(
             "flex min-h-[8px] w-0.5 grow shrink-0 basis-0 flex-col items-center gap-2 bg-neutral-border",
-            { hidden: lastStep }
+            { hidden: lastStep },
           )}
         />
       </div>
       <div
         className={SubframeUtils.twClassNames(
           "flex grow shrink-0 basis-0 flex-col items-center gap-1 py-4",
-          { "px-0 pt-4 pb-1": lastStep, "px-0 pt-1 pb-4": firstStep }
+          { "px-0 pt-4 pb-1": lastStep, "px-0 pt-1 pb-4": firstStep },
         )}
       >
         {label ? (
@@ -101,7 +101,7 @@ const Step = React.forwardRef<HTMLDivElement, StepProps>(function Step(
                   variant === "active",
                 "text-body font-body text-default-font":
                   variant === "completed",
-              }
+              },
             )}
           >
             {label}
@@ -128,13 +128,13 @@ const VerticalStepperRoot = React.forwardRef<
   VerticalStepperRootProps
 >(function VerticalStepperRoot(
   { children, className, ...otherProps }: VerticalStepperRootProps,
-  ref
+  ref,
 ) {
   return children ? (
     <div
       className={SubframeUtils.twClassNames(
         "flex flex-col items-start",
-        className
+        className,
       )}
       ref={ref}
       {...otherProps}

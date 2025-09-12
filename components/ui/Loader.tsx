@@ -19,7 +19,7 @@ const LoaderRoot = React.forwardRef<
   LoaderRootProps
 >(function LoaderRoot(
   { size = "medium", className, ...otherProps }: LoaderRootProps,
-  ref
+  ref,
 ) {
   return (
     <SubframeCore.Loader
@@ -29,7 +29,7 @@ const LoaderRoot = React.forwardRef<
           "text-heading-2 font-heading-2": size === "large",
           "text-caption font-caption": size === "small",
         },
-        className
+        className,
       )}
       ref={ref}
       {...otherProps}

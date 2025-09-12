@@ -21,14 +21,14 @@ const FullscreenDialogRoot = React.forwardRef<
   FullscreenDialogRootProps
 >(function FullscreenDialogRoot(
   { children, className, ...otherProps }: FullscreenDialogRootProps,
-  ref
+  ref,
 ) {
   return children ? (
     <SubframeCore.FullScreenDialog.Root asChild={true} {...otherProps}>
       <div
         className={SubframeUtils.twClassNames(
           "flex h-full w-full flex-col items-start bg-default-background",
-          className
+          className,
         )}
         ref={ref}
       >

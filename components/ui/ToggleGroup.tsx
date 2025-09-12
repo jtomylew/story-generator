@@ -25,7 +25,7 @@ const Item = React.forwardRef<HTMLDivElement, ItemProps>(function Item(
     className,
     ...otherProps
   }: ItemProps,
-  ref
+  ref,
 ) {
   return (
     <SubframeCore.ToggleGroup.Item asChild={true} {...otherProps}>
@@ -33,7 +33,7 @@ const Item = React.forwardRef<HTMLDivElement, ItemProps>(function Item(
         className={SubframeUtils.twClassNames(
           "group/56dea6ed flex h-7 w-full cursor-pointer items-center justify-center gap-2 rounded-md px-2 py-1 active:bg-neutral-100 aria-[checked=true]:bg-default-background aria-[checked=true]:shadow-sm hover:aria-[checked=true]:bg-default-background active:aria-[checked=true]:bg-default-background",
           { "hover:bg-transparent active:bg-transparent": disabled },
-          className
+          className,
         )}
         ref={ref}
       >
@@ -44,7 +44,7 @@ const Item = React.forwardRef<HTMLDivElement, ItemProps>(function Item(
               {
                 "text-neutral-400 group-hover/56dea6ed:text-neutral-400 group-active/56dea6ed:text-neutral-400":
                   disabled,
-              }
+              },
             )}
           >
             {icon}
@@ -57,7 +57,7 @@ const Item = React.forwardRef<HTMLDivElement, ItemProps>(function Item(
               {
                 "text-neutral-400 group-hover/56dea6ed:text-neutral-400 group-active/56dea6ed:text-neutral-400":
                   disabled,
-              }
+              },
             )}
           >
             {children}
@@ -79,14 +79,14 @@ interface ToggleGroupRootProps
 const ToggleGroupRoot = React.forwardRef<HTMLDivElement, ToggleGroupRootProps>(
   function ToggleGroupRoot(
     { children, className, ...otherProps }: ToggleGroupRootProps,
-    ref
+    ref,
   ) {
     return children ? (
       <SubframeCore.ToggleGroup.Root asChild={true} {...otherProps}>
         <div
           className={SubframeUtils.twClassNames(
             "flex items-center gap-0.5 overflow-hidden rounded-md bg-neutral-100 px-0.5 py-0.5",
-            className
+            className,
           )}
           ref={ref}
         >
@@ -94,7 +94,7 @@ const ToggleGroupRoot = React.forwardRef<HTMLDivElement, ToggleGroupRootProps>(
         </div>
       </SubframeCore.ToggleGroup.Root>
     ) : null;
-  }
+  },
 );
 
 export const ToggleGroup = Object.assign(ToggleGroupRoot, {

@@ -114,9 +114,9 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 **Week 1, Day 4**
 
 - **Decision**: Three-tier system with specific word counts and complexity levels:
-    - Preschool (3-5): 250-400 words, simple sentences, basic emotions
-    - Early Elementary (5-7): 350-550 words, problem-solving themes
-    - Elementary (7-10): 450-700 words, complex plots, nuanced emotions
+  - Preschool (3-5): 250-400 words, simple sentences, basic emotions
+  - Early Elementary (5-7): 350-550 words, problem-solving themes
+  - Elementary (7-10): 450-700 words, complex plots, nuanced emotions
 - **Rationale**: Clear developmental appropriateness with distinct vocabulary levels
 - **Alternative considered**: Single story with difficulty slider
 - **Implementation**: Prompt engineering to adjust vocabulary and sentence structure
@@ -142,11 +142,11 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 - **Decision**: Zod validation with server-only imports and tracked .env.example
 - **Previous limitation**: Direct process.env access without validation caused potential runtime errors
 - **Implementation**:
-    - `.env.example` committed to repo (names only, no secrets)
-    - `lib/env.ts` with Zod validation using safeParse()
-    - Server-only imports prevent client-side exposure
-    - Updated API routes to use validated `env.OPENAI_API_KEY`
-    - Added `server-only` package dependency
+  - `.env.example` committed to repo (names only, no secrets)
+  - `lib/env.ts` with Zod validation using safeParse()
+  - Server-only imports prevent client-side exposure
+  - Updated API routes to use validated `env.OPENAI_API_KEY`
+  - Added `server-only` package dependency
 - **Rationale**: Fail fast on missing vars; simplify onboarding; improve security
 - **Learning outcome**: Successfully implemented type-safe environment variable access with clear error messages
 - **Files**: `.env.example`, `lib/env.ts`, updated `app/api/generate-story/route.js`
@@ -157,17 +157,17 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 
 - **Decision**: Zod schemas for API contract validation in `lib/schema.ts`
 - **API contract**:
-    - Request: `{ articleText: string (≥50 chars), readingLevel: enum }`
-    - Response: `{ story, ageBand, newsSummary, sourceHash, model, tokens?, safety, cached, createdAt }`
-    - Errors: 400 (BadRequest with validation issues), 429 (RateLimited), 500 (Internal)
+  - Request: `{ articleText: string (≥50 chars), readingLevel: enum }`
+  - Response: `{ story, ageBand, newsSummary, sourceHash, model, tokens?, safety, cached, createdAt }`
+  - Errors: 400 (BadRequest with validation issues), 429 (RateLimited), 500 (Internal)
 - **Previous limitation**: No input validation or structured error responses
 - **Implementation**:
-    - Created `lib/schema.ts` with `GenerateReq` and `GenerateRes` schemas
-    - Updated API route to use `GenerateReq.safeParse()` for validation
-    - Implemented `formatZodIssues()` helper for clean error formatting
-    - Updated frontend to send `articleText` instead of `newsStory`
-    - Added reading level mapping from UI format to API format
-    - All responses now use `NextResponse.json()` for consistency
+  - Created `lib/schema.ts` with `GenerateReq` and `GenerateRes` schemas
+  - Updated API route to use `GenerateReq.safeParse()` for validation
+  - Implemented `formatZodIssues()` helper for clean error formatting
+  - Updated frontend to send `articleText` instead of `newsStory`
+  - Added reading level mapping from UI format to API format
+  - All responses now use `NextResponse.json()` for consistency
 - **Rationale**: Beginner-proof inputs; consistent error shapes; safer refactors
 - **Learning outcome**: Successfully implemented comprehensive API validation with clear error messages
 - **Files**: `lib/schema.ts`, updated `app/api/generate-story/route.js`, updated `app/page.js`
@@ -179,13 +179,13 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 - **Decision**: Implement comprehensive type system with RequestState union and centralized services
 - **Previous limitation**: Mixed JavaScript/TypeScript with no request lifecycle management
 - **Implementation**:
-    - Created `lib/types.ts` for type-only exports from Zod schemas
-    - Created `lib/ui-types.ts` with `RequestState` union and `ApiError` interface
-    - Created `lib/openai.ts` with centralized OpenAI client using validated env
-    - Refactored `app/page.js` → `app/page.tsx` with full TypeScript
-    - Implemented `AbortController` for request cancellation and cleanup
-    - Created consistent `/api/generate` endpoint
-    - Added proper error mapping to `ApiError` shape
+  - Created `lib/types.ts` for type-only exports from Zod schemas
+  - Created `lib/ui-types.ts` with `RequestState` union and `ApiError` interface
+  - Created `lib/openai.ts` with centralized OpenAI client using validated env
+  - Refactored `app/page.js` → `app/page.tsx` with full TypeScript
+  - Implemented `AbortController` for request cancellation and cleanup
+  - Created consistent `/api/generate` endpoint
+  - Added proper error mapping to `ApiError` shape
 - **Rationale**: Type safety, better error handling, request lifecycle management, memory safety
 - **Learning outcome**: Successfully implemented professional-grade type-safe architecture
 - **Files**: `lib/types.ts`, `lib/ui-types.ts`, `lib/openai.ts`, `app/page.tsx`, `app/api/generate/route.js`
@@ -196,10 +196,10 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 
 - **Decision**: Centralized OpenAI client configuration in `lib/openai.ts`
 - **Previous limitation**: API client setup repeated in route handlers
-- **Implementation**: 
-    - Created `lib/openai.ts` with server-only import
-    - Configured client using validated environment variables from ADR-007
-    - Updated all API routes to use centralized client
+- **Implementation**:
+  - Created `lib/openai.ts` with server-only import
+  - Configured client using validated environment variables from ADR-007
+  - Updated all API routes to use centralized client
 - **Rationale**: Single source of truth for AI configuration; easier testing and modification
 - **Learning outcome**: Successfully centralized OpenAI client with proper environment validation
 - **Files**: `lib/openai.ts`, updated API routes
@@ -211,11 +211,11 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 - **Decision**: Extract StoryForm and StoryOutput components with proper contracts and accessibility
 - **Previous limitation**: Monolithic page component with mixed concerns
 - **Implementation**:
-    - `components/StoryForm.tsx`: Client component with validation, hotkeys, and a11y
-    - `components/StoryOutput.tsx`: Clean state rendering with error handling
-    - Converted API route to TypeScript with `runtime = "nodejs"`
-    - Fixed TypeScript path aliases in `tsconfig.json`
-    - Maintained fetch logic in page component with AbortController
+  - `components/StoryForm.tsx`: Client component with validation, hotkeys, and a11y
+  - `components/StoryOutput.tsx`: Clean state rendering with error handling
+  - Converted API route to TypeScript with `runtime = "nodejs"`
+  - Fixed TypeScript path aliases in `tsconfig.json`
+  - Maintained fetch logic in page component with AbortController
 - **Rationale**: Separation of concerns, reusability, better testing, accessibility compliance
 - **Learning outcome**: Successfully implemented modular component architecture with proper TypeScript support
 - **Files**: `components/StoryForm.tsx`, `components/StoryOutput.tsx`, `app/api/generate/route.ts`, `app/page.tsx`, `tsconfig.json`
@@ -226,9 +226,9 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 
 - **Decision**: External markdown files for prompt templates
 - **Implementation**:
-    - `prompts/system.story.md` for role and guardrails
-    - `prompts/user.story.md` for template with placeholders
-    - File reading in API routes with `runtime = "nodejs"`
+  - `prompts/system.story.md` for role and guardrails
+  - `prompts/user.story.md` for template with placeholders
+  - File reading in API routes with `runtime = "nodejs"`
 - **Previous limitation**: Hardcoded prompts mixed with application logic
 - **Rationale**: Versionable prompts; easy A/B testing; no code redeploy for text tweaks
 - **Learning outcome**: Understanding of file system operations in serverless environments
@@ -239,14 +239,14 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 **Week 2, Day 1**
 
 - **Decision**: Dual documentation approach
-    - `LLM_CONTEXT.md` for AI handoffs and project overview
-    - `DECISIONS.md` for detailed decision tracking and rationale
+  - `LLM_CONTEXT.md` for AI handoffs and project overview
+  - `DECISIONS.md` for detailed decision tracking and rationale
 - **Implementation**:
-    - Created `docs/` folder structure
-    - Implemented comprehensive `docs/DECISIONS.md` with ADR format
-    - Added status tracking with emoji indicators (✅ ⏳ 🔜 ❌ ↻)
-    - Included update prompts for daily/weekly maintenance
-    - Documented all architectural decisions from Week 1 and Week 2
+  - Created `docs/` folder structure
+  - Implemented comprehensive `docs/DECISIONS.md` with ADR format
+  - Added status tracking with emoji indicators (✅ ⏳ 🔜 ❌ ↻)
+  - Included update prompts for daily/weekly maintenance
+  - Documented all architectural decisions from Week 1 and Week 2
 - **Rationale**: Different audiences need different levels of detail
 - **Maintenance strategy**: Daily updates to DECISIONS.md; weekly updates to LLM_CONTEXT.md
 - **Learning outcome**: Established professional documentation habits with clear decision tracking
@@ -258,12 +258,12 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 
 - **Decision**: All UI development must follow a strict design system contract based on Tailwind CSS, Radix Primitives, and shadcn/ui components.
 - **Implementation rules**:
-    - **Atoms**: Only import primitives from `@/components/ui/*` (shadcn wrappers around Radix).
-    - **Molecules/Patterns**: Create in `@/components/patterns/*`.
-    - **Screens/Sections**: Compose in `@/components/screens/*`.
-    - **Styling**: Use Tailwind utilities mapped to tokens (colors, spacing, typography, radius, shadow) from `tailwind.config.js` and `/styles/tokens.css`. No inline hex values or arbitrary spacing.
-    - **Accessibility**: Ensure keyboard navigation, focus rings, ARIA attributes, and Radix semantics are preserved.
-    - **Documentation**: Every component requires a Storybook story with at least a "default" state and one variant (e.g. loading, error).
+  - **Atoms**: Only import primitives from `@/components/ui/*` (shadcn wrappers around Radix).
+  - **Molecules/Patterns**: Create in `@/components/patterns/*`.
+  - **Screens/Sections**: Compose in `@/components/screens/*`.
+  - **Styling**: Use Tailwind utilities mapped to tokens (colors, spacing, typography, radius, shadow) from `tailwind.config.js` and `/styles/tokens.css`. No inline hex values or arbitrary spacing.
+  - **Accessibility**: Ensure keyboard navigation, focus rings, ARIA attributes, and Radix semantics are preserved.
+  - **Documentation**: Every component requires a Storybook story with at least a "default" state and one variant (e.g. loading, error).
 - **Rationale**: Guarantees design consistency, accessibility, and maintainability while enabling AI tools (Cursor) to compose reliably from a known library.
 - **Outcome**: New screens and features will scale cleanly, reduce visual drift, and avoid one-off component duplication.
 - **Files**: `components/ui/`, `components/patterns/`, `components/screens/`, `tailwind.config.js`, `/styles/tokens.css`, `.storybook/`
@@ -275,12 +275,12 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 - **Decision**: Adopt a placeholders-first microinteraction strategy using Tailwind transitions + DS tokens, Radix/shadcn semantics, and optional Framer Motion for complex sequences.
 - **Rationale**: Gives immediate UX affordances without deep animation work; keeps a11y correct; creates consistent hooks AI can compose later.
 - **Implementation Rules**:
-    - Motion tokens live in `/styles/tokens.css`; no hardcoded durations/easings in components.
-    - Use Tailwind transitions with `duration-[var(--motion-*)]` and `ease-[var(--ease-*)]`.
-    - Loading/skeleton placeholders standardized via `<Spinner />` and `<Skeleton />`.
-    - Feedback via shadcn `useToast()` only.
-    - Prefer Radix primitives for focus & ARIA; wrap visuals in shadcn.
-    - Enable reduced-motion fallbacks.
+  - Motion tokens live in `/styles/tokens.css`; no hardcoded durations/easings in components.
+  - Use Tailwind transitions with `duration-[var(--motion-*)]` and `ease-[var(--ease-*)]`.
+  - Loading/skeleton placeholders standardized via `<Spinner />` and `<Skeleton />`.
+  - Feedback via shadcn `useToast()` only.
+  - Prefer Radix primitives for focus & ARIA; wrap visuals in shadcn.
+  - Enable reduced-motion fallbacks.
 - **Scope**: Applies to all atoms/molecules/screens. Complex motion requires explicit note in PR/ADR.
 - **Files**: `/styles/tokens.css`, `components/ui/spinner.tsx`, `components/ui/skeleton.tsx`
 
@@ -290,10 +290,10 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 
 - **Decision**: Systematically cascade the design system across the existing app following ADR-014 and ADR-015 guidelines.
 - **Implementation**:
-    - **Phase 1**: Added Tailwind compat layer with color aliases and motion utilities for gradual migration
-    - **Phase 2**: Replaced raw HTML primitives with shadcn/ui components (Button, Select) while preserving functionality
-    - **Phase 3**: Verified pattern components already used design system primitives properly
-    - **Phase 4**: Confirmed Storybook integration and ran comprehensive tests
+  - **Phase 1**: Added Tailwind compat layer with color aliases and motion utilities for gradual migration
+  - **Phase 2**: Replaced raw HTML primitives with shadcn/ui components (Button, Select) while preserving functionality
+  - **Phase 3**: Verified pattern components already used design system primitives properly
+  - **Phase 4**: Confirmed Storybook integration and ran comprehensive tests
 - **Tokenization**: Replaced hardcoded colors (`text-gray-800` → `text-fg`) and motion (`duration-300` → `motion-medium`)
 - **Primitive Swap**: Converted `<button>` → `<Button>` and `<select>` → `<Select>` with proper imports
 - **Guardrails**: Maintained business logic, avoided non-trivial refactors, preserved accessibility
@@ -307,43 +307,43 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 
 - **Decision**: Enforce a single mapping between external AI tools (Subframe, Lovable, v0, etc.) and our repo so changes always land in the same files.
 - **Canonical structure**:
-    - `components/ui/*` (atoms / shadcn over Radix)
-    - `components/patterns/*` (molecules)
-    - `components/screens/*` (screens/sections)
-    - Stories colocated or under `stories/*` (consistent per component family)
+  - `components/ui/*` (atoms / shadcn over Radix)
+  - `components/patterns/*` (molecules)
+  - `components/screens/*` (screens/sections)
+  - Stories colocated or under `stories/*` (consistent per component family)
 - **Subframe policy**:
-    - Subframe edits its own project; we pull into the repo via CLI.
-    - Sync root: `./components` (set during `npx @subframe/cli init`).
-    - Subframe must **update in place** using our canonical paths.
-    - Tailwind config/tokens remain the source of truth in the repo.
+  - Subframe edits its own project; we pull into the repo via CLI.
+  - Sync root: `./components` (set during `npx @subframe/cli init`).
+  - Subframe must **update in place** using our canonical paths.
+  - Tailwind config/tokens remain the source of truth in the repo.
 - **Guardrails**:
-    - Lint: block foreign UI libs via `no-restricted-imports`.
-    - Token discipline: no inline hex or arbitrary px values.
-    - A11y: Radix semantics; visible focus; `<Label htmlFor>`; aria-*.
-    - Each changed component requires/upgrades a Storybook story.
+  - Lint: block foreign UI libs via `no-restricted-imports`.
+  - Token discipline: no inline hex or arbitrary px values.
+  - A11y: Radix semantics; visible focus; `<Label htmlFor>`; aria-\*.
+  - Each changed component requires/upgrades a Storybook story.
 - **CI/Local checks**:
-    - Require `npm run typecheck` to pass.
-    - Build Storybook (or run dev) on PRs touching `src/components/**`.
-    - Optional: Chromatic visual diffs.
+  - Require `npm run typecheck` to pass.
+  - Build Storybook (or run dev) on PRs touching `src/components/**`.
+  - Optional: Chromatic visual diffs.
 - **CLI & scripts** (add to `package.json`):
-    ```json
-    {
-      "scripts": {
-        "typecheck": "tsc --noEmit",
-        "storybook": "storybook dev -p 6006",
-        "build-storybook": "storybook build",
-        "find:strays": "rg -n \"(src/subframe|^components/|^subframe/)\" src || true",
-        "find:raw-primitives": "rg -n \"<(button|input|select|textarea)(\\\\s|>)\" src/components --glob '!src/components/ui/**' || true"
-      }
+  ```json
+  {
+    "scripts": {
+      "typecheck": "tsc --noEmit",
+      "storybook": "storybook dev -p 6006",
+      "build-storybook": "storybook build",
+      "find:strays": "rg -n \"(src/subframe|^components/|^subframe/)\" src || true",
+      "find:raw-primitives": "rg -n \"<(button|input|select|textarea)(\\\\s|>)\" src/components --glob '!src/components/ui/**' || true"
     }
-    ```
+  }
+  ```
 - **Workflow**:
-    1. Edit/design in Subframe (target explicit canonical paths)
-    2. Pull to repo: `npx @subframe/cli@latest sync --all`
-    3. Verify locally: `npm run typecheck && npm run storybook && npm run dev`
-    4. Fix/organize imports; ensure DS compliance; commit PR → Vercel deploys
-    - **Status**: Adopted
-    - **Note**: If you don't have ripgrep `rg`, swap those scripts for grep equivalents or omit
+  1. Edit/design in Subframe (target explicit canonical paths)
+  2. Pull to repo: `npx @subframe/cli@latest sync --all`
+  3. Verify locally: `npm run typecheck && npm run storybook && npm run dev`
+  4. Fix/organize imports; ensure DS compliance; commit PR → Vercel deploys
+  - **Status**: Adopted
+  - **Note**: If you don't have ripgrep `rg`, swap those scripts for grep equivalents or omit
 - **Rationale**: Prevents component library conflicts and ensures consistent development experience across AI tools
 - **Outcome**: Successfully integrated Subframe component library while maintaining existing functionality and design system contracts
 - **Files**: `components/ui/`, `tsconfig.json`, `package.json`, `.subframe/sync.json`
@@ -355,20 +355,22 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 - **Decision**: Implement barrel exports and consolidate all component imports to use a single canonical import pattern.
 - **Previous limitation**: Mixed import patterns with deep paths and inconsistent component exports causing TypeScript errors and import confusion.
 - **Implementation**:
-    - Created root barrel export `components/index.ts` that re-exports all components from ui, patterns, and screens
-    - Updated all layer-specific barrel exports (`components/ui/index.ts`, `components/patterns/index.ts`, `components/screens/index.ts`) to use consistent named exports
-    - Converted all components from default exports to named exports for consistency
-    - Updated all imports throughout the codebase to use the canonical pattern: `import { ComponentName } from '@/components'`
-    - Fixed TypeScript path aliases in `tsconfig.json` to resolve component imports correctly
-    - Updated all Storybook stories to use the new named export pattern
+  - Created root barrel export `components/index.ts` that re-exports all components from ui, patterns, and screens
+  - Updated all layer-specific barrel exports (`components/ui/index.ts`, `components/patterns/index.ts`, `components/screens/index.ts`) to use consistent named exports
+  - Converted all components from default exports to named exports for consistency
+  - Updated all imports throughout the codebase to use the canonical pattern: `import { ComponentName } from '@/components'`
+  - Fixed TypeScript path aliases in `tsconfig.json` to resolve component imports correctly
+  - Updated all Storybook stories to use the new named export pattern
 - **Canonical import pattern**:
-    ```typescript
-    // ✅ Correct - use root barrel
-    import { Button, StoryForm, GenerateStory } from '@/components'
-    
-    // ❌ Avoid - deep paths
-    import { StoryForm } from '@/components/patterns/StoryForm'
-    ```
+
+  ```typescript
+  // ✅ Correct - use root barrel
+  import { Button, StoryForm, GenerateStory } from "@/components";
+
+  // ❌ Avoid - deep paths
+  import { StoryForm } from "@/components/patterns/StoryForm";
+  ```
+
 - **Rationale**: Simplifies imports, reduces coupling, enables easier refactoring, and provides a single source of truth for component exports
 - **Learning outcome**: Successfully implemented professional-grade import consolidation with zero TypeScript errors
 - **Files**: `components/index.ts`, `components/ui/index.ts`, `components/patterns/index.ts`, `components/screens/index.ts`, all component files, all story files, `tsconfig.json`
@@ -380,19 +382,45 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 - **Decision**: Upgrade to Next.js 15.5.3 and Storybook 8.6.14 for better compatibility and latest features.
 - **Previous limitation**: Next.js 14.2.5 had compatibility issues with Storybook and missing manifest files causing 500 errors.
 - **Implementation**:
-    - Upgraded Next.js from 14.2.5 to 15.5.3 (latest stable)
-    - Upgraded Storybook from mixed versions to 8.6.14 (compatible with Next.js 15.5.3)
-    - Fixed font compatibility issues by replacing `Geist` fonts with `Inter` and `JetBrains_Mono` for stable cross-version support
-    - Updated `app/layout.js` to use compatible font imports and proper className references
-    - Cleaned up version conflicts by removing all Storybook packages and reinstalling consistently
-    - Verified all functionality works with the new versions
+  - Upgraded Next.js from 14.2.5 to 15.5.3 (latest stable)
+  - Upgraded Storybook from mixed versions to 8.6.14 (compatible with Next.js 15.5.3)
+  - Fixed font compatibility issues by replacing `Geist` fonts with `Inter` and `JetBrains_Mono` for stable cross-version support
+  - Updated `app/layout.js` to use compatible font imports and proper className references
+  - Cleaned up version conflicts by removing all Storybook packages and reinstalling consistently
+  - Verified all functionality works with the new versions
 - **Compatibility matrix**:
-    - Next.js 15.5.3 + React 19.1.0 + Storybook 8.6.14 = ✅ Working
-    - Next.js 14.2.5 + React 18.2.0 + Storybook 8.6.14 = ❌ Font issues
-    - Next.js 15.5.3 + React 19.1.0 + Storybook 9.x = ❌ Package conflicts
+  - Next.js 15.5.3 + React 19.1.0 + Storybook 8.6.14 = ✅ Working
+  - Next.js 14.2.5 + React 18.2.0 + Storybook 8.6.14 = ❌ Font issues
+  - Next.js 15.5.3 + React 19.1.0 + Storybook 9.x = ❌ Package conflicts
 - **Rationale**: Latest stable versions provide better performance, security, and compatibility while maintaining all existing functionality
 - **Learning outcome**: Successfully upgraded to latest stable versions with zero breaking changes
 - **Files**: `package.json`, `package-lock.json`, `app/layout.js`
+
+### ADR-020: Workflow Preflight Automation & Documentation ✅
+
+**Week 2, Day 6**
+
+- **Decision**: Implement comprehensive preflight checks, Git hooks, and CI/CD automation to enforce design system compliance and prevent violations.
+- **Previous limitation**: No automated enforcement of design system rules, leading to potential violations and inconsistent code quality.
+- **Implementation**:
+  - Added preflight script with typecheck, lint, format, and custom violation checks
+  - Implemented Husky Git hooks for pre-commit (fast checks) and pre-push (full preflight)
+  - Created GitHub Actions workflow for CI/CD enforcement
+  - Added ESLint rule to prevent deep component imports (`@/components/*/*`)
+  - Updated .gitignore to exclude Subframe and temporary files
+  - Fixed component import violations to use canonical barrel exports
+  - Added comprehensive workflow integration documentation in AI_UI_Guide.md
+- **Preflight checks**:
+  - `typecheck`: TypeScript compilation validation
+  - `lint`: ESLint with zero warnings policy
+  - `format:check`: Prettier formatting validation
+  - `ban:raw-primitives`: Prevent raw HTML elements outside /ui
+  - `find:strays`: Detect deep imports from @/components
+  - `find:duplicates`: Detect duplicate component files
+  - `storybook:build`: Ensure Storybook stories render correctly
+- **Rationale**: Automated enforcement prevents design system violations, ensures consistent code quality, and provides fast feedback loops for developers
+- **Learning outcome**: Successfully implemented professional-grade automation with comprehensive violation detection
+- **Files**: `package.json`, `.husky/`, `.github/workflows/`, `eslint.config.mjs`, `.gitignore`, `docs/AI_UI_Guide.md`, `docs/LLM_CONTEXT.md`
 
 ---
 
@@ -413,6 +441,8 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 - ✅ External AI tool integration (Subframe) with canonical component structure
 - ✅ Component import consolidation with barrel exports and canonical import patterns
 - ✅ Next.js 15.5.3 and Storybook 8.6.14 upgrade with full compatibility
+- ✅ Workflow preflight automation with Git hooks and CI/CD enforcement
+- ✅ Comprehensive violation detection and design system compliance automation
 
 **Known limitations & planned mitigations**
 
@@ -424,6 +454,7 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 - **No analytics/monitoring** → Add error tracking and usage analytics (Week 4: Sentry + PostHog) 🔜
 - **Hardcoded prompts** → Externalize to markdown files for versioning (Week 2: ADR-013) 🔜
 - **No response validation** → Implement GenerateRes schema validation before returning (Week 2) 🔜
+- **Storybook build failure** → Next.js 15.5.3 + Storybook 8.6.14 compatibility issue (Week 3: upgrade to Storybook 9.x or downgrade Next.js) 🔜
 
 ---
 
@@ -458,6 +489,7 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 
 ## Changelog (append-only)
 
+- **Week 2, Day 6**: Completed ADR-020 - implemented workflow preflight automation with comprehensive violation detection, Git hooks, CI/CD enforcement, and updated documentation; fixed component import violations to use canonical barrel exports; added Storybook build issue to technical debt; all preflight checks passing except Storybook build ✅
 - **Week 2, Day 5**: Completed ADR-018/019 - implemented component import consolidation with barrel exports and canonical import patterns; upgraded to Next.js 15.5.3 and Storybook 8.6.14; fixed font compatibility issues; all TypeScript compilation, builds, and dev server tests passing ✅
 - **Week 2, Day 4**: Completed ADR-017 - integrated Subframe component library with canonical structure; resolved import conflicts and component organization; maintained design system contracts ✅
 - **Week 2, Day 3**: Completed ADR-014/015/016 - implemented design system foundation with tokenized styling, UI primitives, and systematic cascade across existing app; replaced raw HTML with shadcn/ui components while preserving functionality; added motion defaults and accessibility features; all tests passing ✅

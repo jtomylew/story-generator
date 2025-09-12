@@ -81,21 +81,33 @@ body {
 /* Design System Compat Layer - Temporary aliases for gradual migration */
 @layer utilities {
   /* Color aliases */
-  .text-fg { @apply text-foreground; }
-  .text-muted { @apply text-muted-foreground; }
-  .bg-bg { @apply bg-background; }
-  .bg-muted { @apply bg-muted; }
-  .border-border { @apply border-border; }
-  .border-input { @apply border-input; }
-  
+  .text-fg {
+    @apply text-foreground;
+  }
+  .text-muted {
+    @apply text-muted-foreground;
+  }
+  .bg-bg {
+    @apply bg-background;
+  }
+  .bg-muted {
+    @apply bg-muted;
+  }
+  .border-border {
+    @apply border-border;
+  }
+  .border-input {
+    @apply border-input;
+  }
+
   /* Motion defaults for interactive elements */
-  .motion-default { 
-    transition: all var(--motion-fast) var(--ease-out); 
+  .motion-default {
+    transition: all var(--motion-fast) var(--ease-out);
   }
-  .motion-medium { 
-    transition: all var(--motion-medium) var(--ease-out); 
+  .motion-medium {
+    transition: all var(--motion-medium) var(--ease-out);
   }
-  .motion-slow { 
-    transition: all var(--motion-slow) var(--ease-out); 
+  .motion-slow {
+    transition: all var(--motion-slow) var(--ease-out);
   }
 }

@@ -19,7 +19,7 @@ const DrawerLayoutRoot = React.forwardRef<
   DrawerLayoutRootProps
 >(function DrawerLayoutRoot(
   { children, className, ...otherProps }: DrawerLayoutRootProps,
-  ref
+  ref,
 ) {
   return (
     <Drawer className={className} ref={ref} {...otherProps}>

@@ -3,13 +3,25 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "//": "— Core dev/build (keep your existing ones) —",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "eslint . --ext .ts,.tsx --max-warnings=0",
+    "format": "prettier -w .",
+    "format:check": "prettier -c .",
+    "//:checks": "— Duplicate & drift guards —",
+    "ban:raw-primitives": "grep -R \"<\\(button\\|input\\|select\\|textarea\\)\\b\" components --include='*.tsx' | grep -v '/ui/' || true",
+    "find:strays": "grep -R \"from ['\\\"]@/components/[^'\\\"]\" components src --include='*.ts' --include='*.tsx' || true",
+    "find:duplicates": "find components -type f \\( -name '*.tsx' -o -name '*.ts' \\) -not -name 'index.ts' -print0 | xargs -0 -I {} basename {} | sort | uniq -d",
+    "find:similar": "grep -R \"export\\s\\+\\(default\\s\\+\\)\\?function\\s\\+.*\\(Form\\|Card\\|Button\\|Field\\)\" components --include='*.tsx' | cut -d: -f1 | sort | uniq",
+    "//:storybook": "— Storybook sanity —",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "storybook:build": "storybook build -o .sb-out",
+    "//:pipelines": "— Preflight gate before PRs —",
+    "preflight": "npm run typecheck && npm run lint && npm run format:check && npm run ban:raw-primitives && npm run find:strays && npm run find:duplicates && npm run storybook:build",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@radix-ui/react-alert-dialog": "^1.1.15",
@@ -31,9 +43,11 @@
     "zod": "^3.25.76"
   },
   "devDependencies": {
+    "@babel/types": "^7.28.4",
     "@eslint/eslintrc": "^3",
     "@storybook/addon-a11y": "^8.6.14",
     "@storybook/addon-essentials": "^8.6.14",
+    "@storybook/addon-interactions": "^8.6.14",
     "@storybook/nextjs": "^8.6.14",
     "@storybook/react": "^8.6.14",
     "@tailwindcss/postcss": "^4",
@@ -41,6 +55,8 @@
     "@types/react": "^19.1.12",
     "eslint": "^9",
     "eslint-config-next": "15.5.0",
+    "husky": "^8.0.0",
+    "prettier": "^3.6.2",
     "storybook": "^8.6.14",
     "tailwindcss": "^4",
     "typescript": "^5.9.2"

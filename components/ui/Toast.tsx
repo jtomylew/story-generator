@@ -30,13 +30,13 @@ const ToastRoot = React.forwardRef<HTMLDivElement, ToastRootProps>(
       className,
       ...otherProps
     }: ToastRootProps,
-    ref
+    ref,
   ) {
     return (
       <div
         className={SubframeUtils.twClassNames(
           "group/2c7966c2 flex w-80 items-center gap-4 rounded-md bg-default-background px-4 py-3 shadow-lg",
-          className
+          className,
         )}
         ref={ref}
         {...otherProps}
@@ -49,7 +49,7 @@ const ToastRoot = React.forwardRef<HTMLDivElement, ToastRootProps>(
                 "text-success-700": variant === "success",
                 "text-error-700": variant === "error",
                 "text-brand-600": variant === "brand",
-              }
+              },
             )}
           >
             {icon}
@@ -64,7 +64,7 @@ const ToastRoot = React.forwardRef<HTMLDivElement, ToastRootProps>(
                   "text-success-700": variant === "success",
                   "text-error-700": variant === "error",
                   "text-brand-800": variant === "brand",
-                }
+                },
               )}
             >
               {title}
@@ -81,7 +81,7 @@ const ToastRoot = React.forwardRef<HTMLDivElement, ToastRootProps>(
         ) : null}
       </div>
     );
-  }
+  },
 );
 
 export const Toast = ToastRoot;

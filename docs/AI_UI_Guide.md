@@ -97,19 +97,22 @@ Ensure inputs, dialogs, and tooltips follow Radix semantics.
 This section defines how to integrate visual prototyping tools (Cursor, Subframe, Lovable, v0, etc.) with our codebase without creating duplicates or messy divergence.
 
 ### Source of Truth
+
 - **Repo is canonical.** All external tools must update existing files in place under canonical paths:
   - `components/ui/*` (primitives)
   - `components/patterns/*` (molecules)
   - `components/screens/*` (screens)
 
 ### Decision Tree
-- **Exploring a design idea?** → Prototype visually in Subframe/Figma/v0. Do not import code. Take screenshots/exports for reference.  
-- **Refining an existing component?** → Use Cursor with explicit file paths and the standard header to modify the file in place.  
-- **Building something new?** → Prototype visually, then recreate with our primitives/patterns in Cursor.  
+
+- **Exploring a design idea?** → Prototype visually in Subframe/Figma/v0. Do not import code. Take screenshots/exports for reference.
+- **Refining an existing component?** → Use Cursor with explicit file paths and the standard header to modify the file in place.
+- **Building something new?** → Prototype visually, then recreate with our primitives/patterns in Cursor.
 - **Blocked and need scaffolding?** → Controlled sync from Subframe (see below).
 
 ### Controlled Sync (Exception Only)
-- Use **only** on a branch named `sync/subframe-YYYYMMDD`.  
+
+- Use **only** on a branch named `sync/subframe-YYYYMMDD`.
 - Run:
   ```bash
   npx @subframe/cli@latest sync --all
@@ -119,6 +122,7 @@ This section defines how to integrate visual prototyping tools (Cursor, Subframe
 - Add `// @subframe/sync-disable` to protect files from overwrite.
 
 ### Preflight Checklist (run before any PR/merge)
+
 ```bash
 npm run typecheck
 npm run ban:raw-primitives   # no raw <button>, <input>, etc. outside /ui
@@ -128,6 +132,7 @@ npm run storybook:build      # ensure updated stories render
 ```
 
 ### Git Workflow (summary)
+
 ```bash
 git checkout main && git pull
 git checkout -b feat/<name>             # normal work
@@ -143,6 +148,7 @@ git push -u origin HEAD
 ```
 
 ### .gitignore Rules
+
 ```bash
 .subframe/
 subframe-components/
@@ -153,6 +159,7 @@ components/draft/
 ```
 
 ### Cursor Prompt Stub
+
 ```sql
 You are updating an existing component in a DS-constrained repo.
 

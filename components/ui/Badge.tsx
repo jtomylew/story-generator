@@ -26,7 +26,7 @@ const BadgeRoot = React.forwardRef<HTMLDivElement, BadgeRootProps>(
       className,
       ...otherProps
     }: BadgeRootProps,
-    ref
+    ref,
   ) {
     return (
       <div
@@ -42,7 +42,7 @@ const BadgeRoot = React.forwardRef<HTMLDivElement, BadgeRootProps>(
             "border border-solid border-neutral-100 bg-neutral-100":
               variant === "neutral",
           },
-          className
+          className,
         )}
         ref={ref}
         {...otherProps}
@@ -56,7 +56,7 @@ const BadgeRoot = React.forwardRef<HTMLDivElement, BadgeRootProps>(
                 "text-warning-800": variant === "warning",
                 "text-error-700": variant === "error",
                 "text-neutral-700": variant === "neutral",
-              }
+              },
             )}
           >
             {icon}
@@ -71,7 +71,7 @@ const BadgeRoot = React.forwardRef<HTMLDivElement, BadgeRootProps>(
                 "text-warning-800": variant === "warning",
                 "text-error-800": variant === "error",
                 "text-neutral-700": variant === "neutral",
-              }
+              },
             )}
           >
             {children}
@@ -86,7 +86,7 @@ const BadgeRoot = React.forwardRef<HTMLDivElement, BadgeRootProps>(
                 "text-warning-800": variant === "warning",
                 "text-error-700": variant === "error",
                 "text-neutral-700": variant === "neutral",
-              }
+              },
             )}
           >
             {iconRight}
@@ -94,7 +94,7 @@ const BadgeRoot = React.forwardRef<HTMLDivElement, BadgeRootProps>(
         ) : null}
       </div>
     );
-  }
+  },
 );
 
 export const Badge = BadgeRoot;

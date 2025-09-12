@@ -16,14 +16,14 @@ interface RowProps extends React.HTMLAttributes<HTMLTableRowElement> {
 
 const Row = React.forwardRef<HTMLTableRowElement, RowProps>(function Row(
   { children, clickable = false, className, ...otherProps }: RowProps,
-  ref
+  ref,
 ) {
   return (
     <tr
       className={SubframeUtils.twClassNames(
         "group/5d119f8d border-t border-solid border-neutral-border",
         { "hover:bg-neutral-50": clickable },
-        className
+        className,
       )}
       ref={ref}
       {...otherProps}
@@ -40,14 +40,14 @@ interface CellProps extends React.TdHTMLAttributes<HTMLTableDataCellElement> {
 
 const Cell = React.forwardRef<HTMLDivElement, CellProps>(function Cell(
   { children, className, ...otherProps }: CellProps,
-  ref
+  ref,
 ) {
   return (
     <td {...otherProps}>
       <div
         className={SubframeUtils.twClassNames(
           "flex h-12 w-full items-center gap-1 px-3",
-          className
+          className,
         )}
         ref={ref}
       >
@@ -65,14 +65,14 @@ interface HeaderRowProps extends React.HTMLAttributes<HTMLTableRowElement> {
 const HeaderRow = React.forwardRef<HTMLTableRowElement, HeaderRowProps>(
   function HeaderRow(
     { children, className, ...otherProps }: HeaderRowProps,
-    ref
+    ref,
   ) {
     return (
       <tr className={className} ref={ref} {...otherProps}>
         {children}
       </tr>
     );
-  }
+  },
 );
 
 interface HeaderCellProps
@@ -85,14 +85,14 @@ interface HeaderCellProps
 const HeaderCell = React.forwardRef<HTMLDivElement, HeaderCellProps>(
   function HeaderCell(
     { children, icon = null, className, ...otherProps }: HeaderCellProps,
-    ref
+    ref,
   ) {
     return (
       <th {...otherProps}>
         <div
           className={SubframeUtils.twClassNames(
             "flex h-8 w-full items-center gap-1 px-3",
-            className
+            className,
           )}
           ref={ref}
         >
@@ -109,7 +109,7 @@ const HeaderCell = React.forwardRef<HTMLDivElement, HeaderCellProps>(
         </div>
       </th>
     );
-  }
+  },
 );
 
 interface TableRootProps extends React.TableHTMLAttributes<HTMLTableElement> {
@@ -121,7 +121,7 @@ interface TableRootProps extends React.TableHTMLAttributes<HTMLTableElement> {
 const TableRoot = React.forwardRef<HTMLTableElement, TableRootProps>(
   function TableRoot(
     { header, children, className, ...otherProps }: TableRootProps,
-    ref
+    ref,
   ) {
     return (
       <table
@@ -135,7 +135,7 @@ const TableRoot = React.forwardRef<HTMLTableElement, TableRootProps>(
         </tbody>
       </table>
     );
-  }
+  },
 );
 
 export const Table = Object.assign(TableRoot, {

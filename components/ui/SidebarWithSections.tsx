@@ -26,14 +26,14 @@ const NavItem = React.forwardRef<HTMLDivElement, NavItemProps>(function NavItem(
     className,
     ...otherProps
   }: NavItemProps,
-  ref
+  ref,
 ) {
   return (
     <div
       className={SubframeUtils.twClassNames(
         "group/2713e17b flex w-full cursor-pointer items-center gap-2 rounded-md px-3 py-2 hover:bg-neutral-50 active:bg-neutral-100",
         { "bg-brand-50 hover:bg-brand-50 active:bg-brand-100": selected },
-        className
+        className,
       )}
       ref={ref}
       {...otherProps}
@@ -42,7 +42,7 @@ const NavItem = React.forwardRef<HTMLDivElement, NavItemProps>(function NavItem(
         <SubframeCore.IconWrapper
           className={SubframeUtils.twClassNames(
             "text-heading-3 font-heading-3 text-neutral-600",
-            { "text-brand-700": selected }
+            { "text-brand-700": selected },
           )}
         >
           {icon}
@@ -52,7 +52,7 @@ const NavItem = React.forwardRef<HTMLDivElement, NavItemProps>(function NavItem(
         <span
           className={SubframeUtils.twClassNames(
             "line-clamp-1 grow shrink-0 basis-0 text-body-bold font-body-bold text-neutral-600",
-            { "text-brand-700": selected }
+            { "text-brand-700": selected },
           )}
         >
           {children}
@@ -72,13 +72,13 @@ interface NavSectionProps extends React.HTMLAttributes<HTMLDivElement> {
 const NavSection = React.forwardRef<HTMLDivElement, NavSectionProps>(
   function NavSection(
     { children, label, className, ...otherProps }: NavSectionProps,
-    ref
+    ref,
   ) {
     return (
       <div
         className={SubframeUtils.twClassNames(
           "flex w-full flex-col items-start gap-1 pt-6",
-          className
+          className,
         )}
         ref={ref}
         {...otherProps}
@@ -97,7 +97,7 @@ const NavSection = React.forwardRef<HTMLDivElement, NavSectionProps>(
         ) : null}
       </div>
     );
-  }
+  },
 );
 
 interface SidebarWithSectionsRootProps
@@ -119,13 +119,13 @@ const SidebarWithSectionsRoot = React.forwardRef<
     className,
     ...otherProps
   }: SidebarWithSectionsRootProps,
-  ref
+  ref,
 ) {
   return (
     <nav
       className={SubframeUtils.twClassNames(
         "flex h-full w-60 flex-col items-start border-r border-solid border-neutral-border bg-default-background",
-        className
+        className,
       )}
       ref={ref}
       {...otherProps}

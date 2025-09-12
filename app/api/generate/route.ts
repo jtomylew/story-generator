@@ -14,7 +14,7 @@ export async function POST(req: Request) {
       const error: ApiError = {
         message: "Invalid request data",
         code: "BAD_REQUEST",
-        issues: formatZodIssues(parsed.error)
+        issues: formatZodIssues(parsed.error),
       };
       return NextResponse.json(error, { status: 400 });
     }
@@ -23,7 +23,7 @@ export async function POST(req: Request) {
     // Create age-appropriate prompt based on reading level
     const getAgeSpecificPrompt = (level: string) => {
       switch (level) {
-        case 'preschool':
+        case "preschool":
           return `Create a very simple allegorical story for preschoolers (ages 3-5). The story should:
 - Use very simple words and short sentences (2-4 words per sentence)
 - Include lots of repetition and rhyming
@@ -33,8 +33,8 @@ export async function POST(req: Request) {
 - Include sound effects and simple actions
 - Be perfect for reading aloud to very young children
 - Use bright, simple imagery and happy endings`;
-        
-        case 'early-elementary':
+
+        case "early-elementary":
           return `Create an allegorical story for early elementary children (ages 5-7). The story should:
 - Use simple vocabulary and short sentences
 - Include some repetition and rhythm
@@ -44,8 +44,8 @@ export async function POST(req: Request) {
 - Include dialogue and simple conversations
 - Be engaging for beginning readers
 - Use descriptive but simple language`;
-        
-        case 'elementary':
+
+        case "elementary":
           return `Create an allegorical story for elementary children (ages 7-10). The story should:
 - Use age-appropriate vocabulary with some challenging words
 - Include varied sentence structures
@@ -55,7 +55,7 @@ export async function POST(req: Request) {
 - Include rich dialogue and descriptions
 - Be suitable for independent reading
 - Use engaging storytelling techniques`;
-        
+
         default:
           return `Create a 5-minute allegorical story for children under 10 years old. The story should:
 - Be engaging and age-appropriate
@@ -80,12 +80,12 @@ Please format the story with proper paragraphs and make it easy to read aloud.`;
       messages: [
         {
           role: "system",
-          content: `You are a skilled children's storyteller who creates engaging, educational allegorical stories based on real-world events. You are specifically adapting stories for ${readingLevel} children. Your stories are always age-appropriate, positive, and include valuable life lessons tailored to the reading level.`
+          content: `You are a skilled children's storyteller who creates engaging, educational allegorical stories based on real-world events. You are specifically adapting stories for ${readingLevel} children. Your stories are always age-appropriate, positive, and include valuable life lessons tailored to the reading level.`,
         },
         {
           role: "user",
-          content: prompt
-        }
+          content: prompt,
+        },
       ],
       max_tokens: 1000,
       temperature: 0.7,
@@ -96,8 +96,8 @@ Please format the story with proper paragraphs and make it easy to read aloud.`;
 
     if (!generatedStory) {
       const error: ApiError = {
-        message: 'Failed to generate story',
-        code: 'INTERNAL_ERROR'
+        message: "Failed to generate story",
+        code: "INTERNAL_ERROR",
       };
       return NextResponse.json(error, { status: 500 });
     }
@@ -107,41 +107,40 @@ Please format the story with proper paragraphs and make it easy to read aloud.`;
       success: true,
       story: generatedStory,
       originalNewsStory: articleText,
-      readingLevel: readingLevel
+      readingLevel: readingLevel,
     });
-
   } catch (error: any) {
-    console.error('Error generating story:', error);
+    console.error("Error generating story:", error);
 
     // Handle specific OpenAI errors
     if (error.status === 401) {
       const apiError: ApiError = {
-        message: 'Invalid OpenAI API key',
-        code: 'INTERNAL_ERROR'
+        message: "Invalid OpenAI API key",
+        code: "INTERNAL_ERROR",
       };
       return NextResponse.json(apiError, { status: 401 });
     }
 
     if (error.status === 429) {
       const apiError: ApiError = {
-        message: 'Rate limit exceeded. Please try again later.',
-        code: 'RATE_LIMITED'
+        message: "Rate limit exceeded. Please try again later.",
+        code: "RATE_LIMITED",
       };
       return NextResponse.json(apiError, { status: 429 });
     }
 
     if (error.status === 500) {
       const apiError: ApiError = {
-        message: 'OpenAI service is currently unavailable',
-        code: 'INTERNAL_ERROR'
+        message: "OpenAI service is currently unavailable",
+        code: "INTERNAL_ERROR",
       };
       return NextResponse.json(apiError, { status: 503 });
     }
 
     // Generic error response
     const apiError: ApiError = {
-      message: 'An error occurred while generating the story',
-      code: 'INTERNAL_ERROR'
+      message: "An error occurred while generating the story",
+      code: "INTERNAL_ERROR",
     };
     return NextResponse.json(apiError, { status: 500 });
   }
@@ -150,24 +149,24 @@ Please format the story with proper paragraphs and make it easy to read aloud.`;
 // Handle unsupported HTTP methods
 export async function GET() {
   const error: ApiError = {
-    message: 'Method not allowed. Use POST to generate a story.',
-    code: 'BAD_REQUEST'
+    message: "Method not allowed. Use POST to generate a story.",
+    code: "BAD_REQUEST",
   };
   return NextResponse.json(error, { status: 405 });
 }
 
 export async function PUT() {
   const error: ApiError = {
-    message: 'Method not allowed. Use POST to generate a story.',
-    code: 'BAD_REQUEST'
+    message: "Method not allowed. Use POST to generate a story.",
+    code: "BAD_REQUEST",
   };
   return NextResponse.json(error, { status: 405 });
 }
 
 export async function DELETE() {
   const error: ApiError = {
-    message: 'Method not allowed. Use POST to generate a story.',
-    code: 'BAD_REQUEST'
+    message: "Method not allowed. Use POST to generate a story.",
+    code: "BAD_REQUEST",
   };
   return NextResponse.json(error, { status: 405 });
 }

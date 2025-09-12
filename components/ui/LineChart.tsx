@@ -18,7 +18,7 @@ const LineChartRoot = React.forwardRef<
   LineChartRootProps
 >(function LineChartRoot(
   { className, ...otherProps }: LineChartRootProps,
-  ref
+  ref,
 ) {
   return (
     <SubframeCore.LineChart

@@ -43,7 +43,7 @@ const ButtonRoot = React.forwardRef<HTMLButtonElement, ButtonRootProps>(
       type = "button",
       ...otherProps
     }: ButtonRootProps,
-    ref
+    ref,
   ) {
     return (
       <button
@@ -71,7 +71,7 @@ const ButtonRoot = React.forwardRef<HTMLButtonElement, ButtonRootProps>(
             "bg-brand-50 hover:bg-brand-100 active:bg-brand-50":
               variant === "brand-secondary",
           },
-          className
+          className,
         )}
         ref={ref}
         type={type}
@@ -95,7 +95,7 @@ const ButtonRoot = React.forwardRef<HTMLButtonElement, ButtonRootProps>(
                   variant === "neutral-primary",
                 "text-brand-700":
                   variant === "brand-tertiary" || variant === "brand-secondary",
-              }
+              },
             )}
           >
             {icon}
@@ -104,7 +104,7 @@ const ButtonRoot = React.forwardRef<HTMLButtonElement, ButtonRootProps>(
         <div
           className={SubframeUtils.twClassNames(
             "hidden h-4 w-4 flex-none items-center justify-center gap-2",
-            { flex: loading, "h-3 w-3 flex-none": size === "small" }
+            { flex: loading, "h-3 w-3 flex-none": size === "small" },
           )}
         >
           <SubframeCore.Loader
@@ -123,7 +123,7 @@ const ButtonRoot = React.forwardRef<HTMLButtonElement, ButtonRootProps>(
                   variant === "neutral-primary",
                 "text-brand-700":
                   variant === "brand-tertiary" || variant === "brand-secondary",
-              }
+              },
             )}
           />
         </div>
@@ -145,7 +145,7 @@ const ButtonRoot = React.forwardRef<HTMLButtonElement, ButtonRootProps>(
                   variant === "neutral-primary",
                 "text-brand-700":
                   variant === "brand-tertiary" || variant === "brand-secondary",
-              }
+              },
             )}
           >
             {children}
@@ -168,7 +168,7 @@ const ButtonRoot = React.forwardRef<HTMLButtonElement, ButtonRootProps>(
                   variant === "neutral-primary",
                 "text-brand-700":
                   variant === "brand-tertiary" || variant === "brand-secondary",
-              }
+              },
             )}
           >
             {iconRight}
@@ -176,7 +176,7 @@ const ButtonRoot = React.forwardRef<HTMLButtonElement, ButtonRootProps>(
         ) : null}
       </button>
     );
-  }
+  },
 );
 
 export const Button = ButtonRoot;

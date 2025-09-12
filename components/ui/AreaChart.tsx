@@ -19,7 +19,7 @@ const AreaChartRoot = React.forwardRef<
   AreaChartRootProps
 >(function AreaChartRoot(
   { stacked = false, className, ...otherProps }: AreaChartRootProps,
-  ref
+  ref,
 ) {
   return (
     <SubframeCore.AreaChart

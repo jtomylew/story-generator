@@ -21,13 +21,13 @@ interface InputProps
 
 const Input = React.forwardRef<HTMLTextAreaElement, InputProps>(function Input(
   { placeholder, className, ...otherProps }: InputProps,
-  ref
+  ref,
 ) {
   return (
     <textarea
       className={SubframeUtils.twClassNames(
         "min-h-[96px] w-full border-none bg-transparent px-2 py-1.5 text-body font-body text-default-font outline-none placeholder:text-neutral-400",
-        className
+        className,
       )}
       placeholder={placeholder as string}
       ref={ref}
@@ -57,13 +57,13 @@ const TextAreaRoot = React.forwardRef<HTMLLabelElement, TextAreaRootProps>(
       className,
       ...otherProps
     }: TextAreaRootProps,
-    ref
+    ref,
   ) {
     return (
       <label
         className={SubframeUtils.twClassNames(
           "group/4ec05ee8 flex flex-col items-start gap-1",
-          className
+          className,
         )}
         ref={ref}
         {...otherProps}
@@ -81,7 +81,7 @@ const TextAreaRoot = React.forwardRef<HTMLLabelElement, TextAreaRootProps>(
                 "border border-solid border-neutral-100 bg-neutral-100 group-hover/4ec05ee8:border group-hover/4ec05ee8:border-solid group-hover/4ec05ee8:border-neutral-border group-focus-within/4ec05ee8:bg-default-background":
                   variant === "filled",
                 "border border-solid border-error-600": error,
-              }
+              },
             )}
           >
             {children}
@@ -91,7 +91,7 @@ const TextAreaRoot = React.forwardRef<HTMLLabelElement, TextAreaRootProps>(
           <span
             className={SubframeUtils.twClassNames(
               "text-caption font-caption text-subtext-color",
-              { "text-error-700": error }
+              { "text-error-700": error },
             )}
           >
             {helpText}
@@ -99,7 +99,7 @@ const TextAreaRoot = React.forwardRef<HTMLLabelElement, TextAreaRootProps>(
         ) : null}
       </label>
     );
-  }
+  },
 );
 
 export const TextArea = Object.assign(TextAreaRoot, {

@@ -30,7 +30,7 @@ const IconWithBackgroundRoot = React.forwardRef<
     className,
     ...otherProps
   }: IconWithBackgroundRootProps,
-  ref
+  ref,
 ) {
   return (
     <div
@@ -47,7 +47,7 @@ const IconWithBackgroundRoot = React.forwardRef<
           "bg-error-100": variant === "error",
           "bg-neutral-100": variant === "neutral",
         },
-        className
+        className,
       )}
       ref={ref}
       {...otherProps}
@@ -65,7 +65,7 @@ const IconWithBackgroundRoot = React.forwardRef<
               "text-success-800": variant === "success",
               "text-error-800": variant === "error",
               "text-neutral-700": variant === "neutral",
-            }
+            },
           )}
         >
           {icon}

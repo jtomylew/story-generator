@@ -16,14 +16,14 @@ interface OptionProps
 
 const Option = React.forwardRef<HTMLButtonElement, OptionProps>(function Option(
   { label, className, ...otherProps }: OptionProps,
-  ref
+  ref,
 ) {
   return (
     <SubframeCore.RadioGroup.Item asChild={true} {...otherProps}>
       <button
         className={SubframeUtils.twClassNames(
           "group/0f804ad9 flex cursor-pointer items-center gap-2 border-none bg-transparent text-left disabled:cursor-default",
-          className
+          className,
         )}
         ref={ref}
       >
@@ -65,14 +65,14 @@ const RadioGroupRoot = React.forwardRef<HTMLDivElement, RadioGroupRootProps>(
       className,
       ...otherProps
     }: RadioGroupRootProps,
-    ref
+    ref,
   ) {
     return (
       <SubframeCore.RadioGroup.Root asChild={true} {...otherProps}>
         <div
           className={SubframeUtils.twClassNames(
             "group/c4b6300e flex flex-col items-start gap-2",
-            className
+            className,
           )}
           ref={ref}
         >
@@ -85,7 +85,7 @@ const RadioGroupRoot = React.forwardRef<HTMLDivElement, RadioGroupRootProps>(
             <div
               className={SubframeUtils.twClassNames(
                 "flex flex-col items-start gap-2",
-                { "flex-row flex-nowrap gap-6": horizontal }
+                { "flex-row flex-nowrap gap-6": horizontal },
               )}
             >
               {children}
@@ -95,7 +95,7 @@ const RadioGroupRoot = React.forwardRef<HTMLDivElement, RadioGroupRootProps>(
             <span
               className={SubframeUtils.twClassNames(
                 "text-caption font-caption text-subtext-color",
-                { "text-error-700": error }
+                { "text-error-700": error },
               )}
             >
               {helpText}
@@ -104,7 +104,7 @@ const RadioGroupRoot = React.forwardRef<HTMLDivElement, RadioGroupRootProps>(
         </div>
       </SubframeCore.RadioGroup.Root>
     );
-  }
+  },
 );
 
 export const RadioGroup = Object.assign(RadioGroupRoot, {

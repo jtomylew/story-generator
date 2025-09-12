@@ -25,7 +25,7 @@ const Item = React.forwardRef<HTMLDivElement, ItemProps>(function Item(
     className,
     ...otherProps
   }: ItemProps,
-  ref
+  ref,
 ) {
   return (
     <div
@@ -35,7 +35,7 @@ const Item = React.forwardRef<HTMLDivElement, ItemProps>(function Item(
           "border-b-2 border-solid border-brand-600 px-2.5 pt-0.5 pb-px hover:border-b-2 hover:border-solid hover:border-brand-600":
             active,
         },
-        className
+        className,
       )}
       ref={ref}
       {...otherProps}
@@ -48,7 +48,7 @@ const Item = React.forwardRef<HTMLDivElement, ItemProps>(function Item(
               "text-neutral-400 group-hover/d5612535:text-neutral-400":
                 disabled,
               "text-brand-700 group-hover/d5612535:text-brand-700": active,
-            }
+            },
           )}
         >
           {icon}
@@ -62,7 +62,7 @@ const Item = React.forwardRef<HTMLDivElement, ItemProps>(function Item(
               "text-neutral-400 group-hover/d5612535:text-neutral-400":
                 disabled,
               "text-brand-700 group-hover/d5612535:text-brand-700": active,
-            }
+            },
           )}
         >
           {children}
@@ -80,13 +80,13 @@ interface TabsRootProps extends React.HTMLAttributes<HTMLDivElement> {
 const TabsRoot = React.forwardRef<HTMLDivElement, TabsRootProps>(
   function TabsRoot(
     { children, className, ...otherProps }: TabsRootProps,
-    ref
+    ref,
   ) {
     return (
       <div
         className={SubframeUtils.twClassNames(
           "flex w-full items-end",
-          className
+          className,
         )}
         ref={ref}
         {...otherProps}
@@ -97,7 +97,7 @@ const TabsRoot = React.forwardRef<HTMLDivElement, TabsRootProps>(
         <div className="flex grow shrink-0 basis-0 flex-col items-start gap-2 self-stretch border-b border-solid border-neutral-border" />
       </div>
     );
-  }
+  },
 );
 
 export const Tabs = Object.assign(TabsRoot, {

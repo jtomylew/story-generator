@@ -15,13 +15,13 @@ interface TooltipRootProps extends React.HTMLAttributes<HTMLDivElement> {
 const TooltipRoot = React.forwardRef<HTMLDivElement, TooltipRootProps>(
   function TooltipRoot(
     { children, className, ...otherProps }: TooltipRootProps,
-    ref
+    ref,
   ) {
     return (
       <div
         className={SubframeUtils.twClassNames(
           "flex flex-col items-start gap-2 rounded-md border border-solid border-neutral-900 bg-neutral-800 px-2 py-1 shadow-lg",
-          className
+          className,
         )}
         ref={ref}
         {...otherProps}
@@ -33,7 +33,7 @@ const TooltipRoot = React.forwardRef<HTMLDivElement, TooltipRootProps>(
         ) : null}
       </div>
     );
-  }
+  },
 );
 
 export const Tooltip = TooltipRoot;

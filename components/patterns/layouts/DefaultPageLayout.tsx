@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 /*
  * Documentation:
  * Avatar — https://app.subframe.com/1e76ad462093/library?component=Avatar_bec25ae6-5010-4485-b46b-cf79e3943ab2
@@ -40,13 +41,13 @@ const DefaultPageLayoutRoot = React.forwardRef<
   DefaultPageLayoutRootProps
 >(function DefaultPageLayoutRoot(
   { children, className, ...otherProps }: DefaultPageLayoutRootProps,
-  ref
+  ref,
 ) {
   return (
     <div
       className={SubframeUtils.twClassNames(
         "flex h-screen w-full items-start",
-        className
+        className,
       )}
       ref={ref}
       {...otherProps}
@@ -54,10 +55,12 @@ const DefaultPageLayoutRoot = React.forwardRef<
       <SidebarWithSections
         className="mobile:hidden"
         header={
-          <img
+          <Image
             className="h-6 flex-none object-cover"
             src="https://res.cloudinary.com/subframe/image/upload/v1711417507/shared/y2rsnhq3mex4auk54aye.png"
             alt="Logo"
+            width={24}
+            height={24}
           />
         }
         footer={

@@ -19,7 +19,7 @@ const DialogLayoutRoot = React.forwardRef<
   DialogLayoutRootProps
 >(function DialogLayoutRoot(
   { children, className, ...otherProps }: DialogLayoutRootProps,
-  ref
+  ref,
 ) {
   return (
     <Dialog className={className} ref={ref} {...otherProps}>

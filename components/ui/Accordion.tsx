@@ -23,7 +23,7 @@ const Chevron = React.forwardRef<
       <FeatherChevronDown
         className={SubframeUtils.twClassNames(
           "text-body font-body text-default-font",
-          className
+          className,
         )}
         ref={ref}
       />
@@ -39,14 +39,14 @@ interface ContentProps
 
 const Content = React.forwardRef<HTMLDivElement, ContentProps>(function Content(
   { children, className, ...otherProps }: ContentProps,
-  ref
+  ref,
 ) {
   return children ? (
     <SubframeCore.Collapsible.Content asChild={true} {...otherProps}>
       <div
         className={SubframeUtils.twClassNames(
           "flex w-full flex-col items-start gap-2",
-          className
+          className,
         )}
         ref={ref}
       >
@@ -64,14 +64,14 @@ interface TriggerProps
 
 const Trigger = React.forwardRef<HTMLDivElement, TriggerProps>(function Trigger(
   { children, className, ...otherProps }: TriggerProps,
-  ref
+  ref,
 ) {
   return children ? (
     <SubframeCore.Collapsible.Trigger asChild={true} {...otherProps}>
       <div
         className={SubframeUtils.twClassNames(
           "flex w-full cursor-pointer flex-col items-start gap-2",
-          className
+          className,
         )}
         ref={ref}
       >
@@ -91,14 +91,14 @@ interface AccordionRootProps
 const AccordionRoot = React.forwardRef<HTMLDivElement, AccordionRootProps>(
   function AccordionRoot(
     { trigger, children, className, ...otherProps }: AccordionRootProps,
-    ref
+    ref,
   ) {
     return (
       <SubframeCore.Collapsible.Root asChild={true} {...otherProps}>
         <div
           className={SubframeUtils.twClassNames(
             "group/d2e81e20 flex w-full flex-col items-start rounded-md",
-            className
+            className,
           )}
           ref={ref}
         >
@@ -119,7 +119,7 @@ const AccordionRoot = React.forwardRef<HTMLDivElement, AccordionRootProps>(
         </div>
       </SubframeCore.Collapsible.Root>
     );
-  }
+  },
 );
 
 export const Accordion = Object.assign(AccordionRoot, {

@@ -30,13 +30,13 @@ const Folder = React.forwardRef<
     className,
     ...otherProps
   }: FolderProps,
-  ref
+  ref,
 ) {
   return (
     <Accordion
       className={SubframeUtils.twClassNames(
         "group/c841484c cursor-pointer",
-        className
+        className,
       )}
       trigger={
         <div className="flex w-full items-center gap-2 rounded-md px-3 py-2 group-hover/c841484c:bg-neutral-50">
@@ -81,14 +81,14 @@ const Item = React.forwardRef<HTMLDivElement, ItemProps>(function Item(
     className,
     ...otherProps
   }: ItemProps,
-  ref
+  ref,
 ) {
   return (
     <div
       className={SubframeUtils.twClassNames(
         "group/42786044 flex w-full cursor-pointer items-center gap-2 rounded-md px-3 py-2 hover:bg-neutral-50",
         { "bg-brand-100 hover:bg-brand-100": selected },
-        className
+        className,
       )}
       ref={ref}
       {...otherProps}
@@ -97,7 +97,7 @@ const Item = React.forwardRef<HTMLDivElement, ItemProps>(function Item(
         <SubframeCore.IconWrapper
           className={SubframeUtils.twClassNames(
             "text-body font-body text-default-font",
-            { "text-brand-700": selected }
+            { "text-brand-700": selected },
           )}
         >
           {icon}
@@ -107,7 +107,7 @@ const Item = React.forwardRef<HTMLDivElement, ItemProps>(function Item(
         <span
           className={SubframeUtils.twClassNames(
             "line-clamp-1 grow shrink-0 basis-0 text-body font-body text-default-font",
-            { "text-brand-700": selected }
+            { "text-brand-700": selected },
           )}
         >
           {label}
@@ -125,13 +125,13 @@ interface TreeViewRootProps extends React.HTMLAttributes<HTMLDivElement> {
 const TreeViewRoot = React.forwardRef<HTMLDivElement, TreeViewRootProps>(
   function TreeViewRoot(
     { children, className, ...otherProps }: TreeViewRootProps,
-    ref
+    ref,
   ) {
     return children ? (
       <div
         className={SubframeUtils.twClassNames(
           "flex w-full flex-col items-start",
-          className
+          className,
         )}
         ref={ref}
         {...otherProps}
@@ -139,7 +139,7 @@ const TreeViewRoot = React.forwardRef<HTMLDivElement, TreeViewRootProps>(
         {children}
       </div>
     ) : null;
-  }
+  },
 );
 
 export const TreeView = Object.assign(TreeViewRoot, {

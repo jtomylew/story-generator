@@ -5,6 +5,7 @@
  */
 
 import React from "react";
+import Image from "next/image";
 import * as SubframeUtils from "./utils";
 
 interface AvatarRootProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -27,7 +28,7 @@ const AvatarRoot = React.forwardRef<HTMLDivElement, AvatarRootProps>(
       className,
       ...otherProps
     }: AvatarRootProps,
-    ref
+    ref,
   ) {
     return (
       <div
@@ -44,7 +45,7 @@ const AvatarRoot = React.forwardRef<HTMLDivElement, AvatarRootProps>(
             "bg-error-100": variant === "error",
             "bg-neutral-100": variant === "neutral",
           },
-          className
+          className,
         )}
         ref={ref}
         {...otherProps}
@@ -64,14 +65,14 @@ const AvatarRoot = React.forwardRef<HTMLDivElement, AvatarRootProps>(
                 "text-success-800": variant === "success",
                 "text-error-800": variant === "error",
                 "text-neutral-800": variant === "neutral",
-              }
+              },
             )}
           >
             {children}
           </span>
         ) : null}
         {image ? (
-          <img
+          <Image
             alt="Avatar"
             className={SubframeUtils.twClassNames(
               "h-8 w-8 flex-none object-cover absolute",
@@ -80,14 +81,16 @@ const AvatarRoot = React.forwardRef<HTMLDivElement, AvatarRootProps>(
                 "h-6 w-6 flex-none": size === "small",
                 "h-12 w-12 flex-none": size === "large",
                 "h-16 w-16 flex-none": size === "x-large",
-              }
+              },
             )}
             src={image}
+            width={32}
+            height={32}
           />
         ) : null}
       </div>
     );
-  }
+  },
 );
 
 export const Avatar = AvatarRoot;

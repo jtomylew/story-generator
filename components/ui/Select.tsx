@@ -19,7 +19,7 @@ interface ItemProps
 
 const Item = React.forwardRef<HTMLDivElement, ItemProps>(function Item(
   { value, children, className, ...otherProps }: ItemProps,
-  ref
+  ref,
 ) {
   return (
     <SubframeCore.Select.Item
@@ -30,7 +30,7 @@ const Item = React.forwardRef<HTMLDivElement, ItemProps>(function Item(
       <div
         className={SubframeUtils.twClassNames(
           "group/969e345b flex h-8 w-full cursor-pointer items-center gap-1 rounded-md px-3 hover:bg-neutral-100 active:bg-neutral-50 data-[highlighted]:bg-brand-50",
-          className
+          className,
         )}
         ref={ref}
       >
@@ -54,13 +54,13 @@ const TriggerValue = React.forwardRef<
   TriggerValueProps
 >(function TriggerValue(
   { placeholder, className, ...otherProps }: TriggerValueProps,
-  ref
+  ref,
 ) {
   return (
     <SubframeCore.Select.Value
       className={SubframeUtils.twClassNames(
         "w-full whitespace-nowrap text-body font-body text-default-font",
-        className
+        className,
       )}
       ref={ref}
       placeholder={placeholder}
@@ -79,14 +79,14 @@ interface ContentProps
 
 const Content = React.forwardRef<HTMLDivElement, ContentProps>(function Content(
   { children, className, ...otherProps }: ContentProps,
-  ref
+  ref,
 ) {
   return children ? (
     <SubframeCore.Select.Content asChild={true} {...otherProps}>
       <div
         className={SubframeUtils.twClassNames(
           "flex w-full flex-col items-start overflow-hidden rounded-md border border-solid border-neutral-border bg-white px-1 py-1 shadow-lg",
-          className
+          className,
         )}
         ref={ref}
       >
@@ -108,14 +108,14 @@ interface TriggerProps
 
 const Trigger = React.forwardRef<HTMLDivElement, TriggerProps>(function Trigger(
   { placeholder, icon = null, className, ...otherProps }: TriggerProps,
-  ref
+  ref,
 ) {
   return (
     <SubframeCore.Select.Trigger asChild={true} {...otherProps}>
       <div
         className={SubframeUtils.twClassNames(
           "flex h-full w-full items-center gap-2 px-3",
-          className
+          className,
         )}
         ref={ref}
       >
@@ -140,14 +140,14 @@ interface ItemTextProps
 const ItemText = React.forwardRef<HTMLSpanElement, ItemTextProps>(
   function ItemText(
     { children, className, ...otherProps }: ItemTextProps,
-    ref
+    ref,
   ) {
     return children ? (
       <SubframeCore.Select.ItemText {...otherProps}>
         <span
           className={SubframeUtils.twClassNames(
             "text-body font-body text-default-font",
-            className
+            className,
           )}
           ref={ref}
         >
@@ -155,7 +155,7 @@ const ItemText = React.forwardRef<HTMLSpanElement, ItemTextProps>(
         </span>
       </SubframeCore.Select.ItemText>
     ) : null;
-  }
+  },
 );
 
 interface SelectRootProps
@@ -198,7 +198,7 @@ const SelectRoot = React.forwardRef<HTMLDivElement, SelectRootProps>(
       form,
       ...otherProps
     }: SelectRootProps,
-    ref
+    ref,
   ) {
     return (
       <SubframeCore.Select.Root
@@ -218,7 +218,7 @@ const SelectRoot = React.forwardRef<HTMLDivElement, SelectRootProps>(
         <div
           className={SubframeUtils.twClassNames(
             "group/bb88f90b flex cursor-pointer flex-col items-start gap-1",
-            className
+            className,
           )}
           ref={ref}
           {...otherProps}
@@ -236,7 +236,7 @@ const SelectRoot = React.forwardRef<HTMLDivElement, SelectRootProps>(
                   variant === "filled",
                 "border border-solid border-error-600": error,
                 "bg-neutral-200": disabled,
-              }
+              },
             )}
           >
             <Trigger placeholder={placeholder} icon={icon} />
@@ -245,7 +245,7 @@ const SelectRoot = React.forwardRef<HTMLDivElement, SelectRootProps>(
             <span
               className={SubframeUtils.twClassNames(
                 "text-caption font-caption text-subtext-color",
-                { "text-error-700": error }
+                { "text-error-700": error },
               )}
             >
               {helpText}
@@ -261,7 +261,7 @@ const SelectRoot = React.forwardRef<HTMLDivElement, SelectRootProps>(
         </div>
       </SubframeCore.Select.Root>
     );
-  }
+  },
 );
 
 export const Select = Object.assign(SelectRoot, {

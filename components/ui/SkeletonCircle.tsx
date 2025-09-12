@@ -19,14 +19,14 @@ const SkeletonCircleRoot = React.forwardRef<
   SkeletonCircleRootProps
 >(function SkeletonCircleRoot(
   { size = "default", className, ...otherProps }: SkeletonCircleRootProps,
-  ref
+  ref,
 ) {
   return (
     <SubframeCore.Skeleton
       className={SubframeUtils.twClassNames(
         "group/8b6e7a84 flex h-9 w-9 flex-col items-start gap-2 rounded-full bg-neutral-200",
         { "h-5 w-5": size === "x-small", "h-7 w-7": size === "small" },
-        className
+        className,
       )}
       ref={ref}
       {...otherProps}

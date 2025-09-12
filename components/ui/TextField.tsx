@@ -18,13 +18,13 @@ interface InputProps
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(function Input(
   { placeholder, className, ...otherProps }: InputProps,
-  ref
+  ref,
 ) {
   return (
     <input
       className={SubframeUtils.twClassNames(
         "h-full w-full border-none bg-transparent text-body font-body text-default-font outline-none placeholder:text-neutral-400",
-        className
+        className,
       )}
       placeholder={placeholder as string}
       ref={ref}
@@ -60,13 +60,13 @@ const TextFieldRoot = React.forwardRef<HTMLLabelElement, TextFieldRootProps>(
       className,
       ...otherProps
     }: TextFieldRootProps,
-    ref
+    ref,
   ) {
     return (
       <label
         className={SubframeUtils.twClassNames(
           "group/be48ca43 flex flex-col items-start gap-1",
-          className
+          className,
         )}
         ref={ref}
         {...otherProps}
@@ -84,7 +84,7 @@ const TextFieldRoot = React.forwardRef<HTMLLabelElement, TextFieldRootProps>(
                 variant === "filled",
               "border border-solid border-error-600": error,
               "border border-solid border-neutral-200 bg-neutral-200": disabled,
-            }
+            },
           )}
         >
           {icon ? (
@@ -101,7 +101,7 @@ const TextFieldRoot = React.forwardRef<HTMLLabelElement, TextFieldRootProps>(
             <SubframeCore.IconWrapper
               className={SubframeUtils.twClassNames(
                 "text-body font-body text-subtext-color",
-                { "text-error-500": error }
+                { "text-error-500": error },
               )}
             >
               {iconRight}
@@ -112,7 +112,7 @@ const TextFieldRoot = React.forwardRef<HTMLLabelElement, TextFieldRootProps>(
           <span
             className={SubframeUtils.twClassNames(
               "text-caption font-caption text-subtext-color",
-              { "text-error-700": error }
+              { "text-error-700": error },
             )}
           >
             {helpText}
@@ -120,7 +120,7 @@ const TextFieldRoot = React.forwardRef<HTMLLabelElement, TextFieldRootProps>(
         ) : null}
       </label>
     );
-  }
+  },
 );
 
 export const TextField = Object.assign(TextFieldRoot, {

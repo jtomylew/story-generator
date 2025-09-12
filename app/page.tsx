@@ -1,13 +1,15 @@
 // @subframe/sync-disable
-'use client';
+"use client";
 
-import { useState, useEffect, useCallback } from 'react';
-import type { GenerateReq } from '@/lib/types';
-import type { RequestState, ApiError } from '@/lib/ui-types';
-import { StoryForm, StoryOutput } from '@/components';
+import { useState, useEffect, useCallback } from "react";
+import type { GenerateReq } from "@/lib/types";
+import type { RequestState, ApiError } from "@/lib/ui-types";
+import { StoryForm, StoryOutput } from "@/components";
 
 export default function Home() {
-  const [requestState, setRequestState] = useState<RequestState>({ status: 'idle' });
+  const [requestState, setRequestState] = useState<RequestState>({
+    status: "idle",
+  });
 
   // Clean up in-flight requests on unmount
   useEffect(() => {
@@ -19,14 +21,14 @@ export default function Home() {
   const handleSubmit = useCallback(async (req: GenerateReq) => {
     // Cancel any in-flight request
     const abortController = new AbortController();
-    
-    setRequestState({ status: 'loading', req });
+
+    setRequestState({ status: "loading", req });
 
     try {
-      const response = await fetch('/api/generate', {
-        method: 'POST',
+      const response = await fetch("/api/generate", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(req),
         signal: abortController.signal,
@@ -37,14 +39,18 @@ export default function Home() {
       if (!response.ok) {
         // Map non-OK responses to ApiError shape
         const error: ApiError = {
-          message: data.message || 'An error occurred',
-          code: data.code || (response.status === 400 ? 'BAD_REQUEST' : 
-                response.status === 429 ? 'RATE_LIMITED' : 
-                'INTERNAL_ERROR'),
-          issues: data.issues
+          message: data.message || "An error occurred",
+          code:
+            data.code ||
+            (response.status === 400
+              ? "BAD_REQUEST"
+              : response.status === 429
+                ? "RATE_LIMITED"
+                : "INTERNAL_ERROR"),
+          issues: data.issues,
         };
-        
-        setRequestState({ status: 'error', req, error });
+
+        setRequestState({ status: "error", req, error });
         return;
       }
 
@@ -53,32 +59,31 @@ export default function Home() {
         story: data.story,
         ageBand: req.readingLevel,
         newsSummary: data.originalNewsStory,
-        sourceHash: '', // TODO: implement hash generation
-        model: process.env.MODEL_NAME || 'gpt-4o',
+        sourceHash: "", // TODO: implement hash generation
+        model: process.env.MODEL_NAME || "gpt-4o",
         safety: { flagged: false, reasons: [] }, // TODO: implement safety checks
         cached: false,
-        createdAt: new Date().toISOString()
+        createdAt: new Date().toISOString(),
       };
 
-      setRequestState({ status: 'success', req, res });
-
+      setRequestState({ status: "success", req, res });
     } catch (err: any) {
-      if (err.name === 'AbortError') {
+      if (err.name === "AbortError") {
         // Request was cancelled, don't update state
         return;
       }
 
       const error: ApiError = {
-        message: err.message || 'Network error occurred',
-        code: 'INTERNAL_ERROR'
+        message: err.message || "Network error occurred",
+        code: "INTERNAL_ERROR",
       };
 
-      setRequestState({ status: 'error', req, error });
+      setRequestState({ status: "error", req, error });
     }
   }, []);
 
   const resetForm = () => {
-    setRequestState({ status: 'idle' });
+    setRequestState({ status: "idle" });
   };
 
   return (
@@ -100,15 +105,12 @@ export default function Home() {
       </header>
 
       <div className="container mx-auto px-4 py-8 max-w-6xl">
-        <StoryForm 
+        <StoryForm
           onSubmit={handleSubmit}
-          isSubmitting={requestState.status === 'loading'}
+          isSubmitting={requestState.status === "loading"}
         />
-        
-        <StoryOutput 
-          state={requestState}
-          onReset={resetForm}
-        />
+
+        <StoryOutput state={requestState} onReset={resetForm} />
       </div>
 
       {/* Footer */}
@@ -122,8 +124,14 @@ export default function Home() {
 
       <style jsx>{`
         @keyframes fade-in {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
         }
         .animate-fade-in {
           animation: fade-in 0.6s ease-out;
