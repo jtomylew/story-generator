@@ -17,10 +17,11 @@
     "find:duplicates": "find components -type f \\( -name '*.tsx' -o -name '*.ts' \\) -not -name 'index.ts' -print0 | xargs -0 -I {} basename {} | sort | uniq -d",
     "find:similar": "grep -R \"export\\s\\+\\(default\\s\\+\\)\\?function\\s\\+.*\\(Form\\|Card\\|Button\\|Field\\)\" components --include='*.tsx' | cut -d: -f1 | sort | uniq",
     "//:pipelines": "— Preflight gate before PRs —",
-    "preflight": "npm run typecheck && npm run lint && npm run format:check && npm run ban:raw-primitives && npm run find:strays && npm run find:duplicates",
-    "preflight:full": "npm run typecheck && npm run lint && npm run format:check && npm run ban:raw-primitives && npm run find:strays && npm run find:duplicates",
+    "preflight": "npm run typecheck && npm run lint && npm run format:check && npm run ban:raw-primitives && npm run find:strays && npm run find:duplicates && npm run storybook:check",
+    "preflight:full": "npm run typecheck && npm run lint && npm run format:check && npm run ban:raw-primitives && npm run find:strays && npm run find:duplicates && npm run storybook:check",
     "//:storybook-reinstall": "— Reinstall Storybook when compatibility issues are resolved —",
     "storybook:check": "./scripts/check-storybook-compatibility.sh",
+    "storybook:check:full": "./scripts/check-storybook-compatibility-full.sh",
     "storybook:install": "./scripts/install-storybook.sh",
     "prepare": "husky install"
   },

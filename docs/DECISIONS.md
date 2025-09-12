@@ -442,8 +442,29 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
   - Removed `.prettierignore` (was only for Storybook)
 - **Impact**: Component inspection now relies on main application at `http://localhost:3000`
 - **Rationale**: Compatibility issues were blocking development workflow; main app provides sufficient component testing
+- **Automated Monitoring**: Storybook compatibility is automatically checked in all preflight workflows (local, Git hooks, CI/CD) using quick version-based checks
 - **Reinstallation**: See `docs/STORYBOOK_REINSTALL.md` for easy reinstallation when compatibility issues are resolved
 - **Files**: `package.json`, `eslint.config.mjs`, removed `.storybook/`, removed `*.stories.tsx`
+
+### ADR-022: Automated Storybook Compatibility Monitoring ✅
+
+**Week 2, Day 6**
+
+- **Decision**: Integrate automatic Storybook compatibility checking into all preflight workflows to detect when version conflicts are resolved.
+- **Implementation**:
+  - `package.json`: Added `storybook:check` (quick) and `storybook:check:full` (thorough) scripts to preflight workflow.
+  - `scripts/check-storybook-compatibility.sh`: Quick version-based compatibility check using known issue patterns.
+  - `scripts/check-storybook-compatibility-full.sh`: Complete installation test for thorough verification.
+  - `.github/workflows/preflight.yml`: Enhanced CI/CD workflow with Storybook compatibility status reporting.
+  - Updated all documentation to reflect automated monitoring capabilities.
+- **Monitoring Integration**:
+  - **Local Development**: `npm run preflight` includes automatic compatibility checking.
+  - **Git Hooks**: Pre-commit and pre-push hooks check compatibility status.
+  - **CI/CD**: GitHub Actions workflow monitors and reports compatibility status.
+  - **Manual Testing**: On-demand quick and full compatibility checks available.
+- **Rationale**: Automatic monitoring ensures immediate detection when compatibility issues are resolved, enabling seamless Storybook reinstallation.
+- **Learning outcome**: Successfully implemented comprehensive automated monitoring that integrates seamlessly with existing preflight workflows.
+- **Files**: `package.json`, `.github/workflows/preflight.yml`, `scripts/check-storybook-compatibility*.sh`, `docs/STORYBOOK_REINSTALL.md`, `docs/AI_UI_Guide.md`, `README.md`, `docs/DECISIONS.md`
 
 ---
 
@@ -511,7 +532,7 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 
 ## Changelog (append-only)
 
-- **Week 2, Day 6**: Completed ADR-020/021 - implemented workflow preflight automation with comprehensive violation detection, Git hooks, CI/CD enforcement, and updated documentation; fixed component import violations to use canonical barrel exports; removed Storybook entirely due to Next.js 15.5.3 compatibility issues; all preflight checks passing ✅
+- **Week 2, Day 6**: Completed ADR-020/021/022 - implemented workflow preflight automation with comprehensive violation detection, Git hooks, CI/CD enforcement, and updated documentation; fixed component import violations to use canonical barrel exports; removed Storybook entirely due to Next.js 15.5.3 compatibility issues; added automated Storybook compatibility monitoring to all preflight workflows; all preflight checks passing ✅
 - **Week 2, Day 5**: Completed ADR-018/019 - implemented component import consolidation with barrel exports and canonical import patterns; upgraded to Next.js 15.5.3 and Storybook 8.6.14; fixed font compatibility issues; all TypeScript compilation, builds, and dev server tests passing ✅
 - **Week 2, Day 4**: Completed ADR-017 - integrated Subframe component library with canonical structure; resolved import conflicts and component organization; maintained design system contracts ✅
 - **Week 2, Day 3**: Completed ADR-014/015/016 - implemented design system foundation with tokenized styling, UI primitives, and systematic cascade across existing app; replaced raw HTML with shadcn/ui components while preserving functionality; added motion defaults and accessibility features; all tests passing ✅

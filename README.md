@@ -22,10 +22,19 @@ You can start editing the page by modifying `app/page.js`. The page auto-updates
 
 ### Storybook (Currently Disabled)
 
-Storybook was temporarily removed due to Next.js 15.5.3 compatibility issues. To reinstall when compatibility is resolved:
+Storybook was temporarily removed due to Next.js 15.5.3 compatibility issues. **Compatibility is automatically monitored** in all preflight workflows.
+
+**To reinstall when compatibility is resolved:**
 
 ```bash
-./scripts/install-storybook.sh
+npm run storybook:install
+```
+
+**To check current compatibility status:**
+
+```bash
+npm run storybook:check          # Quick version-based check
+npm run storybook:check:full     # Complete installation test
 ```
 
 See [docs/STORYBOOK_REINSTALL.md](docs/STORYBOOK_REINSTALL.md) for detailed instructions.

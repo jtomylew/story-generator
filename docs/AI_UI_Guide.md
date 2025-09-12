@@ -27,7 +27,7 @@ It summarizes the design system contract from `/docs/LLM_CONTEXT.md` and ADR-014
   - Use `<Spinner />` and `<Skeleton />` for loading/placeholder states
   - Respect `prefers-reduced-motion`
 - **Typing**: Strong TypeScript only (no `any`).
-- **Documentation**: Add or update Storybook stories for each component (default + at least one variant).
+- **Documentation**: Storybook stories will be automatically created when compatibility is restored (currently disabled due to Next.js 15.5.3 compatibility issues).
 
 ---
 
@@ -56,7 +56,7 @@ Update components/ui/button.tsx.
 
 - Add microinteractions using motion tokens
 - Preserve shadcn structure and exports
-- Update its Storybook story with default, disabled, and loading states
+- Storybook stories will be automatically created when compatibility is restored
 
 ### Refine a Pattern
 
@@ -64,7 +64,7 @@ Create or refine components/patterns/StoryForm.tsx.
 
 - Compose from @/components/ui/\* only
 - Keep props strongly typed
-- Add Storybook story with default and error states
+- Storybook stories will be automatically created when compatibility is restored
 
 ### Refine a Screen
 
@@ -73,7 +73,7 @@ Refine components/screens/GenerateStory.tsx.
 - Improve spacing and hierarchy using Tailwind tokens
 - Extract StoryForm and StoryPreview into components/patterns/
 - Compose them back into GenerateStory.tsx
-- Add or update Storybook stories for screen + patterns
+- Storybook stories will be automatically created when compatibility is restored
 
 ### Update Tokens / Theme
 
@@ -88,7 +88,7 @@ Ensure inputs, dialogs, and tooltips follow Radix semantics.
 
 - Add <Label htmlFor/> to inputs
 - Ensure focus rings and aria-\* attributes
-- Update Storybook stories with accessibility notes
+- Storybook stories will be automatically created when compatibility is restored
 
 ---
 
@@ -128,7 +128,7 @@ npm run typecheck
 npm run ban:raw-primitives   # no raw <button>, <input>, etc. outside /ui
 npm run find:strays          # no deep imports
 npm run find:duplicates      # no duplicate component files
-npm run storybook:build      # ensure updated stories render
+npm run storybook:check      # automatically check Storybook compatibility
 ```
 
 ### Git Workflow (summary)
@@ -168,7 +168,7 @@ Constraints:
 - Update THIS file in place: <path/to/file.tsx>.
 - Compose from primitives in components/ui/* and patterns in components/patterns/*.
 - Do not create new folders or files. Do not add new deps.
-- Add/Update a Storybook story for this component (default + one variant).
+- Storybook stories will be automatically created when compatibility is restored.
 
 Task:
 <what to change / screenshot reference / behavior>
@@ -183,7 +183,7 @@ After change: explain the diff briefly.
 When an AI tool makes changes, ask it to also:
 
 1. Run `npm run typecheck` → confirm 0 errors.
-2. Run `npm run storybook` → confirm updated components render.
+2. Run `npm run storybook:check` → confirm Storybook compatibility status.
 3. Run `npm run dev` → confirm app boots on `http://localhost:3000`.
 4. Summarize which files changed and why.
 

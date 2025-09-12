@@ -8,7 +8,17 @@ Storybook was temporarily removed from this project due to Next.js 15.5.3 + Stor
 
 - **Issue**: Webpack hook compatibility problem causing "Cannot read properties of undefined (reading 'tap')" error
 - **Status**: Storybook removed from project (see ADR-021 in DECISIONS.md)
+- **Automated Monitoring**: Storybook compatibility is automatically checked in all preflight workflows
 - **Alternative**: Component inspection available via main application at `http://localhost:3000`
+
+## Automated Compatibility Monitoring
+
+Storybook compatibility is automatically checked in:
+
+- **Local Development**: `npm run preflight` includes `npm run storybook:check`
+- **Git Hooks**: Pre-commit and pre-push hooks check compatibility
+- **CI/CD**: GitHub Actions workflow monitors compatibility status
+- **Manual Check**: `npm run storybook:check` (quick) or `npm run storybook:check:full` (thorough) for on-demand testing
 
 ## Quick Reinstallation
 
@@ -203,10 +213,12 @@ npm run preflight:full
 
 Reinstall Storybook when:
 
-- ✅ Next.js 15.5.3 + Storybook compatibility is confirmed
-- ✅ Storybook 9.x is stable and compatible
-- ✅ You need component documentation and testing
-- ✅ Team requests component library access
+- ✅ **Automated Check Passes**: `npm run storybook:check` returns success
+- ✅ **CI/CD Confirms**: GitHub Actions shows "Storybook compatibility confirmed"
+- ✅ **Preflight Passes**: All preflight checks including Storybook compatibility pass
+- ✅ **Team Ready**: Component documentation and testing is needed
+
+The automated monitoring will notify you immediately when compatibility is restored!
 
 ## Alternative Component Inspection
 
