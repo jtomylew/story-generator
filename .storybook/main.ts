@@ -21,6 +21,13 @@ const config: StorybookConfig = {
     },
   },
   staticDirs: ["../public"],
+  webpackFinal: async (config) => {
+    // Workaround for Next.js 15.5.3 + Storybook 8.6.14 compatibility issue
+    if (config.cache && typeof config.cache === "object") {
+      config.cache = false;
+    }
+    return config;
+  },
 };
 
 export default config;

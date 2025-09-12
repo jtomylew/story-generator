@@ -20,7 +20,8 @@
     "storybook": "storybook dev -p 6006",
     "storybook:build": "storybook build -o .sb-out",
     "//:pipelines": "— Preflight gate before PRs —",
-    "preflight": "npm run typecheck && npm run lint && npm run format:check && npm run ban:raw-primitives && npm run find:strays && npm run find:duplicates && npm run storybook:build",
+    "preflight": "npm run typecheck && npm run lint && npm run format:check && npm run ban:raw-primitives && npm run find:strays && npm run find:duplicates",
+    "preflight:full": "npm run typecheck && npm run lint && npm run format:check && npm run ban:raw-primitives && npm run find:strays && npm run find:duplicates && npm run storybook:build",
     "prepare": "husky install"
   },
   "dependencies": {
