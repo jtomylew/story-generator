@@ -58,113 +58,109 @@ export function StoryForm({
   );
 
   return (
-    <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-8 mb-8">
-      <form onSubmit={handleSubmit}>
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* News Article Input */}
-          <div className="lg:col-span-2">
-            <label
-              htmlFor="articleText"
-              className="block text-lg font-semibold text-fg mb-4 flex items-center gap-2"
-            >
-              <span className="text-2xl">📰</span>
-              News Article
-            </label>
-            <TextArea className="w-full">
-              <TextArea.Input
-                value={articleText}
-                onChange={(e) => setArticleText(e.target.value)}
-                onKeyDown={handleKeyDown}
-                placeholder="Paste a news article here and watch it transform into a magical story..."
-                className={`h-40 p-6 border-2 rounded-xl focus:ring-4 focus:border-blue-400 bg-white/90 resize-none text-fg placeholder-muted-foreground motion-medium shadow-inner transition duration-[var(--motion-fast)] ease-[var(--ease-standard)] ${
-                  error
-                    ? "border-red-300 focus:ring-red-300"
-                    : "border-blue-200 focus:ring-blue-300"
-                }`}
-                disabled={isSubmitting}
-                aria-describedby={error ? "articleText-error" : undefined}
-                aria-invalid={error ? "true" : "false"}
-              />
-            </TextArea>
+    <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-8 mb-8">
+      <form onSubmit={handleSubmit} className="space-y-8">
+        {/* News Article Input */}
+        <div>
+          <label
+            htmlFor="articleText"
+            className="block text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2"
+          >
+            <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+              <span className="text-white text-sm">📰</span>
+            </div>
+            News Article
+          </label>
+          <TextArea className="w-full">
+            <TextArea.Input
+              value={articleText}
+              onChange={(e) => setArticleText(e.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder="Paste a news article here and watch it transform into a magical story..."
+              className={`h-40 p-6 border-2 rounded-xl focus:ring-4 focus:border-blue-400 bg-white resize-none text-gray-800 placeholder-gray-400 transition duration-200 ease-in-out ${
+                error
+                  ? "border-red-300 focus:ring-red-300"
+                  : "border-gray-200 focus:ring-blue-300"
+              }`}
+              disabled={isSubmitting}
+              aria-describedby={error ? "articleText-error" : undefined}
+              aria-invalid={error ? "true" : "false"}
+            />
+          </TextArea>
+          <div className="flex justify-between items-center mt-2">
+            <div className="text-sm text-gray-500">
+              {articleText.length} characters
+            </div>
             {error && (
               <p
                 id="articleText-error"
-                className="text-red-600 text-sm mt-2"
+                className="text-red-600 text-sm"
                 role="alert"
               >
                 {error}
               </p>
             )}
           </div>
+        </div>
 
-          {/* Reading Level Selection */}
-          <div className="space-y-6">
-            <div>
-              <label
-                htmlFor="readingLevel"
-                className="block text-lg font-semibold text-fg mb-4 flex items-center gap-2"
-              >
-                <span className="text-2xl">🎯</span>
-                Reading Level
-              </label>
-              <Select
-                value={readingLevel}
-                onValueChange={(value) =>
-                  setReadingLevel(value as ReadingLevel)
-                }
-                className="w-full p-4 border-2 border-green-200 rounded-xl focus:ring-4 focus:ring-green-300 focus:border-green-400 bg-white/90 text-fg motion-medium shadow-inner transition duration-[var(--motion-fast)] ease-[var(--ease-standard)]"
-                disabled={isSubmitting}
-              >
-                <Select.Item value="preschool">
-                  👶 Preschool (ages 3-5)
-                </Select.Item>
-                <Select.Item value="early-elementary">
-                  🎒 Early Elementary (ages 5-7)
-                </Select.Item>
-                <Select.Item value="elementary">
-                  📖 Elementary (ages 7-10)
-                </Select.Item>
-              </Select>
-              <p className="text-sm text-muted mt-3 leading-relaxed">
-                Choose the perfect reading level for your young audience
-              </p>
+        {/* Reading Level Selection */}
+        <div>
+          <label
+            htmlFor="readingLevel"
+            className="block text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2"
+          >
+            <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+              <span className="text-white text-sm">🎓</span>
             </div>
-
-            {/* Generate Button */}
-            <div className="pt-4">
-              <Button
-                type="submit"
-                disabled={!canSubmit}
-                variant="brand-primary"
-                size="large"
-                className="w-full px-8 py-4 bg-gradient-to-r from-blue-500 to-green-500 hover:from-blue-600 hover:to-green-600 disabled:from-gray-400 disabled:to-gray-500 text-white font-bold text-lg rounded-xl motion-medium transform hover:scale-105 disabled:transform-none shadow-lg hover:shadow-xl flex items-center justify-center gap-3"
-                aria-busy={isSubmitting}
-              >
-                {isSubmitting ? (
-                  <>
-                    <div className="w-6 h-6 border-3 border-white border-t-transparent rounded-full animate-spin"></div>
-                    <span>Weaving Magic...</span>
-                  </>
-                ) : (
-                  <>
-                    <span className="text-2xl">✨</span>
-                    <span>Weave Story</span>
-                  </>
-                )}
-              </Button>
-            </div>
-
-            {/* Character Counter */}
-            <div className="text-center">
-              <div className="text-sm text-muted">
-                <span className="font-semibold">{articleText.length}</span>{" "}
-                characters
-                {articleText.length >= 50 && (
-                  <span className="text-green-600 ml-2">✓</span>
-                )}
+            Reading Level
+          </label>
+          <Select
+            value={readingLevel}
+            onValueChange={(value) => setReadingLevel(value as ReadingLevel)}
+            className="w-full"
+            disabled={isSubmitting}
+          >
+            <Select.Item value="preschool">
+              <div className="flex items-center gap-2">
+                <span>👶</span>
+                <span>Preschool (ages 3-5)</span>
               </div>
-            </div>
-          </div>
+            </Select.Item>
+            <Select.Item value="early-elementary">
+              <div className="flex items-center gap-2">
+                <span>🎒</span>
+                <span>Early Elementary (ages 5-7)</span>
+              </div>
+            </Select.Item>
+            <Select.Item value="elementary">
+              <div className="flex items-center gap-2">
+                <span>👥</span>
+                <span>Elementary (ages 7-10)</span>
+              </div>
+            </Select.Item>
+          </Select>
+        </div>
+
+        {/* Generate Button */}
+        <div className="flex justify-center">
+          <Button
+            type="submit"
+            disabled={!canSubmit}
+            className="px-8 py-4 bg-gray-200 hover:bg-gray-300 disabled:bg-gray-100 text-gray-800 font-semibold text-lg rounded-xl transition duration-200 ease-in-out flex items-center justify-center gap-3 min-w-[200px]"
+            aria-busy={isSubmitting}
+          >
+            {isSubmitting ? (
+              <>
+                <div className="w-6 h-6 border-2 border-gray-600 border-t-transparent rounded-full animate-spin"></div>
+                <span>Weaving...</span>
+              </>
+            ) : (
+              <>
+                <span className="text-xl">✨</span>
+                <span>Weave Story</span>
+              </>
+            )}
+          </Button>
         </div>
       </form>
     </div>

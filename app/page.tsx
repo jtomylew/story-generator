@@ -87,24 +87,26 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-green-50 to-orange-50">
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-gradient-to-r from-blue-600 via-green-600 to-orange-500 text-white shadow-lg">
-        <div className="container mx-auto px-4 py-6">
+      <header className="bg-white border-b border-gray-200">
+        <div className="container mx-auto px-4 py-8">
           <div className="text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-2 flex items-center justify-center gap-3">
-              <span className="text-3xl md:text-4xl">📚</span>
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-2 flex items-center justify-center gap-3">
+              <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center">
+                <span className="text-white text-2xl">✨</span>
+              </div>
               Story Weaver
-              <span className="text-3xl md:text-4xl">✨</span>
+              <span className="text-2xl text-blue-500">✨</span>
             </h1>
-            <p className="text-lg md:text-xl text-blue-100 font-medium">
+            <p className="text-lg text-gray-600 font-medium">
               Transform news into magical tales for young minds
             </p>
           </div>
         </div>
       </header>
 
-      <div className="container mx-auto px-4 py-8 max-w-6xl">
+      <div className="container mx-auto px-4 py-8 max-w-4xl">
         <StoryForm
           onSubmit={handleSubmit}
           isSubmitting={requestState.status === "loading"}
@@ -114,29 +116,15 @@ export default function Home() {
       </div>
 
       {/* Footer */}
-      <footer className="bg-gradient-to-r from-blue-600 via-green-600 to-orange-500 text-white py-8 mt-16">
+      <footer className="bg-white border-t border-gray-200 py-8 mt-16">
         <div className="container mx-auto px-4 text-center">
-          <p className="text-lg font-medium">
-            ✨ Weaving stories that spark imagination and wonder ✨
+          <p className="text-lg text-gray-600 font-medium flex items-center justify-center gap-2">
+            <span className="text-blue-500">✨</span>
+            Weaving stories that spark imagination and wonder
+            <span className="text-blue-500">✨</span>
           </p>
         </div>
       </footer>
-
-      <style jsx>{`
-        @keyframes fade-in {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        .animate-fade-in {
-          animation: fade-in 0.6s ease-out;
-        }
-      `}</style>
     </div>
   );
 }
