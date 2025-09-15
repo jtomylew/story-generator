@@ -17,17 +17,14 @@ export const GenerateReq = z.object({
 });
 export type GenerateReq = z.infer<typeof GenerateReq>;
 
-/** (Optional) Response schema you can validate against before returning */
+/** Response schema for validated story generation */
 export const GenerateRes = z.object({
   story: z.string().min(50),
-  ageBand: ReadingLevel,
-  newsSummary: z.string().min(10),
-  sourceHash: z.string(),
-  model: z.string(),
-  tokens: z.object({ prompt: z.number(), completion: z.number() }).optional(),
-  safety: z.object({ flagged: z.boolean(), reasons: z.array(z.string()) }),
-  cached: z.boolean(),
-  createdAt: z.string().optional(), // ISO timestamp
+  questions: z.tuple([z.string().min(3), z.string().min(3)]),
+  meta: z.object({ 
+    readingLevel: z.string(), 
+    wordCount: z.number().int().positive() 
+  }).optional()
 });
 export type GenerateRes = z.infer<typeof GenerateRes>;
 
