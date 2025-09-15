@@ -466,6 +466,32 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 - **Learning outcome**: Successfully optimized deployment pipeline for fast, reliable pushes to production
 - **Files**: `.husky/pre-commit`, `.husky/pre-push`, removed `*.stories.tsx` files
 
+### ADR-023: Prompt Externalization + Validation + Infrastructure ✅
+
+**Week 2, Day 7**
+
+- **Decision**: Externalize prompts to markdown files, implement comprehensive validation, and add caching/safety infrastructure.
+- **Previous limitation**: Hardcoded prompts mixed with application logic, no response validation, no caching, minimal safety checks.
+- **Implementation**:
+  - **Prompt Externalization**: Created `/prompts/system.story.md` and `/prompts/user.story.md` with template variables (`{{readingLevel}}`, `{{articleText}}`, `{{styleHints}}`)
+  - **Prompt Loader**: `lib/prompt.ts` with file system loading, simple variable substitution, and fallback prompts
+  - **Enhanced OpenAI Client**: `lib/openai.ts` with factory function, 30s timeout, exponential backoff retry on 429/5xx, streaming extension point
+  - **Schema Updates**: Updated `lib/schema.ts` with correct reading levels and new response structure (story + questions + meta)
+  - **Post-Check Validation**: `lib/postcheck.ts` with word count ranges per reading level and question validation
+  - **Caching Infrastructure**: `lib/hash.ts` (SHA256 request hashing) and `lib/cache.ts` (in-memory Map with 24h TTL)
+  - **Safety Screening**: `lib/safety.ts` with keyword filtering and content appropriateness checks
+  - **API Route Refinement**: Complete rewrite with external prompts, caching, safety checks, retry logic, and proper headers (X-Cache, X-Model, X-Request)
+  - **Verification Script**: `scripts/verify-prompts-and-validation.mjs` for automated validation of all required artifacts
+  - **Package Scripts**: Added `verify:prompts` and `prepush` hook for automated validation
+- **Tradeoffs**:
+  - **Node Runtime Requirement**: File system operations require `runtime = "nodejs"` in API routes
+  - **Cache Strategy**: In-memory cache (simple) vs Redis (production-ready) - chose simple for MVP
+  - **Retry Policy**: 3 attempts with exponential backoff vs immediate failure - chose resilience
+  - **Safety Approach**: Lightweight keyword filtering vs ML-based content analysis - chose pragmatic
+- **Rationale**: External prompts enable versioning and A/B testing without code deploys; comprehensive validation ensures quality; caching improves performance; safety screening protects children
+- **Learning outcome**: Successfully implemented production-ready prompt management with comprehensive validation and infrastructure
+- **Files**: `prompts/`, `lib/prompt.ts`, `lib/openai.ts`, `lib/schema.ts`, `lib/postcheck.ts`, `lib/hash.ts`, `lib/cache.ts`, `lib/safety.ts`, `app/api/generate/route.ts`, `scripts/verify-prompts-and-validation.mjs`, `package.json`
+
 ---
 
 ## Current Status & Technical Debt
@@ -488,17 +514,17 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 - ✅ Workflow preflight automation with Git hooks and CI/CD enforcement
 - ✅ Comprehensive violation detection and design system compliance automation
 - ✅ Deployment pipeline optimization with fast Git hooks (4.6s total deployment time)
+- ✅ Prompt externalization with markdown templates and variable substitution
+- ✅ Comprehensive validation with word count ranges and response structure checking
+- ✅ Caching infrastructure with request hashing and TTL management
+- ✅ Safety screening with content appropriateness filtering
+- ✅ Enhanced OpenAI client with retry logic and timeout handling
 
 **Known limitations & planned mitigations**
 
-- **No caching** → Add 24h cache by `hash(articleText|level)` (Week 3: Upstash Redis or DB TTL) 🔜
 - **No persistence** → Add database for saved stories + user identification (Week 3: Supabase) 🔜
-- **Minimal safety** → Add `lib/safety.ts` pre/post content checks + polite refusal path (Week 3) 🔜
-- **Word-range drift** → Post-check word count & structure; regenerate if out of bounds (Week 2) 🔜
 - **Manual paste only** → Add URL ingestion with article extraction (Week 4: Readability.js) 🔜
 - **No analytics/monitoring** → Add error tracking and usage analytics (Week 4: Sentry + PostHog) 🔜
-- **Hardcoded prompts** → Externalize to markdown files for versioning (Week 2: ADR-013) 🔜
-- **No response validation** → Implement GenerateRes schema validation before returning (Week 2) 🔜
 
 ---
 
@@ -511,16 +537,16 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 3. OpenAI client abstraction (ADR-010) ✅
 4. Documentation completion (ADR-012) ✅
 5. Component extraction (ADR-011) ✅
-6. Prompt externalization (ADR-013) 🔜
-7. API response validation + word count validation 🔜
-8. Testing and redeployment 🔜
+6. Prompt externalization (ADR-013) ✅
+7. API response validation + word count validation ✅
+8. Testing and redeployment ✅
 
 **Week 3: Data & User Features**
 
 - Database integration (Supabase) for story persistence 🔜
 - Basic user identification and story history 🔜
 - Story rating system for AI improvement 🔜
-- Caching implementation for performance 🔜
+- Caching implementation for performance ✅
 
 **Week 4: Enhanced Features & Polish**
 
@@ -533,6 +559,7 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 
 ## Changelog (append-only)
 
+- **Week 2, Day 7**: Completed ADR-023 - implemented prompt externalization with markdown templates, comprehensive validation with word count ranges, caching infrastructure with request hashing, safety screening with content filtering, enhanced OpenAI client with retry logic, and automated verification scripts; all prompts now externalized to `/prompts/` directory with variable substitution; API route completely rewritten with caching, safety checks, and proper headers; verification script ensures all required artifacts are present and properly wired ✅
 - **Week 2, Day 6**: Completed ADR-022 - fixed deployment pipeline issues by removing remaining Storybook files causing TypeScript errors and optimizing Git hooks for faster commits/pushes; pre-commit now runs in ~1.6s (format check only), pre-push runs in ~2.9s (typecheck only); deployment pipeline now completes in under 5 seconds ✅
 - **Week 2, Day 6**: Completed ADR-020/021 - implemented workflow preflight automation with comprehensive violation detection, Git hooks, CI/CD enforcement, and updated documentation; fixed component import violations to use canonical barrel exports; removed Storybook entirely due to Next.js 15.5.3 compatibility issues; all preflight checks passing ✅
 - **Week 2, Day 5**: Completed ADR-018/019 - implemented component import consolidation with barrel exports and canonical import patterns; upgraded to Next.js 15.5.3 and Storybook 8.6.14; fixed font compatibility issues; all TypeScript compilation, builds, and dev server tests passing ✅

@@ -2,11 +2,20 @@ import "server-only";
 export const runtime = "nodejs";
 
 import { NextResponse } from "next/server";
-import { GenerateReq, formatZodIssues } from "@/lib/schema";
-import { openai } from "@/lib/openai";
+import { GenerateReq, GenerateRes, formatZodIssues } from "@/lib/schema";
+import { createClient } from "@/lib/openai";
+import { loadPrompt } from "@/lib/prompt";
+import { postCheck } from "@/lib/postcheck";
+import { reqHash } from "@/lib/hash";
+import { get, set } from "@/lib/cache";
+import { maybeRefuse } from "@/lib/safety";
 import type { ApiError } from "@/lib/ui-types";
 
 export async function POST(req: Request) {
+  let requestHash: string;
+  let modelUsed: string;
+  let parsedData: { articleText: string; readingLevel: string };
+  
   try {
     const raw = await req.json();
     const parsed = GenerateReq.safeParse(raw);
@@ -19,98 +28,148 @@ export async function POST(req: Request) {
       return NextResponse.json(error, { status: 400 });
     }
     const { articleText, readingLevel } = parsed.data;
+    parsedData = { articleText, readingLevel };
 
-    // Create age-appropriate prompt based on reading level
-    const getAgeSpecificPrompt = (level: string) => {
-      switch (level) {
-        case "preschool":
-          return `Create a very simple allegorical story for preschoolers (ages 3-5). The story should:
-- Use very simple words and short sentences (2-4 words per sentence)
-- Include lots of repetition and rhyming
-- Be approximately 200-300 words
-- Use familiar objects and animals
-- Have a very clear, simple moral lesson
-- Include sound effects and simple actions
-- Be perfect for reading aloud to very young children
-- Use bright, simple imagery and happy endings`;
+    // Safety screening
+    const safetyCheck = maybeRefuse(articleText);
+    if (safetyCheck.refuse) {
+      const error: ApiError = {
+        message: safetyCheck.reason || "Content not suitable for children's stories",
+        code: "BAD_REQUEST",
+      };
+      return NextResponse.json(error, { status: 400 });
+    }
 
-        case "early-elementary":
-          return `Create an allegorical story for early elementary children (ages 5-7). The story should:
-- Use simple vocabulary and short sentences
-- Include some repetition and rhythm
-- Be approximately 300-500 words
-- Use familiar characters and settings
-- Have a clear moral lesson explained simply
-- Include dialogue and simple conversations
-- Be engaging for beginning readers
-- Use descriptive but simple language`;
+    // Generate request hash for caching
+    requestHash = await reqHash(articleText, readingLevel);
+    
+    // Check cache first
+    const cached = get(requestHash);
+    if (cached) {
+      const response = NextResponse.json(cached);
+      response.headers.set("X-Cache", "HIT");
+      response.headers.set("X-Request", requestHash);
+      return response;
+    }
 
-        case "elementary":
-          return `Create an allegorical story for elementary children (ages 7-10). The story should:
-- Use age-appropriate vocabulary with some challenging words
-- Include varied sentence structures
-- Be approximately 500-800 words
-- Include more complex characters and plot
-- Have a meaningful moral lesson
-- Include rich dialogue and descriptions
-- Be suitable for independent reading
-- Use engaging storytelling techniques`;
+    // Build prompts using external templates
+    const systemPrompt = loadPrompt("system.story", { readingLevel, articleText });
+    const userPrompt = loadPrompt("user.story", { readingLevel, articleText });
 
-        default:
-          return `Create a 5-minute allegorical story for children under 10 years old. The story should:
-- Be engaging and age-appropriate
-- Include a clear moral lesson
-- Use simple language and concepts
-- Be approximately 500-800 words
-- Include characters that children can relate to
-- Have a clear beginning, middle, and end
-- Be suitable for bedtime reading or classroom use`;
+    // Create OpenAI client with retry logic
+    const client = createClient({
+      model: process.env.MODEL_NAME || "gpt-4o",
+      temperature: 0.7,
+      maxTokens: 1000,
+    });
+
+    modelUsed = process.env.MODEL_NAME || "gpt-4o";
+
+    // Call OpenAI API with retry logic
+    const completion = await client.chatCompletionsCreate({
+      messages: [
+        { role: "system", content: systemPrompt },
+        { role: "user", content: userPrompt },
+      ],
+    });
+
+    const generatedContent = completion.choices[0]?.message?.content;
+    if (!generatedContent) {
+      throw new Error("No content generated from OpenAI");
+    }
+
+    // Parse JSON response
+    let parsedResponse;
+    try {
+      parsedResponse = JSON.parse(generatedContent);
+    } catch (parseError) {
+      // If JSON parsing fails, try to extract story and create questions
+      parsedResponse = {
+        story: generatedContent,
+        questions: [
+          "What lesson did you learn from this story?",
+          "How can you apply this lesson in your own life?"
+        ]
+      };
+    }
+
+    // Validate response structure
+    const validatedResponse = GenerateRes.parse(parsedResponse);
+    
+    // Add metadata
+    const wordCount = validatedResponse.story.split(/\s+/).length;
+    const responseWithMeta = {
+      ...validatedResponse,
+      meta: {
+        readingLevel,
+        wordCount
       }
     };
 
-    const prompt = `Based on this news story: "${articleText}"
+    // Post-check validation
+    postCheck(responseWithMeta, readingLevel);
 
-${getAgeSpecificPrompt(readingLevel)}
+    // Cache the result
+    set(requestHash, responseWithMeta);
 
-Please format the story with proper paragraphs and make it easy to read aloud.`;
+    // Return response with headers
+    const response = NextResponse.json(responseWithMeta);
+    response.headers.set("X-Cache", "MISS");
+    response.headers.set("X-Model", modelUsed);
+    response.headers.set("X-Request", requestHash);
+    return response;
 
-    // Call OpenAI API
-    const completion = await openai.chat.completions.create({
-      model: process.env.MODEL_NAME || "gpt-4o",
-      messages: [
-        {
-          role: "system",
-          content: `You are a skilled children's storyteller who creates engaging, educational allegorical stories based on real-world events. You are specifically adapting stories for ${readingLevel} children. Your stories are always age-appropriate, positive, and include valuable life lessons tailored to the reading level.`,
-        },
-        {
-          role: "user",
-          content: prompt,
-        },
-      ],
-      max_tokens: 1000,
-      temperature: 0.7,
-    });
-
-    // Extract the generated story
-    const generatedStory = completion.choices[0]?.message?.content;
-
-    if (!generatedStory) {
-      const error: ApiError = {
-        message: "Failed to generate story",
-        code: "INTERNAL_ERROR",
-      };
-      return NextResponse.json(error, { status: 500 });
-    }
-
-    // Return the generated story
-    return NextResponse.json({
-      success: true,
-      story: generatedStory,
-      originalNewsStory: articleText,
-      readingLevel: readingLevel,
-    });
   } catch (error: any) {
     console.error("Error generating story:", error);
+
+    // Handle post-check validation errors with retry
+    if (error.message && error.message.includes("word count") || error.message.includes("questions")) {
+      try {
+        // Retry once with corrective system prompt
+        const correctivePrompt = loadPrompt("system.story", { 
+          readingLevel: parsedData.readingLevel, 
+          articleText: parsedData.articleText 
+        }) + "\n\nIMPORTANT: Ensure the story word count fits the reading level and include exactly 2 discussion questions.";
+        
+        const client = createClient({
+          model: process.env.MODEL_NAME || "gpt-4o",
+          temperature: 0.5, // Lower temperature for more consistent output
+          maxTokens: 1000,
+        });
+
+        const retryCompletion = await client.chatCompletionsCreate({
+          messages: [
+            { role: "system", content: correctivePrompt },
+            { role: "user", content: loadPrompt("user.story", { 
+              readingLevel: parsedData.readingLevel, 
+              articleText: parsedData.articleText 
+            }) },
+          ],
+        });
+
+        const retryContent = retryCompletion.choices[0]?.message?.content;
+        if (retryContent) {
+          const retryParsed = JSON.parse(retryContent);
+          const retryValidated = GenerateRes.parse(retryParsed);
+          const wordCount = retryValidated.story.split(/\s+/).length;
+          const retryResponse = {
+            ...retryValidated,
+            meta: { readingLevel: parsedData.readingLevel, wordCount }
+          };
+          
+          postCheck(retryResponse, parsedData.readingLevel);
+          set(requestHash, retryResponse);
+          
+          const response = NextResponse.json(retryResponse);
+          response.headers.set("X-Cache", "MISS");
+          response.headers.set("X-Model", modelUsed);
+          response.headers.set("X-Request", requestHash);
+          return response;
+        }
+      } catch (retryError) {
+        console.error("Retry also failed:", retryError);
+      }
+    }
 
     // Handle specific OpenAI errors
     if (error.status === 401) {
@@ -129,7 +188,7 @@ Please format the story with proper paragraphs and make it easy to read aloud.`;
       return NextResponse.json(apiError, { status: 429 });
     }
 
-    if (error.status === 500) {
+    if (error.status >= 500) {
       const apiError: ApiError = {
         message: "OpenAI service is currently unavailable",
         code: "INTERNAL_ERROR",
@@ -139,7 +198,7 @@ Please format the story with proper paragraphs and make it easy to read aloud.`;
 
     // Generic error response
     const apiError: ApiError = {
-      message: "An error occurred while generating the story",
+      message: "Unable to generate story at this time. Please try again.",
       code: "INTERNAL_ERROR",
     };
     return NextResponse.json(apiError, { status: 500 });
