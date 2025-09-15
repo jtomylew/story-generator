@@ -13,25 +13,29 @@ const DEFAULT_TTL = 24 * 60 * 60 * 1000; // 24 hours
 
 export function get(key: string): GenerateRes | null {
   const entry = cache.get(key);
-  
+
   if (!entry) {
     return null;
   }
-  
+
   // Check if entry has expired
   if (Date.now() - entry.timestamp > entry.ttl) {
     cache.delete(key);
     return null;
   }
-  
+
   return entry.data;
 }
 
-export function set(key: string, data: GenerateRes, ttl: number = DEFAULT_TTL): void {
+export function set(
+  key: string,
+  data: GenerateRes,
+  ttl: number = DEFAULT_TTL,
+): void {
   cache.set(key, {
     data,
     timestamp: Date.now(),
-    ttl
+    ttl,
   });
 }
 

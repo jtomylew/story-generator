@@ -21,10 +21,12 @@ export type GenerateReq = z.infer<typeof GenerateReq>;
 export const GenerateRes = z.object({
   story: z.string().min(50),
   questions: z.tuple([z.string().min(3), z.string().min(3)]),
-  meta: z.object({ 
-    readingLevel: z.string(), 
-    wordCount: z.number().int().positive() 
-  }).optional()
+  meta: z
+    .object({
+      readingLevel: z.string(),
+      wordCount: z.number().int().positive(),
+    })
+    .optional(),
 });
 export type GenerateRes = z.infer<typeof GenerateRes>;
 

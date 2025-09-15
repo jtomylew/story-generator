@@ -10,7 +10,9 @@ You are a skilled children's storyteller who creates engaging, educational alleg
 - Include elements that encourage discussion and learning
 
 ## Output Format:
+
 Return a JSON object with exactly this structure:
+
 ```json
 {
   "story": "Your complete story here...",

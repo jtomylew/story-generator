@@ -15,7 +15,7 @@ export async function POST(req: Request) {
   let requestHash: string;
   let modelUsed: string;
   let parsedData: { articleText: string; readingLevel: string };
-  
+
   try {
     const raw = await req.json();
     const parsed = GenerateReq.safeParse(raw);
@@ -34,7 +34,8 @@ export async function POST(req: Request) {
     const safetyCheck = maybeRefuse(articleText);
     if (safetyCheck.refuse) {
       const error: ApiError = {
-        message: safetyCheck.reason || "Content not suitable for children's stories",
+        message:
+          safetyCheck.reason || "Content not suitable for children's stories",
         code: "BAD_REQUEST",
       };
       return NextResponse.json(error, { status: 400 });
@@ -42,7 +43,7 @@ export async function POST(req: Request) {
 
     // Generate request hash for caching
     requestHash = await reqHash(articleText, readingLevel);
-    
+
     // Check cache first
     const cached = get(requestHash);
     if (cached) {
@@ -53,7 +54,10 @@ export async function POST(req: Request) {
     }
 
     // Build prompts using external templates
-    const systemPrompt = loadPrompt("system.story", { readingLevel, articleText });
+    const systemPrompt = loadPrompt("system.story", {
+      readingLevel,
+      articleText,
+    });
     const userPrompt = loadPrompt("user.story", { readingLevel, articleText });
 
     // Create OpenAI client with retry logic
@@ -88,22 +92,22 @@ export async function POST(req: Request) {
         story: generatedContent,
         questions: [
           "What lesson did you learn from this story?",
-          "How can you apply this lesson in your own life?"
-        ]
+          "How can you apply this lesson in your own life?",
+        ],
       };
     }
 
     // Validate response structure
     const validatedResponse = GenerateRes.parse(parsedResponse);
-    
+
     // Add metadata
     const wordCount = validatedResponse.story.split(/\s+/).length;
     const responseWithMeta = {
       ...validatedResponse,
       meta: {
         readingLevel,
-        wordCount
-      }
+        wordCount,
+      },
     };
 
     // Post-check validation
@@ -118,19 +122,23 @@ export async function POST(req: Request) {
     response.headers.set("X-Model", modelUsed);
     response.headers.set("X-Request", requestHash);
     return response;
-
   } catch (error: any) {
     console.error("Error generating story:", error);
 
     // Handle post-check validation errors with retry
-    if (error.message && error.message.includes("word count") || error.message.includes("questions")) {
+    if (
+      (error.message && error.message.includes("word count")) ||
+      error.message.includes("questions")
+    ) {
       try {
         // Retry once with corrective system prompt
-        const correctivePrompt = loadPrompt("system.story", { 
-          readingLevel: parsedData.readingLevel, 
-          articleText: parsedData.articleText 
-        }) + "\n\nIMPORTANT: Ensure the story word count fits the reading level and include exactly 2 discussion questions.";
-        
+        const correctivePrompt =
+          loadPrompt("system.story", {
+            readingLevel: parsedData.readingLevel,
+            articleText: parsedData.articleText,
+          }) +
+          "\n\nIMPORTANT: Ensure the story word count fits the reading level and include exactly 2 discussion questions.";
+
         const client = createClient({
           model: process.env.MODEL_NAME || "gpt-4o",
           temperature: 0.5, // Lower temperature for more consistent output
@@ -140,10 +148,13 @@ export async function POST(req: Request) {
         const retryCompletion = await client.chatCompletionsCreate({
           messages: [
             { role: "system", content: correctivePrompt },
-            { role: "user", content: loadPrompt("user.story", { 
-              readingLevel: parsedData.readingLevel, 
-              articleText: parsedData.articleText 
-            }) },
+            {
+              role: "user",
+              content: loadPrompt("user.story", {
+                readingLevel: parsedData.readingLevel,
+                articleText: parsedData.articleText,
+              }),
+            },
           ],
         });
 
@@ -154,12 +165,12 @@ export async function POST(req: Request) {
           const wordCount = retryValidated.story.split(/\s+/).length;
           const retryResponse = {
             ...retryValidated,
-            meta: { readingLevel: parsedData.readingLevel, wordCount }
+            meta: { readingLevel: parsedData.readingLevel, wordCount },
           };
-          
+
           postCheck(retryResponse, parsedData.readingLevel);
           set(requestHash, retryResponse);
-          
+
           const response = NextResponse.json(retryResponse);
           response.headers.set("X-Cache", "MISS");
           response.headers.set("X-Model", modelUsed);
