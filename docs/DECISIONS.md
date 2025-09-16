@@ -573,6 +573,22 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 - **Learning outcome**: Successfully resolved deployment failures and established production-ready infrastructure
 - **Files**: Supabase project setup, Vercel environment configuration, `package.json` (preflight script fix), `docs/DECISIONS.md`, `docs/LLM_CONTEXT.md`
 
+### ADR-027: Environment Variable Configuration Fix ✅
+
+**Week 2, Day 8**
+
+- **Decision**: Fix environment variable naming mismatch between Supabase integration and application code.
+- **Previous limitation**: Vercel deployments were failing due to environment variable name mismatch - Supabase integration provided `SUPABASE_SERVICE_ROLE_KEY` but code expected `SUPABASE_SERVICE_ROLE`.
+- **Implementation**:
+  - Updated environment schema to use `SUPABASE_SERVICE_ROLE_KEY` (matches Supabase integration)
+  - Made Supabase environment variables optional for build time to prevent build failures
+  - Added runtime validation in database client to ensure variables are available when needed
+  - Maintained backward compatibility with existing environment variable patterns
+- **Impact**: All Vercel deployments now successful; environment variables properly configured
+- **Rationale**: Supabase Vercel integration uses standard naming conventions; making variables optional for build time allows successful builds while maintaining runtime validation
+- **Learning outcome**: Environment variable naming consistency is critical for cloud platform integrations
+- **Files**: `lib/env.ts`, `lib/db.ts`
+
 ### ADR-022: Automated Storybook Compatibility Monitoring ✅
 
 **Week 2, Day 6**
@@ -691,6 +707,7 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 
 ## Changelog (append-only)
 
+- **Week 2, Day 8**: Completed ADR-027 - fixed environment variable naming mismatch between Supabase integration and application code, made Supabase variables optional for build time while maintaining runtime validation, resolved all Vercel deployment failures; all deployments now successful ✅
 - **Week 2, Day 8**: Completed ADR-026 - resolved deployment failures by setting up Supabase project with Vercel integration, configured environment variables, created database schema with proper RLS policies, and fixed preflight script to handle expected Storybook compatibility issues gracefully; all deployments now successful with full story persistence functionality ✅
 - **Week 2, Day 8**: Completed ADR-025 - implemented story persistence with Supabase using device-based identification, server-only database access, and HttpOnly cookies; added Save button to StoryOutput with loading states, created stories history page with server-side rendering, implemented proper API routes with validation and error handling, and designed secure database schema with RLS policies; users can now save and browse their story history ✅
 - **Week 2, Day 8**: Completed ADR-024 - modernized entire UI to shadcn/ui standards with new Card component, pattern components (Page, SectionHeader, EmptyState, Toolbar), standardized spacing and typography, proper dark mode support with prose styling, and consistent button/input variants; all components now use shadcn primitives with proper sub-component structure; maintained all existing functionality while improving design consistency and accessibility ✅

@@ -43,7 +43,7 @@ curl -i -X POST http://localhost:3000/api/stories/save \
 
 ```bash
 SUPABASE_URL=https://your-project.supabase.co
-SUPABASE_SERVICE_ROLE=your-service-role-key
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
 ```
 
 ## Database Migration

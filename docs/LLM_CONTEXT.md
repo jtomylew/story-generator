@@ -51,7 +51,7 @@ Keep real secrets in `.env.local` (git-ignored). Commit a template in `.env.exam
 
 - `OPENAI_API_KEY` — OpenAI secret key
 - `SUPABASE_URL` — Supabase project URL
-- `SUPABASE_SERVICE_ROLE` — Supabase service role key (server-only)
+- `SUPABASE_SERVICE_ROLE_KEY` — Supabase service role key (server-only)
 
 **Public (client-safe)**
 
