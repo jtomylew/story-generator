@@ -8,6 +8,7 @@ export * from "./BarChart";
 export * from "./Breadcrumbs";
 export * from "./Button";
 export * from "./Calendar";
+export * from "./Card";
 export * from "./Checkbox";
 export * from "./CheckboxCard";
 export * from "./CheckboxGroup";

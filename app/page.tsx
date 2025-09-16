@@ -4,7 +4,7 @@
 import { useState, useEffect, useCallback } from "react";
 import type { GenerateReq } from "@/lib/types";
 import type { RequestState, ApiError } from "@/lib/ui-types";
-import { StoryForm, StoryOutput } from "@/components";
+import { StoryForm, StoryOutput, Page, SectionHeader } from "@/components";
 
 export default function Home() {
   const [requestState, setRequestState] = useState<RequestState>({
@@ -87,44 +87,22 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white border-b border-gray-200">
-        <div className="container mx-auto px-4 py-8">
-          <div className="text-center">
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-2 flex items-center justify-center gap-3">
-              <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center">
-                <span className="text-white text-2xl">✨</span>
-              </div>
-              Story Weaver
-              <span className="text-2xl text-blue-500">✨</span>
-            </h1>
-            <p className="text-lg text-gray-600 font-medium">
-              Transform news into magical tales for young minds
-            </p>
-          </div>
-        </div>
-      </header>
-
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
-        <StoryForm
-          onSubmit={handleSubmit}
-          isSubmitting={requestState.status === "loading"}
+    <div className="min-h-screen bg-background">
+      <Page>
+        <SectionHeader
+          title="Story Weaver"
+          description="Transform news into magical tales for young minds"
         />
 
-        <StoryOutput state={requestState} onReset={resetForm} />
-      </div>
+        <div className="space-y-6">
+          <StoryForm
+            onSubmit={handleSubmit}
+            isSubmitting={requestState.status === "loading"}
+          />
 
-      {/* Footer */}
-      <footer className="bg-white border-t border-gray-200 py-8 mt-16">
-        <div className="container mx-auto px-4 text-center">
-          <p className="text-lg text-gray-600 font-medium flex items-center justify-center gap-2">
-            <span className="text-blue-500">✨</span>
-            Weaving stories that spark imagination and wonder - deployment test
-            <span className="text-blue-500">✨</span>
-          </p>
+          <StoryOutput state={requestState} onReset={resetForm} />
         </div>
-      </footer>
+      </Page>
     </div>
   );
 }
