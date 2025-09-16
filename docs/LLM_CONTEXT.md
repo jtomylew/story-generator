@@ -4,9 +4,9 @@ Allegorical News → Kids' 5-Minute Stories
 
 - **\*What**: Web app that turns news articles into age-appropriate allegorical stories for kids under 10
 - **Tech Stack**: Next.js + TypeScript + OpenAI API + Vercel
-- **Current Status**: ✅ MVP deployed; ✅ Design system foundation and cascade complete; ✅ UI modernized to shadcn/ui standards
-- **API**: POST /api/generate {articleText, readingLevel} → {story, metadata}
-- **Next**: Prompt files, caching, database persistence
+- **Current Status**: ✅ MVP deployed; ✅ Design system foundation and cascade complete; ✅ UI modernized to shadcn/ui standards; ✅ Story persistence with Supabase; ✅ Production deployment infrastructure
+- **API**: POST /api/generate {articleText, readingLevel} → {story, metadata}; POST /api/stories/save; GET /api/stories
+- **Next**: Enhanced user experience, analytics, performance optimization
 
 ## Purpose (what we're building)
 
@@ -33,11 +33,13 @@ Turn a current news article (pasted text for now) into a gentle, age-appropriate
 - **Language:** TypeScript (fully migrated)
 - **AI provider:** OpenAI API (model configurable per environment)
 - **Hosting:** Vercel (auto-deploy from GitHub)
+- **Database:** Supabase (PostgreSQL with Row Level Security)
 - **Validation:** Zod (env + request/response schemas)
 - **UI Components:** shadcn/ui + Radix primitives with barrel exports; Card component with Header/Title/Content/Footer
-- **Documentation:** Storybook 8.6.14
+- **Documentation:** Storybook 8.6.14 (temporarily disabled due to compatibility issues)
 - **Prompts:** Markdown files loaded server-side (`fs`)
-- **Optional (planned):** Upstash Redis (cache), Supabase/Vercel Postgres (persistence), Sentry/PostHog (telemetry)
+- **Caching:** Request hashing with in-memory cache
+- **Optional (planned):** Upstash Redis (enhanced cache), Sentry/PostHog (telemetry)
 
 ---
 

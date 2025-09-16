@@ -49,3 +49,10 @@ SUPABASE_SERVICE_ROLE=your-service-role-key
 ## Database Migration
 
 Run the SQL migration in `sql/2025-01-16-stories.sql` on your Supabase instance to create the stories table with proper indexes and RLS policies.
+
+## Deployment Setup
+
+- **Supabase Project**: Created with Vercel integration for automatic environment variable configuration
+- **Database Schema**: Stories table created with proper RLS policies and indexes
+- **Vercel Integration**: Environment variables automatically configured via Supabase dashboard
+- **Production Status**: ✅ All deployments successful with full story persistence functionality
