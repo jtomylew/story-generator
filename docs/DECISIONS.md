@@ -14,6 +14,17 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 - **Weekly summary**: "Update the current week summary in docs/DECISIONS.md to reflect all completed work and current project status."
 - **New technical debt**: "I discovered a new limitation: [brief description]. Add this to the technical debt section in docs/DECISIONS.md and suggest when to address it."
 
+**Collaboration Style & Communication Preferences:**
+
+- **Proactive documentation updates**: Always update relevant docs when making changes, don't wait to be asked
+- **Clear status communication**: Use checkmarks (✅) and status indicators liberally to show progress
+- **Comprehensive explanations**: Provide context for why decisions were made, not just what was done
+- **Systematic approach**: Break down complex tasks into clear, actionable steps with todo tracking
+- **Immediate verification**: Test changes locally before committing, verify deployments work
+- **Clean repository management**: Merge and clean up branches promptly, keep only main branch
+- **Error resolution focus**: When issues arise, investigate root cause and fix systematically rather than quick patches
+- **Documentation-first mindset**: Update docs as part of the work, not as an afterthought
+
 ---
 
 ## Week 1 Summary ✅

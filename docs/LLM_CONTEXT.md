@@ -611,3 +611,28 @@ App should error clearly when key is missing.
 - 500 (temporary throw) shows `{ message: "boom", code: "INTERNAL_ERROR" }` in UI
 - AbortController cancels prior request (Network shows **canceled**)
 - Missing `OPENAI_API_KEY` fails fast with a clear error
+
+---
+
+## 5) Collaboration Style & Communication Preferences
+
+**Working Approach:**
+
+- **Proactive documentation**: Update docs as part of the work, not as an afterthought
+- **Systematic problem-solving**: Break down complex issues into clear, actionable steps
+- **Immediate verification**: Test changes locally before committing, verify deployments work
+- **Clean repository management**: Merge and clean up branches promptly, keep only main branch
+
+**Communication Style:**
+
+- **Clear status indicators**: Use checkmarks (✅) and progress indicators liberally
+- **Comprehensive context**: Explain why decisions were made, not just what was done
+- **Error resolution focus**: Investigate root cause and fix systematically rather than quick patches
+- **Documentation-first mindset**: Always update relevant docs when making changes
+
+**Preferred Workflow:**
+
+- **Todo tracking**: Use structured task lists for complex multi-step work
+- **Immediate feedback**: Test and verify changes before moving to next steps
+- **Clean commits**: Make focused commits with clear messages
+- **Complete handoffs**: Ensure all work is properly documented and committed
