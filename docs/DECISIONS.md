@@ -521,6 +521,33 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 - **Learning outcome**: Successfully modernized entire UI to professional design system standards with zero breaking changes
 - **Files**: `components/ui/Card.tsx`, `components/patterns/Page.tsx`, `components/patterns/EmptyState.tsx`, `components/patterns/Toolbar.tsx`, `app/page.tsx`, `components/patterns/StoryForm.tsx`, `components/patterns/StoryOutput.tsx`, `components/ui/index.ts`, `components/patterns/index.ts`
 
+### ADR-025: Story Persistence with Supabase ✅
+
+**Week 2, Day 8**
+
+- **Decision**: Implement minimal story persistence using Supabase with device-based identification and server-only database access.
+- **Previous limitation**: No way to save or retrieve previously generated stories, limiting user engagement and story reuse.
+- **Implementation**:
+  - **Database Setup**: Created Supabase integration with service role authentication for server-only access
+  - **Device Identification**: Implemented HttpOnly cookie-based device ID system for anonymous user tracking
+  - **API Routes**: Created POST `/api/stories/save` and GET `/api/stories` with proper validation and error handling
+  - **Save Functionality**: Added Save button to StoryOutput component with loading states and success feedback
+  - **History Page**: Created `/stories` page with server-side rendering and empty state handling
+  - **Database Schema**: Designed stories table with proper indexes, RLS policies, and upsert functionality
+  - **Environment Validation**: Extended environment schema to include Supabase URL and service role key
+- **Security & Privacy**:
+  - **Server-Only Access**: Database client only accessible from server-side code, never exposed to client
+  - **Device-Based Tracking**: Uses HttpOnly cookies for anonymous device identification (400-day expiration)
+  - **Row Level Security**: Implemented RLS policies for future user authentication compatibility
+  - **Data Minimization**: Only stores essential story data with proper indexing for performance
+- **Tradeoffs**:
+  - **Anonymous vs Authenticated**: Chose device-based tracking for simplicity vs full user authentication
+  - **In-Memory vs Database**: Moved from in-memory cache to persistent storage for story history
+  - **Server-Side vs Client-Side**: Used server-side rendering for stories page vs client-side fetching
+- **Rationale**: Story persistence increases user engagement and provides value through story history; device-based tracking balances privacy with functionality; server-only database access ensures security
+- **Learning outcome**: Successfully implemented production-ready persistence layer with proper security, validation, and user experience
+- **Files**: `lib/db.ts`, `lib/device.ts`, `lib/env.ts`, `app/api/stories/save/route.ts`, `app/api/stories/route.ts`, `app/(app)/stories/page.tsx`, `components/patterns/StoryOutput.tsx`, `sql/2025-01-16-stories.sql`
+
 ---
 
 ## Current Status & Technical Debt
@@ -551,10 +578,10 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 - ✅ UI modernization to shadcn/ui standards with Card components and pattern layouts
 - ✅ Standardized spacing, typography, and component structure throughout the app
 - ✅ Dark mode support with proper prose styling and color token usage
+- ✅ Story persistence (Supabase) added: save + list by deviceId; service role server-only; node runtime for API routes; cookie deviceId
 
 **Known limitations & planned mitigations**
 
-- **No persistence** → Add database for saved stories + user identification (Week 3: Supabase) 🔜
 - **Manual paste only** → Add URL ingestion with article extraction (Week 4: Readability.js) 🔜
 - **No analytics/monitoring** → Add error tracking and usage analytics (Week 4: Sentry + PostHog) 🔜
 
@@ -619,6 +646,7 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 
 ## Changelog (append-only)
 
+- **Week 2, Day 8**: Completed ADR-025 - implemented story persistence with Supabase using device-based identification, server-only database access, and HttpOnly cookies; added Save button to StoryOutput with loading states, created stories history page with server-side rendering, implemented proper API routes with validation and error handling, and designed secure database schema with RLS policies; users can now save and browse their story history ✅
 - **Week 2, Day 8**: Completed ADR-024 - modernized entire UI to shadcn/ui standards with new Card component, pattern components (Page, SectionHeader, EmptyState, Toolbar), standardized spacing and typography, proper dark mode support with prose styling, and consistent button/input variants; all components now use shadcn primitives with proper sub-component structure; maintained all existing functionality while improving design consistency and accessibility ✅
 - **Week 2, Day 7**: Completed ADR-023 - implemented prompt externalization with markdown templates, comprehensive validation with word count ranges, caching infrastructure with request hashing, safety screening with content filtering, enhanced OpenAI client with retry logic, and automated verification scripts; all prompts now externalized to `/prompts/` directory with variable substitution; API route completely rewritten with caching, safety checks, and proper headers; verification script ensures all required artifacts are present and properly wired ✅
 - **Week 2, Day 6**: Completed ADR-022 - fixed deployment pipeline issues by removing remaining Storybook files causing TypeScript errors and optimizing Git hooks for faster commits/pushes; pre-commit now runs in ~1.6s (format check only), pre-push runs in ~2.9s (typecheck only); deployment pipeline now completes in under 5 seconds ✅

@@ -4,6 +4,7 @@
 import { useState } from "react";
 import type { RequestState } from "@/lib/ui-types";
 import { Button, Card, SkeletonText, Toolbar } from "@/components";
+import { reqHash } from "@/lib/hash";
 
 interface StoryOutputProps {
   state: RequestState;
@@ -12,6 +13,9 @@ interface StoryOutputProps {
 
 export function StoryOutput({ state, onReset }: StoryOutputProps) {
   const [showToast, setShowToast] = useState(false);
+  const [saveState, setSaveState] = useState<
+    "idle" | "loading" | "saved" | "error"
+  >("idle");
 
   const handleCopyStory = async () => {
     if (state.status !== "success") return;
@@ -38,6 +42,42 @@ export function StoryOutput({ state, onReset }: StoryOutputProps) {
     } catch (error) {
       console.error("Failed to copy story:", error);
       // Could add error toast here if needed
+    }
+  };
+
+  const handleSaveStory = async () => {
+    if (state.status !== "success") return;
+
+    setSaveState("loading");
+
+    try {
+      const articleHash = await reqHash(
+        state.req.articleText,
+        state.req.readingLevel,
+      );
+
+      const response = await fetch("/api/stories/save", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          articleHash,
+          readingLevel: state.req.readingLevel,
+          story: state.res.story,
+        }),
+      });
+
+      if (response.ok) {
+        setSaveState("saved");
+        setShowToast(true);
+        setTimeout(() => setShowToast(false), 3000);
+      } else {
+        setSaveState("error");
+      }
+    } catch (error) {
+      console.error("Failed to save story:", error);
+      setSaveState("error");
     }
   };
 
@@ -117,6 +157,16 @@ export function StoryOutput({ state, onReset }: StoryOutputProps) {
           <Card.Footer>
             <Toolbar className="w-full justify-center">
               <Button
+                onClick={handleSaveStory}
+                variant="neutral-secondary"
+                size="small"
+                icon="💾"
+                disabled={saveState === "loading" || saveState === "saved"}
+                loading={saveState === "loading"}
+              >
+                {saveState === "saved" ? "Saved" : "Save Story"}
+              </Button>
+              <Button
                 onClick={handleCopyStory}
                 variant="neutral-secondary"
                 size="small"
@@ -141,7 +191,9 @@ export function StoryOutput({ state, onReset }: StoryOutputProps) {
           <div className="fixed top-4 right-4 z-50">
             <div className="bg-green-500 text-white px-4 py-2 rounded-md shadow-md flex items-center gap-2">
               <span>✅</span>
-              <span className="text-sm font-medium">Story copied!</span>
+              <span className="text-sm font-medium">
+                {saveState === "saved" ? "Story saved!" : "Story copied!"}
+              </span>
             </div>
           </div>
         )}

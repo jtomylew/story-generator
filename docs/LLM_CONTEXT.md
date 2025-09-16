@@ -48,6 +48,8 @@ Keep real secrets in `.env.local` (git-ignored). Commit a template in `.env.exam
 **Required**
 
 - `OPENAI_API_KEY` — OpenAI secret key
+- `SUPABASE_URL` — Supabase project URL
+- `SUPABASE_SERVICE_ROLE` — Supabase service role key (server-only)
 
 **Public (client-safe)**
 
@@ -171,6 +173,64 @@ import { StoryForm } from "@/components/patterns/StoryForm";
 - X-Cache: HIT|MISS
 - X-Model: [model-name]
 - X-Request: [uuid]
+
+**Route:** POST /api/stories/save
+**Request JSON**
+
+```json
+{
+  "articleHash": "string (sha256 hash of article text)",
+  "readingLevel": "preschool" | "early-elementary" | "elementary",
+  "story": "string (full story text)"
+}
+```
+
+**Response JSON (200)**
+
+```json
+{
+  "ok": true,
+  "id": "uuid"
+}
+```
+
+**Errors**
+
+- 400: {"message":"Invalid request data","code":"VALIDATION_ERROR","issues":[...]}
+- 500: {"message":"Failed to save story","code":"INTERNAL_ERROR"}
+
+**Headers**
+
+- X-Request-Id: [uuid]
+- X-Duration: [ms]
+
+**Route:** GET /api/stories
+**Query Parameters**
+
+- limit: number (default 10, max 50)
+
+**Response JSON (200)**
+
+```json
+[
+  {
+    "id": "uuid",
+    "articleHash": "string",
+    "readingLevel": "preschool" | "early-elementary" | "elementary",
+    "createdAt": "ISO timestamp",
+    "snippet": "string (first 160 chars + ...)"
+  }
+]
+```
+
+**Errors**
+
+- 500: {"message":"Failed to fetch stories","code":"INTERNAL_ERROR"}
+
+**Headers**
+
+- X-Request-Id: [uuid]
+- X-Duration: [ms]
 
 ## Prompt files (structure)
 

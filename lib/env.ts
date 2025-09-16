@@ -11,6 +11,8 @@ const EnvSchema = z.object({
   UPSTASH_REDIS_REST_URL: z.string().url().optional(),
   UPSTASH_REDIS_REST_TOKEN: z.string().optional(),
   SENTRY_DSN: z.string().url().optional(),
+  SUPABASE_URL: z.string().url().min(1, "Missing SUPABASE_URL"),
+  SUPABASE_SERVICE_ROLE: z.string().min(1, "Missing SUPABASE_SERVICE_ROLE"),
 });
 
 const parsed = EnvSchema.safeParse({
@@ -21,6 +23,8 @@ const parsed = EnvSchema.safeParse({
   UPSTASH_REDIS_REST_URL: process.env.UPSTASH_REDIS_REST_URL,
   UPSTASH_REDIS_REST_TOKEN: process.env.UPSTASH_REDIS_REST_TOKEN,
   SENTRY_DSN: process.env.SENTRY_DSN,
+  SUPABASE_URL: process.env.SUPABASE_URL,
+  SUPABASE_SERVICE_ROLE: process.env.SUPABASE_SERVICE_ROLE,
 });
 
 if (!parsed.success) {
