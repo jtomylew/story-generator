@@ -526,6 +526,34 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 - **Manual paste only** → Add URL ingestion with article extraction (Week 4: Readability.js) 🔜
 - **No analytics/monitoring** → Add error tracking and usage analytics (Week 4: Sentry + PostHog) 🔜
 
+## Known Issues
+
+**TypeScript Path Resolution**
+
+- Issue: Some TypeScript path aliases may not resolve correctly in certain IDE configurations
+- Workaround: Use relative imports for critical files, ensure `tsconfig.json` paths are properly configured
+- Status: Monitoring, no functional impact
+
+**Next.js 15 × Storybook Compatibility**
+
+- Issue: Next.js 15.5.3 has compatibility issues with Storybook 8.6.14 (webpack hook conflicts)
+- Resolution: Removed Storybook entirely (ADR-021) - component testing via main app at `http://localhost:3000`
+- Status: Resolved by removal
+
+**Vercel Environment Validation**
+
+- Issue: Environment variables not validated at build time, only at runtime
+- Impact: Deployments may succeed but fail at runtime if env vars missing
+- Workaround: Manual verification in Vercel dashboard, consider build-time validation
+- Status: Low priority, runtime validation sufficient for MVP
+
+**Git Hooks Performance**
+
+- Issue: Pre-commit hooks can be slow on large codebases
+- Resolution: Optimized to run only essential checks (format + typecheck) in hooks
+- Performance: Pre-commit ~1.6s, pre-push ~2.9s (down from 30+ seconds)
+- Status: Optimized for current scale
+
 ---
 
 ## Next Phase Planning (30-minute chunks)

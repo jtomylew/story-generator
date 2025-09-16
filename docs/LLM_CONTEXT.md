@@ -196,6 +196,14 @@ Questions:
 2) [second question]
 ```
 
+### Prompt Variables
+
+| Variable           | Type              | Description                                    | Example Values                                      |
+| ------------------ | ----------------- | ---------------------------------------------- | --------------------------------------------------- |
+| `{{readingLevel}}` | string            | Target age group for story complexity          | `"preschool"`, `"early-elementary"`, `"elementary"` |
+| `{{articleText}}`  | string            | Raw news article content to transform          | Any news article text (≥50 chars)                   |
+| `{{styleHints}}`   | string (optional) | Additional style guidance for story generation | Custom instructions for tone, characters, etc.      |
+
 **Server note:** Any route that reads prompt files must run on Node runtime:
 
 ```ts

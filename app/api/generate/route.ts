@@ -49,6 +49,7 @@ export async function POST(req: Request) {
     if (cached) {
       const response = NextResponse.json(cached);
       response.headers.set("X-Cache", "HIT");
+      response.headers.set("X-Model", modelUsed);
       response.headers.set("X-Request", requestHash);
       return response;
     }
@@ -114,7 +115,11 @@ export async function POST(req: Request) {
     postCheck(responseWithMeta, readingLevel);
 
     // Cache the result
-    set(requestHash, responseWithMeta);
+    try {
+      set(requestHash, responseWithMeta);
+    } catch (cacheError) {
+      console.warn("Failed to cache result:", cacheError);
+    }
 
     // Return response with headers
     const response = NextResponse.json(responseWithMeta);
@@ -212,7 +217,9 @@ export async function POST(req: Request) {
       message: "Unable to generate story at this time. Please try again.",
       code: "INTERNAL_ERROR",
     };
-    return NextResponse.json(apiError, { status: 500 });
+    const response = NextResponse.json(apiError, { status: 500 });
+    response.headers.set("X-Cache", "BYPASS");
+    return response;
   }
 }
 

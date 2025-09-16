@@ -1,6 +1,7 @@
 // @subframe/sync-disable
 "use client";
 
+import { useState } from "react";
 import type { RequestState } from "@/lib/ui-types";
 import { Button } from "@/components";
 
@@ -10,6 +11,36 @@ interface StoryOutputProps {
 }
 
 export function StoryOutput({ state, onReset }: StoryOutputProps) {
+  const [showToast, setShowToast] = useState(false);
+
+  const handleCopyStory = async () => {
+    if (state.status !== "success") return;
+
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(state.res.story);
+      } else {
+        // Fallback for older browsers or non-secure contexts
+        const textArea = document.createElement("textarea");
+        textArea.value = state.res.story;
+        textArea.style.position = "fixed";
+        textArea.style.left = "-999999px";
+        textArea.style.top = "-999999px";
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        document.execCommand("copy");
+        textArea.remove();
+      }
+
+      setShowToast(true);
+      setTimeout(() => setShowToast(false), 3000);
+    } catch (error) {
+      console.error("Failed to copy story:", error);
+      // Could add error toast here if needed
+    }
+  };
+
   // Idle state - nothing to render
   if (state.status === "idle") {
     return null;
@@ -111,14 +142,11 @@ export function StoryOutput({ state, onReset }: StoryOutputProps) {
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Button
-            onClick={() => {
-              navigator.clipboard.writeText(state.res.story);
-              // You could add a toast notification here
-            }}
+            onClick={handleCopyStory}
             className="px-8 py-4 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold rounded-xl motion-medium transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center gap-3"
           >
             <span className="text-xl">📋</span>
-            <span>Copy Story</span>
+            <span>Share Story</span>
           </Button>
 
           <Button
@@ -131,6 +159,16 @@ export function StoryOutput({ state, onReset }: StoryOutputProps) {
             <span>Start New Story</span>
           </Button>
         </div>
+
+        {/* Toast Notification */}
+        {showToast && (
+          <div className="fixed top-4 right-4 z-50 animate-fade-in">
+            <div className="bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-2">
+              <span className="text-xl">✅</span>
+              <span className="font-medium">Story copied!</span>
+            </div>
+          </div>
+        )}
       </div>
     );
   }
