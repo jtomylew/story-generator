@@ -11,8 +11,8 @@ const EnvSchema = z.object({
   UPSTASH_REDIS_REST_URL: z.string().url().optional(),
   UPSTASH_REDIS_REST_TOKEN: z.string().optional(),
   SENTRY_DSN: z.string().url().optional(),
-  SUPABASE_URL: z.string().url().min(1, "Missing SUPABASE_URL"),
-  SUPABASE_SERVICE_ROLE: z.string().min(1, "Missing SUPABASE_SERVICE_ROLE"),
+  SUPABASE_URL: z.string().url().optional(),
+  SUPABASE_SERVICE_ROLE: z.string().optional(),
 });
 
 const parsed = EnvSchema.safeParse({
