@@ -442,9 +442,11 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
   - Removed `.prettierignore` (was only for Storybook)
 - **Impact**: Component inspection now relies on main application at `http://localhost:3000`
 - **Rationale**: Compatibility issues were blocking development workflow; main app provides sufficient component testing
+- **Automated Monitoring**: Storybook compatibility is automatically checked in all preflight workflows (local, Git hooks, CI/CD) using quick version-based checks
+- **Reinstallation**: See `docs/STORYBOOK_REINSTALL.md` for easy reinstallation when compatibility issues are resolved
 - **Files**: `package.json`, `eslint.config.mjs`, removed `.storybook/`, removed `*.stories.tsx`
 
-### ADR-022: Deployment Pipeline Optimization ✅
+### ADR-022: Deployment Pipeline Optimization + Automated Storybook Monitoring ✅
 
 **Week 2, Day 6**
 
@@ -548,6 +550,26 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 - **Learning outcome**: Successfully implemented production-ready persistence layer with proper security, validation, and user experience
 - **Files**: `lib/db.ts`, `lib/device.ts`, `lib/env.ts`, `app/api/stories/save/route.ts`, `app/api/stories/route.ts`, `app/(app)/stories/page.tsx`, `components/patterns/StoryOutput.tsx`, `sql/2025-01-16-stories.sql`
 
+### ADR-022: Automated Storybook Compatibility Monitoring ✅
+
+**Week 2, Day 6**
+
+- **Decision**: Integrate automatic Storybook compatibility checking into all preflight workflows to detect when version conflicts are resolved.
+- **Implementation**:
+  - `package.json`: Added `storybook:check` (quick) and `storybook:check:full` (thorough) scripts to preflight workflow.
+  - `scripts/check-storybook-compatibility.sh`: Quick version-based compatibility check using known issue patterns.
+  - `scripts/check-storybook-compatibility-full.sh`: Complete installation test for thorough verification.
+  - `.github/workflows/preflight.yml`: Enhanced CI/CD workflow with Storybook compatibility status reporting.
+  - Updated all documentation to reflect automated monitoring capabilities.
+- **Monitoring Integration**:
+  - **Local Development**: `npm run preflight` includes automatic compatibility checking.
+  - **Git Hooks**: Pre-commit and pre-push hooks check compatibility status.
+  - **CI/CD**: GitHub Actions workflow monitors and reports compatibility status.
+  - **Manual Testing**: On-demand quick and full compatibility checks available.
+- **Rationale**: Automatic monitoring ensures immediate detection when compatibility issues are resolved, enabling seamless Storybook reinstallation.
+- **Learning outcome**: Successfully implemented comprehensive automated monitoring that integrates seamlessly with existing preflight workflows.
+- **Files**: `package.json`, `.github/workflows/preflight.yml`, `scripts/check-storybook-compatibility*.sh`, `docs/STORYBOOK_REINSTALL.md`, `docs/AI_UI_Guide.md`, `README.md`, `docs/DECISIONS.md`
+
 ---
 
 ## Current Status & Technical Debt
@@ -646,11 +668,14 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 
 ## Changelog (append-only)
 
+<<<<<<< HEAD
+
 - **Week 2, Day 8**: Completed ADR-025 - implemented story persistence with Supabase using device-based identification, server-only database access, and HttpOnly cookies; added Save button to StoryOutput with loading states, created stories history page with server-side rendering, implemented proper API routes with validation and error handling, and designed secure database schema with RLS policies; users can now save and browse their story history ✅
 - **Week 2, Day 8**: Completed ADR-024 - modernized entire UI to shadcn/ui standards with new Card component, pattern components (Page, SectionHeader, EmptyState, Toolbar), standardized spacing and typography, proper dark mode support with prose styling, and consistent button/input variants; all components now use shadcn primitives with proper sub-component structure; maintained all existing functionality while improving design consistency and accessibility ✅
 - **Week 2, Day 7**: Completed ADR-023 - implemented prompt externalization with markdown templates, comprehensive validation with word count ranges, caching infrastructure with request hashing, safety screening with content filtering, enhanced OpenAI client with retry logic, and automated verification scripts; all prompts now externalized to `/prompts/` directory with variable substitution; API route completely rewritten with caching, safety checks, and proper headers; verification script ensures all required artifacts are present and properly wired ✅
 - **Week 2, Day 6**: Completed ADR-022 - fixed deployment pipeline issues by removing remaining Storybook files causing TypeScript errors and optimizing Git hooks for faster commits/pushes; pre-commit now runs in ~1.6s (format check only), pre-push runs in ~2.9s (typecheck only); deployment pipeline now completes in under 5 seconds ✅
 - **Week 2, Day 6**: Completed ADR-020/021 - implemented workflow preflight automation with comprehensive violation detection, Git hooks, CI/CD enforcement, and updated documentation; fixed component import violations to use canonical barrel exports; removed Storybook entirely due to Next.js 15.5.3 compatibility issues; all preflight checks passing ✅
+- **Week 2, Day 6**: Completed ADR-020/021/022 - implemented workflow preflight automation with comprehensive violation detection, Git hooks, CI/CD enforcement, and updated documentation; fixed component import violations to use canonical barrel exports; removed Storybook entirely due to Next.js 15.5.3 compatibility issues; added automated Storybook compatibility monitoring to all preflight workflows; all preflight checks passing ✅
 - **Week 2, Day 5**: Completed ADR-018/019 - implemented component import consolidation with barrel exports and canonical import patterns; upgraded to Next.js 15.5.3 and Storybook 8.6.14; fixed font compatibility issues; all TypeScript compilation, builds, and dev server tests passing ✅
 - **Week 2, Day 4**: Completed ADR-017 - integrated Subframe component library with canonical structure; resolved import conflicts and component organization; maintained design system contracts ✅
 - **Week 2, Day 3**: Completed ADR-014/015/016 - implemented design system foundation with tokenized styling, UI primitives, and systematic cascade across existing app; replaced raw HTML with shadcn/ui components while preserving functionality; added motion defaults and accessibility features; all tests passing ✅
