@@ -492,6 +492,35 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 - **Learning outcome**: Successfully implemented production-ready prompt management with comprehensive validation and infrastructure
 - **Files**: `prompts/`, `lib/prompt.ts`, `lib/openai.ts`, `lib/schema.ts`, `lib/postcheck.ts`, `lib/hash.ts`, `lib/cache.ts`, `lib/safety.ts`, `app/api/generate/route.ts`, `scripts/verify-prompts-and-validation.mjs`, `package.json`
 
+### ADR-024: UI Modernization to shadcn/ui Standards ✅
+
+**Week 2, Day 8**
+
+- **Decision**: Modernize the entire UI to match shadcn/ui defaults and design system standards without modifying tokens or theme files.
+- **Previous limitation**: Custom styling mixed with design system components, inconsistent spacing and typography, custom button/panel CSS.
+- **Implementation**:
+  - **New Pattern Components**: Created `Page`, `SectionHeader`, `EmptyState`, and `Toolbar` components with standardized layouts
+  - **Card Component**: Built complete shadcn-style Card with Header, Title, Content, Footer sub-components using `rounded-xl` and proper shadows
+  - **Layout Modernization**: Refactored main page to use `Page` container with `mx-auto max-w-5xl px-4 md:px-6 py-6 md:py-10`
+  - **Form Modernization**: Updated StoryForm with Card structure, proper TextArea/Select usage, and standardized button variants
+  - **Output Modernization**: Updated StoryOutput with SkeletonText loading states, proper error handling, and prose styling for story content
+  - **Spacing Standardization**: Applied consistent `gap-3`, `gap-6`, `space-y-6` patterns throughout
+  - **Typography Standardization**: Used `text-2xl font-semibold tracking-tight` for headings, `text-sm text-muted-foreground` for body text
+  - **Story Content**: Applied `prose prose-sm dark:prose-invert max-w-none` for proper typography and dark mode support
+  - **Button Standardization**: Used proper shadcn variants (`brand-primary`, `neutral-secondary`, `destructive-primary`) and sizes (`small`, `medium`, `large`)
+- **Design System Compliance**:
+  - **No Token Changes**: All styling uses utility classes only, no modifications to Tailwind config or CSS variables
+  - **shadcn Primitives**: All components use `@/components/ui/*` primitives with proper sub-component structure
+  - **Accessibility**: Maintained proper ARIA attributes, focus management, and keyboard navigation
+  - **Dark Mode**: Full support with `dark:prose-invert` and proper color token usage
+- **Tradeoffs**:
+  - **Component Structure**: Used `Card.Header` pattern vs direct imports for better encapsulation
+  - **Styling Approach**: Utility classes only vs custom CSS for maximum maintainability
+  - **Loading States**: SkeletonText components vs custom loading animations for consistency
+- **Rationale**: Modern shadcn/ui standards provide better accessibility, consistency, and maintainability while preserving all existing functionality
+- **Learning outcome**: Successfully modernized entire UI to professional design system standards with zero breaking changes
+- **Files**: `components/ui/Card.tsx`, `components/patterns/Page.tsx`, `components/patterns/EmptyState.tsx`, `components/patterns/Toolbar.tsx`, `app/page.tsx`, `components/patterns/StoryForm.tsx`, `components/patterns/StoryOutput.tsx`, `components/ui/index.ts`, `components/patterns/index.ts`
+
 ---
 
 ## Current Status & Technical Debt
@@ -519,6 +548,9 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 - ✅ Caching infrastructure with request hashing and TTL management
 - ✅ Safety screening with content appropriateness filtering
 - ✅ Enhanced OpenAI client with retry logic and timeout handling
+- ✅ UI modernization to shadcn/ui standards with Card components and pattern layouts
+- ✅ Standardized spacing, typography, and component structure throughout the app
+- ✅ Dark mode support with proper prose styling and color token usage
 
 **Known limitations & planned mitigations**
 
@@ -587,6 +619,7 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 
 ## Changelog (append-only)
 
+- **Week 2, Day 8**: Completed ADR-024 - modernized entire UI to shadcn/ui standards with new Card component, pattern components (Page, SectionHeader, EmptyState, Toolbar), standardized spacing and typography, proper dark mode support with prose styling, and consistent button/input variants; all components now use shadcn primitives with proper sub-component structure; maintained all existing functionality while improving design consistency and accessibility ✅
 - **Week 2, Day 7**: Completed ADR-023 - implemented prompt externalization with markdown templates, comprehensive validation with word count ranges, caching infrastructure with request hashing, safety screening with content filtering, enhanced OpenAI client with retry logic, and automated verification scripts; all prompts now externalized to `/prompts/` directory with variable substitution; API route completely rewritten with caching, safety checks, and proper headers; verification script ensures all required artifacts are present and properly wired ✅
 - **Week 2, Day 6**: Completed ADR-022 - fixed deployment pipeline issues by removing remaining Storybook files causing TypeScript errors and optimizing Git hooks for faster commits/pushes; pre-commit now runs in ~1.6s (format check only), pre-push runs in ~2.9s (typecheck only); deployment pipeline now completes in under 5 seconds ✅
 - **Week 2, Day 6**: Completed ADR-020/021 - implemented workflow preflight automation with comprehensive violation detection, Git hooks, CI/CD enforcement, and updated documentation; fixed component import violations to use canonical barrel exports; removed Storybook entirely due to Next.js 15.5.3 compatibility issues; all preflight checks passing ✅
