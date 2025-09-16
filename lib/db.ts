@@ -4,7 +4,7 @@ import { env } from "./env";
 // Server-only database client using service role key
 export function getDb() {
   const supabaseUrl = env.SUPABASE_URL;
-  const supabaseServiceKey = env.SUPABASE_SERVICE_ROLE;
+  const supabaseServiceKey = env.SUPABASE_SERVICE_ROLE_KEY;
 
   if (!supabaseUrl || !supabaseServiceKey) {
     throw new Error("Supabase environment variables not configured");
