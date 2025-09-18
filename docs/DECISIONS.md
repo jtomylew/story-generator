@@ -621,6 +621,7 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
   - Secondary: URL extraction for user-provided links
   - Optional fallback: News API (NewsData.io free tier) — server-only keys, may be disabled in production
   - Database: `articles` table with 24–48h TTL (align TTL with freshness requirement) + `feed_cache` table
+  - **TTL Choice**: Set to 48h to match "prioritize articles from last 48 hours" requirement
   - Deduplication: normalize URLs (strip UTM, trailing slashes), canonicalize domain, dedup on `sha256(url)`
   - Feed refresh via **Vercel Cron (preferred)** or on-demand refresh endpoint
   - Safety: extend existing `lib/safety.ts` (do not fork) with feed-specific filters; block violent/political keywords
@@ -728,13 +729,14 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 
 ### Feed Infrastructure
 
-**Chunk 1: Database Setup**
+**Chunk 1: Database Setup** ✅
 
 - Create articles table (id, url, title, content, source, category, published_at, extracted_at)
 - Add indexes for category, published_at, source
 - Create feed_cache table for aggregated state
 - Include device_id support early for history tracking
 - Test with manual inserts
+- **Completed**: Created articles + feed_cache schema (lowercase categories), indexes, RLS posture, and seed.
 
 **Chunk 2: RSS Parser Setup**
 
