@@ -196,6 +196,29 @@ When an AI tool makes changes, ask it to also:
 
 ---
 
+## Troubleshooting
+
+### Shell Environment Issues
+
+**Problem**: AI tools may encounter `zsh:1: command not found: dump_zsh_state` errors when running git commands.
+
+**Solution**: Use bash to bypass shell configuration issues:
+
+```bash
+# Instead of: git add .
+bash -c "cd '/path/to/project' && git add ."
+
+# Instead of: git commit -m "message"
+bash -c "cd '/path/to/project' && git commit -m 'message'"
+
+# Instead of: git push origin main
+bash -c "cd '/path/to/project' && git push origin main"
+```
+
+**Note**: This issue only affects AI tool shell sessions, not normal developer terminal usage.
+
+---
+
 # Reminders
 
 `/docs/LLM_CONTEXT.md` is the master contract. ADR-014/015 define DS rules. ADR-017 governs how external AI tools (Subframe, Lovable, v0, Cursor) map to the repo.
