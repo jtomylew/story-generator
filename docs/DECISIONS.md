@@ -738,12 +738,13 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 - Test with manual inserts
 - **Completed**: Created articles + feed_cache schema (lowercase categories), indexes, RLS posture, and seed.
 
-**Chunk 2: RSS Parser Setup**
+**Chunk 2: RSS Parser Setup** ✅
 
 - Install rss-parser: `npm install rss-parser`
 - Create `lib/rss.ts` with RSSFeedParser class
 - Implement single feed parsing function
 - Add error handling and validation
+- **Completed**: Created RSSFeedParser class with URL normalization, category inference, HTML cleaning, and curated feeds.
 
 **Chunk 3: Multi-Source Aggregation**
 
