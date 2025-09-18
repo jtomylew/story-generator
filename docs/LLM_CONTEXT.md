@@ -94,8 +94,8 @@ Keep real secrets in `.env.local` (git-ignored). Commit a template in `.env.exam
     /index.ts            # Patterns barrel export
     /StoryForm.tsx
     /StoryOutput.tsx
-    /NewsFeed.tsx        # Planned: main feed component
-    /ArticleCard.tsx     # Planned: individual article display
+    /NewsFeed.tsx        # ✅ Implemented: main feed component
+    /ArticleCard.tsx     # ✅ Implemented: individual article display
     /CategoryFilter.tsx  # Planned: category selection chips
     /ImportModal.tsx     # Planned: import options modal
     /layouts/
