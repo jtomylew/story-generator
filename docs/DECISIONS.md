@@ -754,12 +754,13 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 - Sort by published date
 - **Completed**: Added `lib/feeds.ts` with `CURATED_FEEDS` and parallel aggregation via `allSettled`; normalized+deduped by URL hash; sorted by published_at.
 
-**Chunk 4: Feed API Endpoint**
+**Chunk 4: Feed API Endpoint** ✅
 
 - Create `app/api/feed/route.ts`
 - Implement GET to return cached feed
 - Add category and limit query params
 - Include diversity algorithm (max 2 per source)
+- **Completed**: Created GET /api/feed endpoint with 1hr cache TTL, diversity algorithm (max 2/source), and X-Cache headers.
 
 **Chunk 5: Feed Refresh Logic**
 

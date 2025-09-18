@@ -7,6 +7,9 @@ import {
   type ArticleCategory,
 } from "./rss";
 
+// Re-export types for use in other modules
+export type { ArticleInput, ArticleCategory } from "./rss";
+
 // Extended curated feeds with more sources for better diversity
 export const CURATED_FEEDS: Record<ArticleCategory, string[]> = {
   science: [
