@@ -666,13 +666,30 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 - **Learning outcome**: Successfully implemented comprehensive automated monitoring that integrates seamlessly with existing preflight workflows.
 - **Files**: `package.json`, `.github/workflows/preflight.yml`, `scripts/check-storybook-compatibility*.sh`, `docs/STORYBOOK_REINSTALL.md`, `docs/AI_UI_Guide.md`, `README.md`, `docs/DECISIONS.md`
 
+### ADR-029: Reading Level Simplification ✅
+
+**Week 2, Day 9**
+
+- **Decision**: Remove reading level selection UI and set all stories to target elementary level (7-10 year olds) by default.
+- **Implementation**:
+  - **UI Simplification**: Removed reading level dropdown from `StoryForm.tsx`, eliminating user choice complexity
+  - **Schema Update**: Made `readingLevel` optional in `GenerateReq` schema while maintaining backward compatibility
+  - **API Defaults**: Updated `/api/generate` and `/api/stories/save` to default to "elementary" when no reading level provided
+  - **Component Updates**: Modified all components to handle optional reading level gracefully
+  - **Infrastructure Preservation**: Kept all reading level infrastructure intact for easy future restoration
+- **Rationale**: Simplifies user experience by removing decision fatigue while maintaining consistent, age-appropriate output for the primary target audience (7-10 year olds). The infrastructure remains intact for easy restoration if needed.
+- **Backward Compatibility**: API still accepts reading level if provided, ensuring no breaking changes for potential future integrations.
+- **Restoration Path**: To restore reading level selection: make `readingLevel` required in schema, add back UI selection component, remove default value logic.
+- **Learning outcome**: Successfully simplified user experience while maintaining professional code quality and easy feature restoration capability.
+- **Files**: `components/patterns/StoryForm.tsx`, `lib/schema.ts`, `app/api/generate/route.ts`, `app/api/stories/save/route.ts`, `components/patterns/StoryOutput.tsx`, `app/page.tsx`, `components/screens/GenerateStory.tsx`
+
 ---
 
 ## Current Status & Technical Debt
 
 **Completed capabilities**
 
-- ✅ Functional story generation with three reading levels
+- ✅ Functional story generation with fixed elementary reading level (7-10 year olds)
 - ✅ Responsive web interface with kid-friendly design
 - ✅ Production deployment with automated CI/CD
 - ✅ Type-safe architecture with comprehensive error handling
@@ -908,6 +925,7 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 
 ## Changelog (append-only)
 
+- **Week 2, Day 9**: Completed ADR-029 - removed reading level selection UI and set all stories to target elementary level (7-10 year olds) by default; simplified user experience by eliminating decision fatigue while maintaining consistent age-appropriate output; preserved all infrastructure for easy future restoration; API maintains backward compatibility ✅
 - **Week 2, Day 8**: Completed ADR-027 - fixed environment variable naming mismatch between Supabase integration and application code, made Supabase variables optional for build time while maintaining runtime validation, resolved all Vercel deployment failures; all deployments now successful ✅
 - **Week 2, Day 8**: Completed ADR-026 - resolved deployment failures by setting up Supabase project with Vercel integration, configured environment variables, created database schema with proper RLS policies, and fixed preflight script to handle expected Storybook compatibility issues gracefully; all deployments now successful with full story persistence functionality ✅
 - **Week 2, Day 8**: Completed ADR-025 - implemented story persistence with Supabase using device-based identification, server-only database access, and HttpOnly cookies; added Save button to StoryOutput with loading states, created stories history page with server-side rendering, implemented proper API routes with validation and error handling, and designed secure database schema with RLS policies; users can now save and browse their story history ✅

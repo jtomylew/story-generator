@@ -13,7 +13,7 @@ Allegorical News → Kids' 5-Minute Stories
 - **\*What**: Web app that turns news articles into age-appropriate allegorical stories for kids under 10
 - **Tech Stack**: Next.js + TypeScript + OpenAI API + Vercel
 - **Current Status**: ✅ MVP deployed; ✅ Design system foundation and cascade complete; ✅ UI modernized to shadcn/ui standards; ✅ Story persistence with Supabase; ✅ Production deployment infrastructure; 📜 Planned: Feed-first UI with multi-source aggregation (RSS, URL extraction, optional News API) and import options
-- **API**: POST /api/generate {articleText, readingLevel} → {story, metadata}; POST /api/stories/save; GET /api/stories
+- **API**: POST /api/generate {articleText, readingLevel?} → {story, metadata}; POST /api/stories/save; GET /api/stories
 - **Next**: Enhanced user experience, analytics, performance optimization
 
 ## Purpose (what we're building)
@@ -27,11 +27,10 @@ Turn a current news article (pasted text for now) into a gentle, age-appropriate
 - Safety: No real names/places; no graphic, frightening, or political propaganda content
 - Output: Title, Story (within level word range), exactly 2 kid-friendly questions
 
-## Reading levels & word ranges
+## Reading level & word ranges
 
-- **Preschool (3–5):** 250–400 words; very simple sentences & emotions
-- **Early Elementary (5–7):** 350–550 words; simple problem solving
-- **Elementary (7–10):** 450–700 words; slightly more complex plots & feelings
+- **Elementary (7–10):** 180–320 words; age-appropriate vocabulary and sentence structure
+- **Note**: Reading level selection has been removed from the UI. All stories now target elementary level (7-10 year olds) by default. The infrastructure for multiple reading levels remains intact for easy restoration if needed.
 
 ---
 
@@ -83,7 +82,7 @@ Keep real secrets in `.env.local` (git-ignored). Commit a template in `.env.exam
 ```
 /app
   /page.tsx
-  /api/generate/route.ts  # POST {articleText, readingLevel} → story payload
+  /api/generate/route.ts  # POST {articleText, readingLevel?} → story payload
 /components
   /index.ts              # Root barrel export
   /ui/                   # shadcn/ui primitives (atoms)
@@ -158,7 +157,7 @@ import { StoryForm } from "@/components/patterns/StoryForm";
 ```json
 {
   "articleText": "string, >= 50 chars",
-  "readingLevel": "preschool" | "early-elementary" | "elementary"
+  "readingLevel": "preschool" | "early-elementary" | "elementary" (optional, defaults to "elementary")
 }
 ```
 
@@ -196,7 +195,7 @@ import { StoryForm } from "@/components/patterns/StoryForm";
 ```json
 {
   "articleHash": "string (sha256 hash of article text)",
-  "readingLevel": "preschool" | "early-elementary" | "elementary",
+  "readingLevel": "preschool" | "early-elementary" | "elementary" (optional, defaults to "elementary"),
   "story": "string (full story text)"
 }
 ```
@@ -232,7 +231,7 @@ import { StoryForm } from "@/components/patterns/StoryForm";
   {
     "id": "uuid",
     "articleHash": "string",
-    "readingLevel": "preschool" | "early-elementary" | "elementary",
+    "readingLevel": "preschool" | "early-elementary" | "elementary" (optional, defaults to "elementary"),
     "createdAt": "ISO timestamp",
     "snippet": "string (first 160 chars + ...)"
   }
@@ -274,11 +273,11 @@ Questions:
 
 ### Prompt Variables
 
-| Variable           | Type              | Description                                    | Example Values                                      |
-| ------------------ | ----------------- | ---------------------------------------------- | --------------------------------------------------- |
-| `{{readingLevel}}` | string            | Target age group for story complexity          | `"preschool"`, `"early-elementary"`, `"elementary"` |
-| `{{articleText}}`  | string            | Raw news article content to transform          | Any news article text (≥50 chars)                   |
-| `{{styleHints}}`   | string (optional) | Additional style guidance for story generation | Custom instructions for tone, characters, etc.      |
+| Variable           | Type              | Description                                                      | Example Values                                      |
+| ------------------ | ----------------- | ---------------------------------------------------------------- | --------------------------------------------------- |
+| `{{readingLevel}}` | string            | Target age group for story complexity (defaults to "elementary") | `"preschool"`, `"early-elementary"`, `"elementary"` |
+| `{{articleText}}`  | string            | Raw news article content to transform                            | Any news article text (≥50 chars)                   |
+| `{{styleHints}}`   | string (optional) | Additional style guidance for story generation                   | Custom instructions for tone, characters, etc.      |
 
 **Server note:** Any route that reads prompt files must run on Node runtime:
 

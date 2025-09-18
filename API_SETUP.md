@@ -21,31 +21,35 @@ You can get your API key from: https://platform.openai.com/api-keys
 
 ## API Usage
 
-### Endpoint: `POST /api/generate-story`
+### Endpoint: `POST /api/generate`
 
 **Request Body:**
 
 ```json
 {
-  "newsStory": "Your news story text here...",
-  "readingLevel": "Elementary (ages 7-10)"
+  "articleText": "Your news story text here...",
+  "readingLevel": "elementary"
 }
 ```
 
-**Reading Level Options:**
+**Reading Level Options (Optional):**
 
-- `"Preschool (ages 3-5)"` - Very simple vocabulary, short sentences, lots of repetition
-- `"Early Elementary (ages 5-7)"` - Simple vocabulary, short sentences, some repetition
-- `"Elementary (ages 7-10)"` - Age-appropriate vocabulary, varied sentence structures
+- `"preschool"` - Very simple vocabulary, short sentences, lots of repetition
+- `"early-elementary"` - Simple vocabulary, short sentences, some repetition
+- `"elementary"` - Age-appropriate vocabulary, varied sentence structures (default)
+
+**Note:** The `readingLevel` field is optional. If not provided, stories will default to "elementary" level (7-10 year olds).
 
 **Success Response:**
 
 ```json
 {
-  "success": true,
   "story": "Generated allegorical story for children...",
-  "originalNewsStory": "Original news story text...",
-  "readingLevel": "Elementary (ages 7-10)"
+  "questions": ["First discussion question?", "Second discussion question?"],
+  "meta": {
+    "readingLevel": "elementary",
+    "wordCount": 250
+  }
 }
 ```
 
@@ -60,20 +64,21 @@ You can get your API key from: https://platform.openai.com/api-keys
 ### Example Usage
 
 ```javascript
-const response = await fetch("/api/generate-story", {
+const response = await fetch("/api/generate", {
   method: "POST",
   headers: {
     "Content-Type": "application/json",
   },
   body: JSON.stringify({
-    newsStory:
+    articleText:
       "Scientists discover a new species of butterfly in the Amazon rainforest.",
-    readingLevel: "Elementary (ages 7-10)",
+    readingLevel: "elementary", // Optional - defaults to "elementary" if not provided
   }),
 });
 
 const data = await response.json();
 console.log(data.story);
+console.log(data.questions); // Array of 2 discussion questions
 ```
 
 ## Features
