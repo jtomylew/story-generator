@@ -57,7 +57,7 @@ export default function Home() {
       // Map successful response to GenerateRes shape
       const res = {
         story: data.story,
-        ageBand: req.readingLevel,
+        ageBand: req.readingLevel || "elementary",
         newsSummary: data.originalNewsStory,
         sourceHash: "", // TODO: implement hash generation
         model: process.env.MODEL_NAME || "gpt-4o",

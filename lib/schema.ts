@@ -13,7 +13,8 @@ export const GenerateReq = z.object({
   articleText: z
     .string()
     .min(50, "Provide at least a full paragraph of article text."),
-  readingLevel: ReadingLevel,
+  // readingLevel is now optional - will default to "elementary" (7-10 year olds)
+  readingLevel: ReadingLevel.optional(),
 });
 export type GenerateReq = z.infer<typeof GenerateReq>;
 

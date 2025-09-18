@@ -53,7 +53,7 @@ export function StoryOutput({ state, onReset }: StoryOutputProps) {
     try {
       const articleHash = await reqHash(
         state.req.articleText,
-        state.req.readingLevel,
+        state.req.readingLevel || "elementary",
       );
 
       const response = await fetch("/api/stories/save", {
@@ -63,7 +63,7 @@ export function StoryOutput({ state, onReset }: StoryOutputProps) {
         },
         body: JSON.stringify({
           articleHash,
-          readingLevel: state.req.readingLevel,
+          readingLevel: state.req.readingLevel || "elementary",
           story: state.res.story,
         }),
       });

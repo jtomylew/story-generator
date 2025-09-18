@@ -9,7 +9,9 @@ export const runtime = "nodejs";
 
 const SaveStorySchema = z.object({
   articleHash: z.string().min(1, "Article hash is required"),
-  readingLevel: z.enum(["preschool", "early-elementary", "elementary"]),
+  readingLevel: z
+    .enum(["preschool", "early-elementary", "elementary"])
+    .optional(),
   story: z.string().min(1, "Story is required"),
 });
 
@@ -24,6 +26,9 @@ export async function POST(request: NextRequest) {
     const deviceId = await getOrCreateDeviceId();
     const supabase = getDb();
 
+    // Default to "elementary" if no reading level specified
+    const effectiveReadingLevel = validatedData.readingLevel || "elementary";
+
     // Upsert the story
     const { data, error } = await supabase
       .from("stories")
@@ -31,7 +36,7 @@ export async function POST(request: NextRequest) {
         {
           device_id: deviceId,
           article_hash: validatedData.articleHash,
-          reading_level: validatedData.readingLevel,
+          reading_level: effectiveReadingLevel,
           story: validatedData.story,
         },
         {

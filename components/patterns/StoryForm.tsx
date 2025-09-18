@@ -2,24 +2,21 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import type { GenerateReq, ReadingLevel } from "@/lib/types";
-import { Button, TextArea, Select, Card } from "@/components";
+import type { GenerateReq } from "@/lib/types";
+import { Button, TextArea, Card } from "@/components";
 
 interface StoryFormProps {
   onSubmit: (req: GenerateReq) => void;
   isSubmitting?: boolean;
   defaultText?: string;
-  defaultLevel?: ReadingLevel;
 }
 
 export function StoryForm({
   onSubmit,
   isSubmitting = false,
   defaultText = "",
-  defaultLevel = "elementary",
 }: StoryFormProps) {
   const [articleText, setArticleText] = useState(defaultText);
-  const [readingLevel, setReadingLevel] = useState<ReadingLevel>(defaultLevel);
   const [error, setError] = useState<string>("");
 
   // Client-side validation mirroring Zod schema
@@ -41,9 +38,9 @@ export function StoryForm({
 
       if (!canSubmit) return;
 
-      onSubmit({ articleText: articleText.trim(), readingLevel });
+      onSubmit({ articleText: articleText.trim() });
     },
-    [articleText, readingLevel, canSubmit, onSubmit],
+    [articleText, canSubmit, onSubmit],
   );
 
   // Hotkey: Ctrl/Cmd+Enter submits when valid
@@ -83,36 +80,6 @@ export function StoryForm({
                 aria-invalid={error ? "true" : "false"}
               />
             </TextArea>
-          </div>
-
-          {/* Reading Level Selection */}
-          <div className="space-y-2">
-            <Select
-              label="Reading Level"
-              value={readingLevel}
-              onValueChange={(value) => setReadingLevel(value as ReadingLevel)}
-              className="w-full"
-              disabled={isSubmitting}
-            >
-              <Select.Item value="preschool">
-                <div className="flex items-center gap-2">
-                  <span>👶</span>
-                  <span>Preschool (ages 3-5)</span>
-                </div>
-              </Select.Item>
-              <Select.Item value="early-elementary">
-                <div className="flex items-center gap-2">
-                  <span>🎒</span>
-                  <span>Early Elementary (ages 5-7)</span>
-                </div>
-              </Select.Item>
-              <Select.Item value="elementary">
-                <div className="flex items-center gap-2">
-                  <span>👥</span>
-                  <span>Elementary (ages 7-10)</span>
-                </div>
-              </Select.Item>
-            </Select>
           </div>
 
           {/* Generate Button */}

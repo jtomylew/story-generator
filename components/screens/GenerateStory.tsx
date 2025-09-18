@@ -50,7 +50,7 @@ export function GenerateStory({ className }: GenerateStoryProps) {
 
       const res = {
         story: data.story,
-        ageBand: req.readingLevel,
+        ageBand: req.readingLevel || "elementary",
         newsSummary: data.originalNewsStory,
         sourceHash: "",
         model: process.env.MODEL_NAME || "gpt-4o",

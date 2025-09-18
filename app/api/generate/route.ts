@@ -15,6 +15,7 @@ export async function POST(req: Request) {
   let requestHash: string;
   let modelUsed: string;
   let parsedData: { articleText: string; readingLevel: string };
+  let effectiveReadingLevel: string;
 
   try {
     const raw = await req.json();
@@ -28,7 +29,9 @@ export async function POST(req: Request) {
       return NextResponse.json(error, { status: 400 });
     }
     const { articleText, readingLevel } = parsed.data;
-    parsedData = { articleText, readingLevel };
+    // Default to "elementary" (7-10 year olds) if no reading level specified
+    effectiveReadingLevel = readingLevel || "elementary";
+    parsedData = { articleText, readingLevel: effectiveReadingLevel };
 
     // Safety screening
     const safetyCheck = maybeRefuse(articleText);
@@ -42,7 +45,7 @@ export async function POST(req: Request) {
     }
 
     // Generate request hash for caching
-    requestHash = await reqHash(articleText, readingLevel);
+    requestHash = await reqHash(articleText, effectiveReadingLevel);
 
     // Check cache first
     const cached = get(requestHash);
@@ -56,10 +59,13 @@ export async function POST(req: Request) {
 
     // Build prompts using external templates
     const systemPrompt = loadPrompt("system.story", {
-      readingLevel,
+      readingLevel: effectiveReadingLevel,
       articleText,
     });
-    const userPrompt = loadPrompt("user.story", { readingLevel, articleText });
+    const userPrompt = loadPrompt("user.story", {
+      readingLevel: effectiveReadingLevel,
+      articleText,
+    });
 
     // Create OpenAI client with retry logic
     const client = createClient({
@@ -106,13 +112,13 @@ export async function POST(req: Request) {
     const responseWithMeta = {
       ...validatedResponse,
       meta: {
-        readingLevel,
+        readingLevel: effectiveReadingLevel,
         wordCount,
       },
     };
 
     // Post-check validation
-    postCheck(responseWithMeta, readingLevel);
+    postCheck(responseWithMeta, effectiveReadingLevel);
 
     // Cache the result
     try {
@@ -139,7 +145,7 @@ export async function POST(req: Request) {
         // Retry once with corrective system prompt
         const correctivePrompt =
           loadPrompt("system.story", {
-            readingLevel: parsedData.readingLevel,
+            readingLevel: effectiveReadingLevel,
             articleText: parsedData.articleText,
           }) +
           "\n\nIMPORTANT: Ensure the story word count fits the reading level and include exactly 2 discussion questions.";
@@ -156,7 +162,7 @@ export async function POST(req: Request) {
             {
               role: "user",
               content: loadPrompt("user.story", {
-                readingLevel: parsedData.readingLevel,
+                readingLevel: effectiveReadingLevel,
                 articleText: parsedData.articleText,
               }),
             },
@@ -170,10 +176,10 @@ export async function POST(req: Request) {
           const wordCount = retryValidated.story.split(/\s+/).length;
           const retryResponse = {
             ...retryValidated,
-            meta: { readingLevel: parsedData.readingLevel, wordCount },
+            meta: { readingLevel: effectiveReadingLevel, wordCount },
           };
 
-          postCheck(retryResponse, parsedData.readingLevel);
+          postCheck(retryResponse, effectiveReadingLevel);
           set(requestHash, retryResponse);
 
           const response = NextResponse.json(retryResponse);
