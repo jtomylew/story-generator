@@ -627,11 +627,11 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 - **Curated RSS Sources**:
   ```ts
   const CURATED_FEEDS = {
-    science: ['https://www.sciencedaily.com/rss/all.xml'],
-    positive: ['https://www.goodnewsnetwork.org/feed/'],
-    education: ['https://www.edutopia.org/rss.xml'],
-    nature: ['https://www.nationalgeographic.com/kids/feed/'],
-    sports: ['https://www.si.com/rss/si_kids.rss'],
+    science: ["https://www.sciencedaily.com/rss/all.xml"],
+    positive: ["https://www.goodnewsnetwork.org/feed/"],
+    education: ["https://www.edutopia.org/rss.xml"],
+    nature: ["https://www.nationalgeographic.com/kids/feed/"],
+    sports: ["https://www.si.com/rss/si_kids.rss"],
   };
   ```
 - **Rationale**: A feed-first approach provides immediate daily value; RSS feeds are free and reliable; diversity prevents fatigue; safety filtering protects young users.
@@ -729,6 +729,7 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 ### Feed Infrastructure
 
 **Chunk 1: Database Setup**
+
 - Create articles table (id, url, title, content, source, category, published_at, extracted_at)
 - Add indexes for category, published_at, source
 - Create feed_cache table for aggregated state
@@ -736,24 +737,28 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 - Test with manual inserts
 
 **Chunk 2: RSS Parser Setup**
+
 - Install rss-parser: `npm install rss-parser`
 - Create `lib/rss.ts` with RSSFeedParser class
 - Implement single feed parsing function
 - Add error handling and validation
 
 **Chunk 3: Multi-Source Aggregation**
+
 - Create `lib/feeds.ts` with CURATED_FEEDS constant
 - Implement parallel feed fetching with Promise.allSettled
 - Normalize + deduplicate URLs via sha256 hash
 - Sort by published date
 
 **Chunk 4: Feed API Endpoint**
+
 - Create `app/api/feed/route.ts`
 - Implement GET to return cached feed
 - Add category and limit query params
 - Include diversity algorithm (max 2 per source)
 
 **Chunk 5: Feed Refresh Logic**
+
 - Create `app/api/feed/refresh/route.ts`
 - Implement background refresh (cron or on-demand)
 - Store in articles table with 24–48h TTL
@@ -762,29 +767,34 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 ### Feed UI Development
 
 **Chunk 6: ArticleCard Component**
+
 - Create `components/patterns/ArticleCard.tsx`
 - Display title, source, category chip, published time
 - Add "Generate Story" button
 - Loading + hover states
 
 **Chunk 7: NewsFeed Component**
+
 - Create `components/patterns/NewsFeed.tsx`
 - Grid layout, responsive columns
 - Integrate ArticleCard
 - Empty state handling
 
 **Chunk 8: Homepage Conversion**
+
 - Update `app/page.tsx` to show NewsFeed by default
 - Move existing form to `app/paste/page.tsx`
 - Add navigation tabs component
 - Implement tab switching
 
 **Chunk 9: Category Filters**
+
 - Create `components/patterns/CategoryFilter.tsx`
 - Filter chips for each category (multi-select with "All")
 - Connect to feed API
 
 **Chunk 10: Loading & Refresh**
+
 - Skeleton loading states
 - Pull-to-refresh on mobile
 - Auto-refresh every 30 min
@@ -793,18 +803,21 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 ### Content Diversity & Safety
 
 **Chunk 11: Diversity Algorithm**
+
 - Create `lib/diversity.ts`
 - Implement category rotation
 - Add source distribution rules
 - Freshness scoring (newer = higher)
 
 **Chunk 12: Content Filtering**
+
 - Extend `lib/safety.ts` with feed keyword filters
 - Block list: ['war','death','killed','murder','attack']
 - Implement title/content scanning
 - Age-appropriate scoring
 
 **Chunk 13: User History Tracking**
+
 - Add converted_articles table (device_id, article_id, converted_at)
 - Track which articles have been used
 - Filter from feed display
@@ -813,22 +826,26 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 ### Import Options
 
 **Chunk 14: URL Extraction**
+
 - Install `@extractus/article-parser`
 - Create `lib/extract.ts`
 - Add URL validation
 - Implement extraction + error handling
 
 **Chunk 15: Import Modal**
+
 - Create `components/patterns/ImportModal.tsx`
 - Tabs: "Browse Feed" | "Paste Text" | "Enter URL"
 - Validation + error states
 
 **Chunk 16: Paste Enhancement**
+
 - Update StoryForm for modal use
 - Add character count + better validation
 - Preserve existing functionality
 
 **Chunk 17: URL Input Flow**
+
 - Create URL input component
 - Add validation + preview
 - Show extraction progress
@@ -837,12 +854,14 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 ### Polish & Optimization
 
 **Chunk 18: Performance**
+
 - Feed pagination (infinite scroll)
 - Browser caching
 - Lazy-load images
 - Service worker for offline
 
 **Chunk 19: Analytics**
+
 - Track article views
 - Monitor generation success rate
 - Log category preferences
@@ -850,6 +869,7 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 - Use PostHog/Sentry per ADR-023
 
 **Chunk 20: Final Polish**
+
 - Keyboard shortcuts
 - Share functionality
 - Article bookmarking
@@ -857,6 +877,7 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 - Test with golden seed feeds
 
 ### Testing Checklist
+
 - Feed loads with variety of articles
 - Category filters work
 - No more than 2 per source

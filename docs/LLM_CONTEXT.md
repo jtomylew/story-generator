@@ -451,16 +451,16 @@ For full roadmap see DECISIONS.md.
 
 When a request says **"Implement Chunk X from docs/DECISIONS.md"**:
 
-- Treat `/docs/DECISIONS.md`, `/docs/AI_UI_Guide.md`, and `/docs/LLM_CONTEXT.md` as the authoritative context.  
-- Follow all relevant ADRs (e.g. ADR-014 design system, ADR-015 microinteractions, ADR-017 external tool sync, ADR-018 barrel imports, ADR-028 feed-first plan).  
-- Update existing files in place; use barrel imports only.  
+- Treat `/docs/DECISIONS.md`, `/docs/AI_UI_Guide.md`, and `/docs/LLM_CONTEXT.md` as the authoritative context.
+- Follow all relevant ADRs (e.g. ADR-014 design system, ADR-015 microinteractions, ADR-017 external tool sync, ADR-018 barrel imports, ADR-028 feed-first plan).
+- Update existing files in place; use barrel imports only.
 - Always update `/docs/DECISIONS.md`:
-  - Mark the chunk as ⏳ (in progress) or ✅ (completed).  
-  - Add a one-line summary of what was built under ADR-028.  
-- After completing the work, apply **Quick Verify Steps** (typecheck, dev server boot, Mini Test Plan).  
+  - Mark the chunk as ⏳ (in progress) or ✅ (completed).
+  - Add a one-line summary of what was built under ADR-028.
+- After completing the work, apply **Quick Verify Steps** (typecheck, dev server boot, Mini Test Plan).
 - Summarize which files changed and why.
 
-This allows a minimal prompt:  
+This allows a minimal prompt:
 
 Implement Chunk X – [short description] from docs/DECISIONS.md Feature Roadmap.
 
