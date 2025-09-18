@@ -12,7 +12,7 @@ Allegorical News → Kids' 5-Minute Stories
 
 - **\*What**: Web app that turns news articles into age-appropriate allegorical stories for kids under 10
 - **Tech Stack**: Next.js + TypeScript + OpenAI API + Vercel
-- **Current Status**: ✅ MVP deployed; ✅ Design system foundation and cascade complete; ✅ UI modernized to shadcn/ui standards; ✅ Story persistence with Supabase; ✅ Production deployment infrastructure; 📜 Planned: Feed-first UI with multi-source aggregation (RSS, URL extraction, optional News API) and import options
+- **Current Status**: ✅ MVP deployed; ✅ Design system foundation and cascade complete; ✅ UI modernized to shadcn/ui standards; ✅ Story persistence with Supabase; ✅ Production deployment infrastructure; ✅ Feed-first UI components (NewsFeed, ArticleCard) implemented; 📜 Planned: Homepage conversion, category filters, and import options
 - **API**: POST /api/generate {articleText, readingLevel?} → {story, metadata}; POST /api/stories/save; GET /api/stories
 - **Next**: Enhanced user experience, analytics, performance optimization
 
@@ -92,18 +92,24 @@ Keep real secrets in `.env.local` (git-ignored). Commit a template in `.env.exam
     /... (other primitives)
   /patterns/             # Molecules
     /index.ts            # Patterns barrel export
-    /StoryForm.tsx
-    /StoryOutput.tsx
+    /StoryForm.tsx       # ✅ Implemented: story input form
+    /StoryOutput.tsx     # ✅ Implemented: story display component
     /NewsFeed.tsx        # ✅ Implemented: main feed component
     /ArticleCard.tsx     # ✅ Implemented: individual article display
+    /EmptyState.tsx      # ✅ Implemented: empty state component
+    /Page.tsx            # ✅ Implemented: page wrapper component
+    /Toolbar.tsx         # ✅ Implemented: toolbar component
     /CategoryFilter.tsx  # Planned: category selection chips
     /ImportModal.tsx     # Planned: import options modal
     /layouts/
+      /DefaultPageLayout.tsx  # ✅ Implemented: default page layout
+      /DialogLayout.tsx       # ✅ Implemented: dialog layout
+      /DrawerLayout.tsx       # ✅ Implemented: drawer layout
 
 Note: all imports must go through barrel (import { NewsFeed } from "@/components").
   /screens/              # Screens/Sections
     /index.ts            # Screens barrel export
-    /GenerateStory.tsx
+    /GenerateStory.tsx   # ✅ Implemented: story generation screen
 /lib
   env.ts          # Zod-validated env access (server-only)
   openai.ts       # OpenAI client wrapper
@@ -393,6 +399,7 @@ When implementing or scaffolding UI, add **hooks/slots** for microinteractions b
 - ✅ Next.js 15.5.3 and Storybook 8.6.14 upgrade with full compatibility
 - ✅ External AI tool integration (Subframe) with canonical component structure
 - ✅ Deployment pipeline optimization with fast Git hooks (4.6s total deployment time)
+- ✅ Feed-first UI components: NewsFeed and ArticleCard with responsive grid layout
 - 🔜 Prompts moved to files; load via fs
 - 🔜 Cache (24h) by (hash, level)
 - 🔜 Post-checks (word range, exactly 2 questions)
