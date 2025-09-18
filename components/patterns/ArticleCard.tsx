@@ -13,13 +13,13 @@ interface ArticleCardProps {
 // Helper function to format relative time
 function formatRelativeTime(dateString?: string): string {
   if (!dateString) return "Recently";
-  
+
   const date = new Date(dateString);
   const now = new Date();
   const diffInMs = now.getTime() - date.getTime();
   const diffInHours = Math.floor(diffInMs / (1000 * 60 * 60));
   const diffInDays = Math.floor(diffInHours / 24);
-  
+
   if (diffInHours < 1) return "Just now";
   if (diffInHours < 24) return `${diffInHours}h ago`;
   if (diffInDays < 7) return `${diffInDays}d ago`;
@@ -28,7 +28,9 @@ function formatRelativeTime(dateString?: string): string {
 }
 
 // Helper function to get badge variant based on category
-function getCategoryVariant(category: string): "brand" | "neutral" | "error" | "warning" | "success" {
+function getCategoryVariant(
+  category: string,
+): "brand" | "neutral" | "error" | "warning" | "success" {
   switch (category) {
     case "science":
     case "technology":
@@ -53,7 +55,11 @@ function capitalizeCategory(category: string): string {
   return category.charAt(0).toUpperCase() + category.slice(1);
 }
 
-export function ArticleCard({ article, onGenerateStory, isGenerating = false }: ArticleCardProps) {
+export function ArticleCard({
+  article,
+  onGenerateStory,
+  isGenerating = false,
+}: ArticleCardProps) {
   const handleGenerateStory = () => {
     onGenerateStory(article);
   };
@@ -81,7 +87,7 @@ export function ArticleCard({ article, onGenerateStory, isGenerating = false }: 
           </Badge>
         </div>
       </Card.Header>
-      
+
       <Card.Content>
         <div className="flex justify-center">
           <Button
@@ -113,7 +119,7 @@ export function ArticleCardSkeleton() {
           <SkeletonText size="label" className="h-6 w-16 rounded-md" />
         </div>
       </Card.Header>
-      
+
       <Card.Content>
         <div className="flex justify-center">
           <SkeletonText size="label" className="h-10 w-32 rounded-md" />
