@@ -42,6 +42,14 @@ fi
 NEXT_VERSION=$(npm list next --depth=0 2>/dev/null | grep "next@" | sed 's/.*@//' | head -1)
 REACT_VERSION=$(npm list react --depth=0 2>/dev/null | grep "react@" | sed 's/.*@//' | head -1)
 
+# Fallback if npm list fails (common in CI environments)
+if [ -z "$NEXT_VERSION" ]; then
+    NEXT_VERSION=$(node -e "console.log(require('./package.json').dependencies.next || require('./package.json').devDependencies.next)" 2>/dev/null | sed 's/[^0-9.]//g')
+fi
+if [ -z "$REACT_VERSION" ]; then
+    REACT_VERSION=$(node -e "console.log(require('./package.json').dependencies.react || require('./package.json').devDependencies.react)" 2>/dev/null | sed 's/[^0-9.]//g')
+fi
+
 if [ "$VERBOSE" = "true" ]; then
     echo "📋 Detected Next.js: $NEXT_VERSION"
     echo "📋 Detected React: $REACT_VERSION"
@@ -51,26 +59,26 @@ fi
 # - Next.js 15.5.3 + Storybook 8.6.14 has webpack hook issues
 # - React 19.1.1 + Storybook 8.6.14 has compatibility problems
 
+# Always return 0 (success) since Storybook compatibility issues are expected
+# and should not cause CI failures
 if [[ "$NEXT_VERSION" == "15.5.3" ]] && [[ "$REACT_VERSION" == "19.1.1" ]]; then
     if [ "$VERBOSE" = "true" ]; then
         echo "❌ Known compatibility issue detected"
         echo "Next.js 15.5.3 + React 19.1.1 + Storybook 8.6.14 has webpack hook conflicts"
-        echo "Compatibility issues detected"
+        echo "Compatibility issues detected (expected - not a build failure)"
     else
         echo "❌ Storybook compatibility issues detected (Next.js 15.5.3 + React 19.1.1)"
     fi
-    # Return 0 for expected compatibility issues (not build failures)
-    exit 0
+else
+    if [ "$VERBOSE" = "true" ]; then
+        echo "⚠️  Storybook compatibility unknown for this version combination"
+        echo "Run full test with: VERBOSE=true npm run storybook:check:full"
+        echo "Compatibility issues may still exist"
+    else
+        echo "⚠️  Storybook compatibility unknown - issues may still exist"
+    fi
 fi
 
-# If we get here, the versions might be compatible
-# For now, we'll be conservative and assume issues exist until proven otherwise
-if [ "$VERBOSE" = "true" ]; then
-    echo "⚠️  Storybook compatibility unknown for this version combination"
-    echo "Run full test with: VERBOSE=true npm run storybook:check:full"
-    echo "Compatibility issues may still exist"
-else
-    echo "⚠️  Storybook compatibility unknown - issues may still exist"
-fi
-# Return 0 for warnings (not failures) to allow CI to continue
+# Always return 0 to prevent CI failures
+# Storybook compatibility issues are expected and should not break the build
 exit 0
