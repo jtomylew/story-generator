@@ -25,6 +25,7 @@
     "test:rss": "npx tsx scripts/test-rss-parser.ts",
     "test:aggregation": "npx tsx scripts/test-aggregation.mjs",
     "test:feed-api": "node scripts/test-feed-api.mjs",
+    "test:feed-refresh": "node scripts/test-feed-refresh.mjs",
     "//:storybook-reinstall": "— Reinstall Storybook when compatibility issues are resolved —",
     "storybook:check": "./scripts/check-storybook-compatibility.sh",
     "storybook:check:full": "./scripts/check-storybook-compatibility-full.sh",

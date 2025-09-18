@@ -762,12 +762,13 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 - Include diversity algorithm (max 2 per source)
 - **Completed**: Created GET /api/feed endpoint with 1hr cache TTL, diversity algorithm (max 2/source), and X-Cache headers.
 
-**Chunk 5: Feed Refresh Logic**
+**Chunk 5: Feed Refresh Logic** ✅
 
 - Create `app/api/feed/refresh/route.ts`
 - Implement background refresh (cron or on-demand)
 - Store in articles table with 24–48h TTL
 - Update feed_cache with latest state
+- **Completed**: Created GET /api/feed/refresh endpoint with multi-category refresh, idempotent upserts, 48h TTL, and optional auth.
 
 ### Feed UI Development
 
