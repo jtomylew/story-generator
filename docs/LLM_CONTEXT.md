@@ -1,3 +1,11 @@
+---
+⚠️ **Assistant Instruction**  
+When preparing Cursor prompts based on this document:  
+- Default to **Minimal level** (intent + guardrails + doc update + verify).  
+- Use **Standard or Detailed** only if explicitly requested or if the chunk introduces brand-new patterns, libraries, or safety-critical logic.  
+- Do **not** include line-by-line code unless explicitly asked. Cursor should infer implementation from ADRs, this guide, and existing codebase patterns.
+---
+
 Allegorical News → Kids' 5-Minute Stories
 
 ## Executive Summary
@@ -463,6 +471,26 @@ When a request says **"Implement Chunk X from docs/DECISIONS.md"**:
 This allows a minimal prompt:
 
 Implement Chunk X – [short description] from docs/DECISIONS.md Feature Roadmap.
+
+## Cursor Prompt Guidelines (Summary)
+
+- **Minimal is default:** intent + guardrails + doc update note + simple verify.
+- **Standard:** add explicit constraints and file references if necessary.
+- **Detailed:** only when introducing brand-new patterns, libraries, or complex logic.
+
+Minimal prompt skeleton:
+Implement [Chunk Name] from docs/DECISIONS.md.
+
+Create [file path]:
+• [what it does]
+• [key guardrails]
+Return: [expected output]
+
+Update docs/DECISIONS.md: Mark [Chunk] ✅
+Verify: [quick check]
+
+Cursor should infer validation, error handling, and async patterns from ADRs and `AI_UI_Guide.md`.  
+See **AI_UI_Guide.md → AI Assistant Prompting Style & Cursor Prompt Guidelines** for the full ladder.
 
 # LLM Test Instruction Style Guide
 

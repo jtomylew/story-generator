@@ -6,6 +6,75 @@ It summarizes the design system contract from `/docs/LLM_CONTEXT.md` and ADR-014
 
 ---
 
+⚠️ **Assistant Instruction**  
+When preparing Cursor prompts based on this document:
+
+- Default to **Minimal level** (intent + guardrails + doc update + verify).
+- Use **Standard or Detailed** only if explicitly requested or if the chunk introduces brand-new patterns, libraries, or safety-critical logic.
+- Do **not** include line-by-line code unless explicitly asked. Cursor should infer implementation from ADRs, this guide, and existing codebase patterns.
+
+---
+
+## AI Assistant Prompting Style & Cursor Prompt Guidelines
+
+When generating Cursor prompts, follow these principles:
+
+- **Default to brevity:** Provide intent, scope, and essential guardrails only.
+- **Do not** include line-by-line code, SQL, or prescriptive implementation unless explicitly asked.
+- **Always include:**
+  - Scope (e.g., "Chunk 3 – Multi-Source Aggregation" from `docs/DECISIONS.md`)
+  - Guardrails (server-only, category enum, barrel imports, no new deps, etc.)
+  - Doc update notes (what to mark in `DECISIONS.md` or `LLM_CONTEXT.md`)
+  - Quick Verify reference (typecheck/dev or Mini Test Plan)
+
+### Prompt Detail Levels
+
+- **Minimal (preferred / default)**
+  - State **WHAT** to build, not **HOW**
+  - Requirements as bullet points
+  - Reference existing patterns in the repo
+  - ~5–10 lines total
+  - Let Cursor infer implementation from ADRs and guides
+
+- **Standard**
+  - Add key technical requirements
+  - Specify important constraints (e.g., "server-only", "max 2 per source")
+  - Reference specific files/functions if needed
+  - ~10–15 lines total
+  - Include a verification step
+
+- **Detailed (only for new patterns)**
+  - Include type definitions or code structure
+  - Explain complex algorithms or workflows
+  - ~20+ lines
+  - Use only when introducing new libraries, security/safety-sensitive code, or novel patterns
+
+### Example Minimal Prompt
+
+Implement [Chunk Name] from docs/DECISIONS.md.
+
+Create [file path]:
+• [core functionality]
+• [key guardrails]
+Return: [expected output]
+
+Update docs/DECISIONS.md: Mark [Chunk] ✅
+Verify: [simple test command or curl]
+**When to add detail:**
+
+- New patterns not yet in the repo
+- Security/safety-critical features
+- Complex algorithms needing clear guidance
+
+**When to stay minimal:**
+
+- CRUD operations
+- Standard API endpoints
+- UI components following existing patterns
+- Features using established libraries
+
+---
+
 ## 1. Design System Contract (summary)
 
 > Full rules live in `/docs/LLM_CONTEXT.md` and ADR-014/015 in `/docs/DECISIONS.md`.  

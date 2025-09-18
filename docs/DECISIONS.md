@@ -1,3 +1,11 @@
+---
+⚠️ **Assistant Instruction**  
+When preparing Cursor prompts based on this document:  
+- Default to **Minimal level** (intent + guardrails + doc update + verify).  
+- Use **Standard or Detailed** only if explicitly requested or if the chunk introduces brand-new patterns, libraries, or safety-critical logic.  
+- Do **not** include line-by-line code unless explicitly asked. Cursor should infer implementation from ADRs, this guide, and existing codebase patterns.
+---
+
 A lightweight running log of technical decisions, tradeoffs, and status snapshots for the **Allegorical News → Kids' 5-Minute Stories** app.
 
 **How to use this doc:**
@@ -726,6 +734,9 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 ---
 
 ## Feature Roadmap (30-minute chunks)
+
+> **Assistant note:** Roadmap chunks should be translated into **concise Cursor prompts** using the Minimal format by default.  
+> Use Standard or Detailed only when introducing new patterns or safety-critical logic (see AI_UI_Guide.md → Prompt Guidelines).
 
 ### Feed Infrastructure
 
