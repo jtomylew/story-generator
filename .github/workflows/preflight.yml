@@ -18,11 +18,7 @@ jobs:
         run: npm run preflight
       - name: Check Storybook compatibility status
         run: |
-          if npm run storybook:check --silent; then
-            echo "⚠️ Storybook compatibility issues detected (expected)"
-            echo "Continue using main app at localhost:3000 for component inspection"
-            echo "This is not a build failure - compatibility issues are known and expected"
-          else
-            echo "✅ Storybook compatibility confirmed - ready for reinstallation"
-            echo "Run 'npm run storybook:install' to reinstall Storybook"
-          fi
+          npm run storybook:check --silent
+          echo "⚠️ Storybook compatibility issues detected (expected)"
+          echo "Continue using main app at localhost:3000 for component inspection"
+          echo "This is not a build failure - compatibility issues are known and expected"
