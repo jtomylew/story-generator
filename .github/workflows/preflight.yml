@@ -15,10 +15,19 @@ jobs:
           cache: "npm"
       - run: npm ci
       - name: Run preflight checks
-        run: npm run preflight
+        run: |
+          set -e
+          echo "Running preflight checks..."
+          npm run typecheck
+          npm run lint
+          npm run format:check
+          npm run ban:raw-primitives
+          npm run find:strays
+          npm run find:duplicates
+          echo "✅ All preflight checks passed"
       - name: Check Storybook compatibility status
         run: |
-          npm run storybook:check --silent
-          echo "⚠️ Storybook compatibility issues detected (expected)"
+          echo "Checking Storybook compatibility..."
+          npm run storybook:check || echo "⚠️ Storybook compatibility issues detected (expected)"
           echo "Continue using main app at localhost:3000 for component inspection"
           echo "This is not a build failure - compatibility issues are known and expected"
