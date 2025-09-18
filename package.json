@@ -23,6 +23,7 @@
     "prepush": "npm run typecheck && npm run verify:prompts",
     "test:prompts": "node scripts/test-prompt-pipeline.mjs",
     "test:rss": "npx tsx scripts/test-rss-parser.ts",
+    "test:aggregation": "npx tsx scripts/test-aggregation.mjs",
     "//:storybook-reinstall": "— Reinstall Storybook when compatibility issues are resolved —",
     "storybook:check": "./scripts/check-storybook-compatibility.sh",
     "storybook:check:full": "./scripts/check-storybook-compatibility-full.sh",

@@ -746,12 +746,13 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 - Add error handling and validation
 - **Completed**: Created RSSFeedParser class with URL normalization, category inference, HTML cleaning, and curated feeds.
 
-**Chunk 3: Multi-Source Aggregation**
+**Chunk 3: Multi-Source Aggregation** ✅
 
 - Create `lib/feeds.ts` with CURATED_FEEDS constant
 - Implement parallel feed fetching with Promise.allSettled
 - Normalize + deduplicate URLs via sha256 hash
 - Sort by published date
+- **Completed**: Added `lib/feeds.ts` with `CURATED_FEEDS` and parallel aggregation via `allSettled`; normalized+deduped by URL hash; sorted by published_at.
 
 **Chunk 4: Feed API Endpoint**
 

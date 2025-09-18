@@ -2,6 +2,9 @@ import "server-only";
 import Parser from "rss-parser";
 import type { ArticleInput, ArticleCategory } from "./db";
 
+// Re-export types for use in other modules
+export type { ArticleInput, ArticleCategory } from "./db";
+
 // RSS Feed Parser for news article aggregation
 export class RSSFeedParser {
   private parser: Parser;
@@ -74,7 +77,7 @@ export class RSSFeedParser {
   /**
    * Normalize URL: lowercase, strip query parameters and fragments
    */
-  private normalizeUrl(url: string): string | null {
+  normalizeUrl(url: string): string | null {
     try {
       const urlObj = new URL(url);
       return `${urlObj.protocol}//${urlObj.hostname.toLowerCase()}${urlObj.pathname}`;
@@ -173,6 +176,18 @@ export class RSSFeedParser {
       .replace(/<[^>]*>/g, "") // Remove HTML tags
       .replace(/\s+/g, " ") // Normalize whitespace
       .trim();
+  }
+}
+
+/**
+ * Standalone URL normalization function for reuse across modules
+ */
+export function normalizeUrl(url: string): string | null {
+  try {
+    const urlObj = new URL(url);
+    return `${urlObj.protocol}//${urlObj.hostname.toLowerCase()}${urlObj.pathname}`;
+  } catch {
+    return null;
   }
 }
 
