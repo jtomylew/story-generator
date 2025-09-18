@@ -217,6 +217,26 @@ bash -c "cd '/path/to/project' && git push origin main"
 
 **Note**: This issue only affects AI tool shell sessions, not normal developer terminal usage.
 
+### Directory Navigation Issues
+
+**Problem**: AI tools may lose working directory context and end up in root directory (`/`) instead of the project directory.
+
+**Symptoms**:
+
+- Commands work initially, then fail with "not a git repository"
+- `pwd` shows `/` instead of project directory
+- Need to repeatedly re-navigate with full paths
+
+**Solution**: Always use absolute paths in bash commands:
+
+```bash
+# Always include the full project path
+bash -c "cd '/Users/jonathanlewis/Library/Mobile Documents/com~apple~CloudDocs/Coding_Projects/story-generator' && git status"
+bash -c "cd '/Users/jonathanlewis/Library/Mobile Documents/com~apple~CloudDocs/Coding_Projects/story-generator' && git add ."
+```
+
+**Prevention**: Use the full project path in every bash command to avoid directory context loss.
+
 ---
 
 # Reminders
