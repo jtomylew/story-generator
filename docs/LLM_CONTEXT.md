@@ -4,7 +4,7 @@ Allegorical News → Kids' 5-Minute Stories
 
 - **\*What**: Web app that turns news articles into age-appropriate allegorical stories for kids under 10
 - **Tech Stack**: Next.js + TypeScript + OpenAI API + Vercel
-- **Current Status**: ✅ MVP deployed; ✅ Design system foundation and cascade complete; ✅ UI modernized to shadcn/ui standards; ✅ Story persistence with Supabase; ✅ Production deployment infrastructure
+- **Current Status**: ✅ MVP deployed; ✅ Design system foundation and cascade complete; ✅ UI modernized to shadcn/ui standards; ✅ Story persistence with Supabase; ✅ Production deployment infrastructure; 📜 Planned: Feed-first UI with multi-source aggregation (RSS, URL extraction, optional News API) and import options
 - **API**: POST /api/generate {articleText, readingLevel} → {story, metadata}; POST /api/stories/save; GET /api/stories
 - **Next**: Enhanced user experience, analytics, performance optimization
 
@@ -87,7 +87,13 @@ Keep real secrets in `.env.local` (git-ignored). Commit a template in `.env.exam
     /index.ts            # Patterns barrel export
     /StoryForm.tsx
     /StoryOutput.tsx
+    /NewsFeed.tsx        # Planned: main feed component
+    /ArticleCard.tsx     # Planned: individual article display
+    /CategoryFilter.tsx  # Planned: category selection chips
+    /ImportModal.tsx     # Planned: import options modal
     /layouts/
+
+Note: all imports must go through barrel (import { NewsFeed } from "@/components").
   /screens/              # Screens/Sections
     /index.ts            # Screens barrel export
     /GenerateStory.tsx
@@ -386,6 +392,7 @@ When implementing or scaffolding UI, add **hooks/slots** for microinteractions b
 - 🔜 Persistence (stories table) + "Save story"
 - 🔜 Telemetry (Sentry, PostHog)
 - 🔜 URL/RSS ingestion (Readability + rss-parser)
+- 📜 News feed with content diversity + safety filtering (planned)
 
 ## Quality gates (post-checks)
 
@@ -404,16 +411,25 @@ When implementing or scaffolding UI, add **hooks/slots** for microinteractions b
   - Banned terms absent (configurable list)
 - Snapshot "golden" stories; alert on large diffs (manual review)
 
-## Next tasks (20–30 min chunks)
+### Feed-Specific Tests
 
-1. Add .env.example + lib/env.ts (Zod) and switch to env.OPENAI_API_KEY
-2. Add lib/schema.ts and validate body in /api/generate
-3. Extract prompts to /prompts/\* and load them (Node runtime)
-4. Implement hash.ts + cache.ts; return X-Cache header
-5. Add post-checks for word range & question count; regen on fail
-6. Add minimal safety.ts (keywords/NER) + refusal path
-7. Persist to DB (optional) and add "Save story" button
-8. Add Sentry/PostHog; log model, tokens, cache hits
+- RSS parsing with curated feeds returns articles
+- Safety filter (lib/safety.ts) blocks violent keywords
+- Diversity algorithm enforces max 2 per source
+- Category filters return correct subsets
+- Converted articles are excluded per device_id
+
+## Next tasks (30-minute chunks)
+
+**Phase 1 feed infrastructure only:**
+
+- Chunk 1: Database setup (articles + feed_cache tables with indexes, device_id)
+- Chunk 2: RSS parser setup (lib/rss.ts)
+- Chunk 3: Multi-source aggregation (lib/feeds.ts, CURATED_FEEDS, dedup)
+- Chunk 4: Feed API endpoint (app/api/feed/route.ts)
+- Chunk 5: Feed refresh logic (app/api/feed/refresh/route.ts, cron/TTL)
+
+For full roadmap see DECISIONS.md.
 
 ## Non-goals (for now)
 
@@ -430,6 +446,23 @@ When implementing or scaffolding UI, add **hooks/slots** for microinteractions b
 - When implementing a task, cite the sections you follow (e.g., "API contract", "Prompt files")
 - Prefer small, isolated diffs to keep 20–30 min cadence
 - If something is ambiguous, propose a default and update /docs/DECISIONS.md
+
+### Chunk Execution Shortcut
+
+When a request says **"Implement Chunk X from docs/DECISIONS.md"**:
+
+- Treat `/docs/DECISIONS.md`, `/docs/AI_UI_Guide.md`, and `/docs/LLM_CONTEXT.md` as the authoritative context.  
+- Follow all relevant ADRs (e.g. ADR-014 design system, ADR-015 microinteractions, ADR-017 external tool sync, ADR-018 barrel imports, ADR-028 feed-first plan).  
+- Update existing files in place; use barrel imports only.  
+- Always update `/docs/DECISIONS.md`:
+  - Mark the chunk as ⏳ (in progress) or ✅ (completed).  
+  - Add a one-line summary of what was built under ADR-028.  
+- After completing the work, apply **Quick Verify Steps** (typecheck, dev server boot, Mini Test Plan).  
+- Summarize which files changed and why.
+
+This allows a minimal prompt:  
+
+Implement Chunk X – [short description] from docs/DECISIONS.md Feature Roadmap.
 
 # LLM Test Instruction Style Guide
 

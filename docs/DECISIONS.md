@@ -600,6 +600,43 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 - **Learning outcome**: Environment variable naming consistency is critical for cloud platform integrations
 - **Files**: `lib/env.ts`, `lib/db.ts`
 
+### ADR-028: News Feed & Import Strategy 📜
+
+**Week 3+ Planning**
+
+- **Decision**: Implement feed-first UI with multi-source news aggregation and import options.
+- **UI Redesign - Feed-First Approach**:
+  - Default homepage displays curated news feed with 10–15 diverse articles
+  - Each ArticleCard shows: headline, source, category tag, published time, "Generate Story" button
+  - Navigation tabs: "News Feed" (default) | "Paste Article" | "Enter URL"
+  - Auto-refresh every 30 minutes with new content
+- **Content Diversity Requirements**:
+  - Centralized categories enum: Science | Nature | Sports | Arts | Education | Technology | Animals
+  - Rotate between categories; maximum 2 articles from the same source in view
+  - Prioritize articles from last 48 hours
+  - Mix serious and lighthearted topics
+  - Track converted articles to prevent repetition
+- **Technical Architecture**:
+  - Primary: RSS feed aggregation (always free)
+  - Secondary: URL extraction for user-provided links
+  - Optional fallback: News API (NewsData.io free tier) — server-only keys, may be disabled in production
+  - Database: `articles` table with 24–48h TTL (align TTL with freshness requirement) + `feed_cache` table
+  - Deduplication: normalize URLs (strip UTM, trailing slashes), canonicalize domain, dedup on `sha256(url)`
+  - Feed refresh via **Vercel Cron (preferred)** or on-demand refresh endpoint
+  - Safety: extend existing `lib/safety.ts` (do not fork) with feed-specific filters; block violent/political keywords
+- **Curated RSS Sources**:
+  ```ts
+  const CURATED_FEEDS = {
+    science: ['https://www.sciencedaily.com/rss/all.xml'],
+    positive: ['https://www.goodnewsnetwork.org/feed/'],
+    education: ['https://www.edutopia.org/rss.xml'],
+    nature: ['https://www.nationalgeographic.com/kids/feed/'],
+    sports: ['https://www.si.com/rss/si_kids.rss'],
+  };
+  ```
+- **Rationale**: A feed-first approach provides immediate daily value; RSS feeds are free and reliable; diversity prevents fatigue; safety filtering protects young users.
+- **Scope**: Planned for Week 3+. Implementation will follow the Feature Roadmap below.
+
 ### ADR-022: Automated Storybook Compatibility Monitoring ✅
 
 **Week 2, Day 6**
@@ -687,32 +724,147 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 
 ---
 
-## Next Phase Planning (30-minute chunks)
+## Feature Roadmap (30-minute chunks)
 
-**Week 2: Code Quality & Organization**
+### Feed Infrastructure
 
-1. Environment + request validation (ADR-007/008) ✅
-2. Type-safe architecture + request state management (ADR-009) ✅
-3. OpenAI client abstraction (ADR-010) ✅
-4. Documentation completion (ADR-012) ✅
-5. Component extraction (ADR-011) ✅
-6. Prompt externalization (ADR-013) ✅
-7. API response validation + word count validation ✅
-8. Testing and redeployment ✅
+**Chunk 1: Database Setup**
+- Create articles table (id, url, title, content, source, category, published_at, extracted_at)
+- Add indexes for category, published_at, source
+- Create feed_cache table for aggregated state
+- Include device_id support early for history tracking
+- Test with manual inserts
 
-**Week 3: Data & User Features**
+**Chunk 2: RSS Parser Setup**
+- Install rss-parser: `npm install rss-parser`
+- Create `lib/rss.ts` with RSSFeedParser class
+- Implement single feed parsing function
+- Add error handling and validation
 
-- Database integration (Supabase) for story persistence 🔜
-- Basic user identification and story history 🔜
-- Story rating system for AI improvement 🔜
-- Caching implementation for performance ✅
+**Chunk 3: Multi-Source Aggregation**
+- Create `lib/feeds.ts` with CURATED_FEEDS constant
+- Implement parallel feed fetching with Promise.allSettled
+- Normalize + deduplicate URLs via sha256 hash
+- Sort by published date
 
-**Week 4: Enhanced Features & Polish**
+**Chunk 4: Feed API Endpoint**
+- Create `app/api/feed/route.ts`
+- Implement GET to return cached feed
+- Add category and limit query params
+- Include diversity algorithm (max 2 per source)
 
-- DALL-E illustration generation for stories 🔜
-- URL article ingestion capability 🔜
-- Story export and sharing functionality 🔜
-- Analytics and error monitoring 🔜
+**Chunk 5: Feed Refresh Logic**
+- Create `app/api/feed/refresh/route.ts`
+- Implement background refresh (cron or on-demand)
+- Store in articles table with 24–48h TTL
+- Update feed_cache with latest state
+
+### Feed UI Development
+
+**Chunk 6: ArticleCard Component**
+- Create `components/patterns/ArticleCard.tsx`
+- Display title, source, category chip, published time
+- Add "Generate Story" button
+- Loading + hover states
+
+**Chunk 7: NewsFeed Component**
+- Create `components/patterns/NewsFeed.tsx`
+- Grid layout, responsive columns
+- Integrate ArticleCard
+- Empty state handling
+
+**Chunk 8: Homepage Conversion**
+- Update `app/page.tsx` to show NewsFeed by default
+- Move existing form to `app/paste/page.tsx`
+- Add navigation tabs component
+- Implement tab switching
+
+**Chunk 9: Category Filters**
+- Create `components/patterns/CategoryFilter.tsx`
+- Filter chips for each category (multi-select with "All")
+- Connect to feed API
+
+**Chunk 10: Loading & Refresh**
+- Skeleton loading states
+- Pull-to-refresh on mobile
+- Auto-refresh every 30 min
+- Show "New articles available" toast
+
+### Content Diversity & Safety
+
+**Chunk 11: Diversity Algorithm**
+- Create `lib/diversity.ts`
+- Implement category rotation
+- Add source distribution rules
+- Freshness scoring (newer = higher)
+
+**Chunk 12: Content Filtering**
+- Extend `lib/safety.ts` with feed keyword filters
+- Block list: ['war','death','killed','murder','attack']
+- Implement title/content scanning
+- Age-appropriate scoring
+
+**Chunk 13: User History Tracking**
+- Add converted_articles table (device_id, article_id, converted_at)
+- Track which articles have been used
+- Filter from feed display
+- Add "Already converted" indicator
+
+### Import Options
+
+**Chunk 14: URL Extraction**
+- Install `@extractus/article-parser`
+- Create `lib/extract.ts`
+- Add URL validation
+- Implement extraction + error handling
+
+**Chunk 15: Import Modal**
+- Create `components/patterns/ImportModal.tsx`
+- Tabs: "Browse Feed" | "Paste Text" | "Enter URL"
+- Validation + error states
+
+**Chunk 16: Paste Enhancement**
+- Update StoryForm for modal use
+- Add character count + better validation
+- Preserve existing functionality
+
+**Chunk 17: URL Input Flow**
+- Create URL input component
+- Add validation + preview
+- Show extraction progress
+- Display extracted article before generation
+
+### Polish & Optimization
+
+**Chunk 18: Performance**
+- Feed pagination (infinite scroll)
+- Browser caching
+- Lazy-load images
+- Service worker for offline
+
+**Chunk 19: Analytics**
+- Track article views
+- Monitor generation success rate
+- Log category preferences
+- Track refresh frequency
+- Use PostHog/Sentry per ADR-023
+
+**Chunk 20: Final Polish**
+- Keyboard shortcuts
+- Share functionality
+- Article bookmarking
+- Onboarding flow
+- Test with golden seed feeds
+
+### Testing Checklist
+- Feed loads with variety of articles
+- Category filters work
+- No more than 2 per source
+- Safety filters block inappropriate content
+- URL extraction handles diverse sites
+- Stories generate from feed articles
+- User history prevents repetition
+- Mobile responsive + performant
 
 ---
 
