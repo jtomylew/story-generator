@@ -800,12 +800,13 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 
 ### Feed UI Development
 
-**Chunk 6: ArticleCard Component**
+**Chunk 6: ArticleCard Component** ✅
 
 - Create `components/patterns/ArticleCard.tsx`
 - Display title, source, category chip, published time
 - Add "Generate Story" button
 - Loading + hover states
+- **Completed**: Created ArticleCard component with Card structure, Badge for category display, relative time formatting, hover effects using motion tokens, loading states with SkeletonText, and proper TypeScript interfaces. Added ArticleCardSkeleton for loading states. Updated barrel exports.
 
 **Chunk 7: NewsFeed Component**
 
