@@ -24,11 +24,22 @@ npm run dev:safe
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+## Features
+
+### Category Filtering
+
+The homepage includes a category filter system that allows you to filter news articles by topic:
+
+- **Available categories**: Science, Nature, Sports, Arts, Education, Technology, Animals
+- **Multi-select functionality**: Choose multiple categories or select "All" to show everything
+- **URL persistence**: Filter selections are saved in the URL for sharing and bookmarking
+- **Keyboard accessible**: Full keyboard navigation support with Tab, Enter, and Space keys
+
 ### Troubleshooting Directory Issues
 
 If you experience recurring directory issues where npm commands fail, see [docs/DIRECTORY_ISSUE_SOLUTION.md](docs/DIRECTORY_ISSUE_SOLUTION.md) for comprehensive solutions and prevention strategies.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 ## Component Development
 

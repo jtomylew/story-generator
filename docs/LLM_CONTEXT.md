@@ -12,7 +12,7 @@ Allegorical News → Kids' 5-Minute Stories
 
 - **\*What**: Web app that turns news articles into age-appropriate allegorical stories for kids under 10
 - **Tech Stack**: Next.js + TypeScript + OpenAI API + Vercel
-- **Current Status**: ✅ MVP deployed; ✅ Design system foundation and cascade complete; ✅ UI modernized to shadcn/ui standards; ✅ Story persistence with Supabase; ✅ Production deployment infrastructure; ✅ Feed-first UI components (NewsFeed, ArticleCard) implemented; 📜 Planned: Homepage conversion, category filters, and import options
+- **Current Status**: ✅ MVP deployed; ✅ Design system foundation and cascade complete; ✅ UI modernized to shadcn/ui standards; ✅ Story persistence with Supabase; ✅ Production deployment infrastructure; ✅ Feed-first UI components (NewsFeed, ArticleCard) implemented; ✅ Homepage conversion with NavTabs; ✅ Category filtering system with URL state management; 📜 Planned: Loading states, refresh functionality, and import options
 - **API**: POST /api/generate {articleText, readingLevel?} → {story, metadata}; POST /api/stories/save; GET /api/stories
 - **Next**: Enhanced user experience, analytics, performance optimization
 
@@ -97,9 +97,10 @@ Keep real secrets in `.env.local` (git-ignored). Commit a template in `.env.exam
     /NewsFeed.tsx        # ✅ Implemented: main feed component
     /ArticleCard.tsx     # ✅ Implemented: individual article display
     /EmptyState.tsx      # ✅ Implemented: empty state component
+    /CategoryFilter.tsx  # ✅ Implemented: multi-select category filtering
+    /NavTabs.tsx         # ✅ Implemented: navigation tabs component
     /Page.tsx            # ✅ Implemented: page wrapper component
     /Toolbar.tsx         # ✅ Implemented: toolbar component
-    /CategoryFilter.tsx  # Planned: category selection chips
     /ImportModal.tsx     # Planned: import options modal
     /layouts/
       /DefaultPageLayout.tsx  # ✅ Implemented: default page layout
@@ -224,6 +225,48 @@ import { StoryForm } from "@/components/patterns/StoryForm";
 
 - X-Request-Id: [uuid]
 - X-Duration: [ms]
+
+**Route:** GET /api/feed
+**Query Parameters**
+
+- categories: string (comma-separated list of categories, optional)
+- limit: number (default 20, max 50)
+
+**Available Categories**
+
+- science, nature, sports, arts, education, technology, animals
+
+**Response JSON (200)**
+
+```json
+{
+  "articles": [
+    {
+      "title": "string",
+      "content": "string",
+      "source": "string",
+      "url": "string",
+      "published_at": "ISO timestamp",
+      "category": "science" | "nature" | "sports" | "arts" | "education" | "technology" | "animals"
+    }
+  ],
+  "meta": {
+    "cache_hit": boolean,
+    "appliedCategories": ["science", "technology"],
+    "total": number,
+    "diversity_applied": boolean
+  }
+}
+```
+
+**Errors**
+
+- 400: {"error":"Invalid categories: [list]. Must be one of: [valid categories]"}
+- 500: {"error":"Internal server error"}
+
+**Headers**
+
+- X-Cache: HIT|MISS
 
 **Route:** GET /api/stories
 **Query Parameters**
