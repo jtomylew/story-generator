@@ -683,6 +683,28 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 - **Learning outcome**: Successfully simplified user experience while maintaining professional code quality and easy feature restoration capability.
 - **Files**: `components/patterns/StoryForm.tsx`, `lib/schema.ts`, `app/api/generate/route.ts`, `app/api/stories/save/route.ts`, `components/patterns/StoryOutput.tsx`, `app/page.tsx`, `components/screens/GenerateStory.tsx`
 
+### ADR-030: Directory Issue Resolution & Prevention ✅
+
+**Week 2, Day 9**
+
+- **Decision**: Implement comprehensive solution to prevent recurring directory navigation issues that cause npm commands to fail.
+- **Problem**: AI tools and shell sessions frequently lose working directory context, causing commands to fail with "Could not read package.json: Error: ENOENT: no such file or directory, open '/Users/jonathanlewis/package.json'".
+- **Root Cause**: Commands executed from wrong directory due to shell session state loss and path resolution issues with spaces in project path.
+- **Implementation**:
+  - **Documentation**: Created comprehensive `docs/DIRECTORY_ISSUE_SOLUTION.md` with root cause analysis and prevention strategies
+  - **Safe Scripts**: Added `dev:safe` script to package.json with absolute path handling
+  - **Shell Wrapper**: Created `scripts/start-dev.sh` with directory verification and process cleanup
+  - **Updated Documentation**: Enhanced AI_UI_Guide.md and README.md with directory handling best practices
+  - **Best Practices**: Established guidelines for AI tools to always use absolute paths and verify directories
+- **Prevention Strategy**:
+  - Always verify directory before running commands: `pwd && ls -la package.json`
+  - Use explicit `cd` commands with full paths before npm commands
+  - Kill existing processes before starting new ones: `pkill -f "next dev"`
+  - Add error handling for directory operations
+- **Rationale**: Directory issues were causing significant development friction and wasted time. A comprehensive solution with multiple layers of protection ensures reliable development workflow.
+- **Learning outcome**: Successfully identified and resolved a recurring infrastructure issue that was blocking productive development sessions.
+- **Files**: `docs/DIRECTORY_ISSUE_SOLUTION.md`, `package.json`, `scripts/start-dev.sh`, `docs/AI_UI_Guide.md`, `README.md`
+
 ---
 
 ## Current Status & Technical Debt

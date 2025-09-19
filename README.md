@@ -14,7 +14,19 @@ pnpm dev
 bun dev
 ```
 
+**If you encounter directory issues** (npm commands fail with "Could not read package.json"), use the safe script:
+
+```bash
+npm run dev:safe
+# or use the shell script wrapper
+./scripts/start-dev.sh
+```
+
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+### Troubleshooting Directory Issues
+
+If you experience recurring directory issues where npm commands fail, see [docs/DIRECTORY_ISSUE_SOLUTION.md](docs/DIRECTORY_ISSUE_SOLUTION.md) for comprehensive solutions and prevention strategies.
 
 You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
 

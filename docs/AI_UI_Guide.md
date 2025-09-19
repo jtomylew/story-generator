@@ -295,6 +295,7 @@ bash -c "cd '/path/to/project' && git push origin main"
 - Commands work initially, then fail with "not a git repository"
 - `pwd` shows `/` instead of project directory
 - Need to repeatedly re-navigate with full paths
+- npm commands fail with "Could not read package.json: Error: ENOENT: no such file or directory, open '/Users/jonathanlewis/package.json'"
 
 **Solution**: Always use absolute paths in bash commands:
 
@@ -302,9 +303,19 @@ bash -c "cd '/path/to/project' && git push origin main"
 # Always include the full project path
 bash -c "cd '/Users/jonathanlewis/Library/Mobile Documents/com~apple~CloudDocs/Coding_Projects/story-generator' && git status"
 bash -c "cd '/Users/jonathanlewis/Library/Mobile Documents/com~apple~CloudDocs/Coding_Projects/story-generator' && git add ."
+bash -c "cd '/Users/jonathanlewis/Library/Mobile Documents/com~apple~CloudDocs/Coding_Projects/story-generator' && npm run dev"
 ```
 
 **Prevention**: Use the full project path in every bash command to avoid directory context loss.
+
+**Best Practices**:
+
+1. Always verify directory before running commands: `pwd && ls -la package.json`
+2. Use explicit `cd` commands with full paths before npm commands
+3. Kill existing processes before starting new ones: `pkill -f "next dev"`
+4. Add error handling for directory operations: `cd "$PROJECT_ROOT" || { echo "Failed to change directory"; exit 1; }`
+
+**For AI Tools**: Always start commands with directory verification and use absolute paths to prevent this recurring issue.
 
 ---
 
