@@ -816,12 +816,13 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 - Empty state handling
 - **Completed**: Created NewsFeed component with responsive grid layout (1 col mobile, 2 cols md, 3 cols lg), loading states with skeleton cards, empty state using EmptyState component, proper ArticleCard integration with generatingId tracking, and barrel imports from @/components. Updated exports in patterns/index.ts.
 
-**Chunk 8: Homepage Conversion**
+**Chunk 8: Homepage Conversion** ✅
 
 - Update `app/page.tsx` to show NewsFeed by default
 - Move existing form to `app/paste/page.tsx`
 - Add navigation tabs component
 - Implement tab switching
+- **Completed**: Created NavTabs component with shadcn/ui Tabs and Next.js Link navigation; moved story generation logic to /paste route; updated homepage to display NewsFeed as default view; added verification script for automated testing
 
 **Chunk 9: Category Filters**
 
