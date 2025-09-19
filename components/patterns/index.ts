@@ -1,5 +1,6 @@
 // Pattern Components (Molecules) - Named exports
 export * from "./ArticleCard";
+export * from "./CategoryFilter";
 export * from "./EmptyState";
 export * from "./NavTabs";
 export * from "./NewsFeed";

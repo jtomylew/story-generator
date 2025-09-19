@@ -22,7 +22,7 @@ interface FeedResponse {
   articles: ArticleInput[];
   meta: {
     cache_hit: boolean;
-    category: string;
+    appliedCategories: string[];
     total: number;
     diversity_applied: boolean;
   };
@@ -52,23 +52,37 @@ function applyDiversity(articles: ArticleInput[]): ArticleInput[] {
  * GET /api/feed
  *
  * Query parameters:
- * - category?: ArticleCategory (default: all categories)
+ * - categories?: string (comma-separated list of categories, default: all categories)
  * - limit?: number (default: 20, max: 50)
  */
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const category = searchParams.get("category") as ArticleCategory | null;
+    const categoriesParam = searchParams.get("categories");
     const limitParam = searchParams.get("limit");
 
-    // Validate category
-    if (category && !VALID_CATEGORIES.includes(category)) {
-      return NextResponse.json(
-        {
-          error: `Invalid category. Must be one of: ${VALID_CATEGORIES.join(", ")}`,
-        },
-        { status: 400 },
+    // Parse and validate categories
+    let appliedCategories: string[] = [];
+    if (categoriesParam) {
+      const categories = categoriesParam
+        .split(",")
+        .map((c) => c.trim().toLowerCase())
+        .filter((c) => c.length > 0);
+
+      // Validate each category
+      const invalidCategories = categories.filter(
+        (c) => !VALID_CATEGORIES.includes(c as ArticleCategory),
       );
+      if (invalidCategories.length > 0) {
+        return NextResponse.json(
+          {
+            error: `Invalid categories: ${invalidCategories.join(", ")}. Must be one of: ${VALID_CATEGORIES.join(", ")}`,
+          },
+          { status: 400 },
+        );
+      }
+
+      appliedCategories = categories;
     }
 
     // Validate and set limit
@@ -85,7 +99,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Generate cache key
-    const cacheKey = `feed:${category || "all"}:${limit}`;
+    const cacheKey = `feed:${appliedCategories.length > 0 ? appliedCategories.sort().join(",") : "all"}:${limit}`;
 
     // Check cache first
     const db = getDb();
@@ -106,7 +120,10 @@ export async function GET(request: NextRequest) {
       articles = cachedData.payload as ArticleInput[];
     } else {
       // Cache miss - fetch fresh data
-      const categories = category ? [category] : undefined;
+      const categories =
+        appliedCategories.length > 0
+          ? (appliedCategories as ArticleCategory[])
+          : undefined;
       const result = await fetchAggregatedFeed({
         categories,
         maxTotal: limit * 2, // Fetch more to account for diversity filtering
@@ -141,7 +158,7 @@ export async function GET(request: NextRequest) {
       articles,
       meta: {
         cache_hit: cacheHit,
-        category: category || "all",
+        appliedCategories: appliedCategories,
         total: articles.length,
         diversity_applied: diversityApplied,
       },

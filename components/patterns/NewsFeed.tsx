@@ -10,6 +10,7 @@ interface NewsFeedProps {
   onGenerateStory: (article: Article) => void;
   generatingId?: string;
   isLoading?: boolean;
+  selectedCategories?: string[];
 }
 
 export function NewsFeed({
@@ -17,6 +18,7 @@ export function NewsFeed({
   onGenerateStory,
   generatingId,
   isLoading = false,
+  selectedCategories = [],
 }: NewsFeedProps) {
   // Show loading state
   if (isLoading) {
@@ -31,11 +33,19 @@ export function NewsFeed({
 
   // Show empty state
   if (articles.length === 0) {
+    const hasSelectedCategories = selectedCategories.length > 0;
+
     return (
       <EmptyState
         icon="📰"
-        title="No Articles Available"
-        description="We're working on bringing you fresh news articles. Check back soon!"
+        title={
+          hasSelectedCategories ? "No Articles Found" : "No Articles Available"
+        }
+        description={
+          hasSelectedCategories
+            ? `No articles found for the selected categories: ${selectedCategories.join(", ")}. Try selecting different categories or clear all filters.`
+            : "We're working on bringing you fresh news articles. Check back soon!"
+        }
         action={
           <Button
             onClick={() => window.location.reload()}
