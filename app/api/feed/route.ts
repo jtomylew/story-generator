@@ -24,6 +24,7 @@ interface FeedResponse {
     appliedCategories: string[];
     total: number;
     diversity_applied: boolean;
+    lastUpdated: string;
   };
 }
 
@@ -183,6 +184,21 @@ export async function GET(request: NextRequest) {
     // Limit to requested amount
     articles = articles.slice(0, limit);
 
+    // Generate last updated timestamp
+    const lastUpdated = new Date().toISOString();
+
+    // Check for If-Modified-Since header
+    const ifModifiedSince = request.headers.get("if-modified-since");
+    if (ifModifiedSince) {
+      const lastModified = new Date(ifModifiedSince);
+      const currentTime = new Date(lastUpdated);
+
+      // If content hasn't changed in the last 5 minutes, return 304
+      if (currentTime.getTime() - lastModified.getTime() < 5 * 60 * 1000) {
+        return new NextResponse(null, { status: 304 });
+      }
+    }
+
     const response = NextResponse.json({
       articles,
       meta: {
@@ -190,11 +206,14 @@ export async function GET(request: NextRequest) {
         appliedCategories: appliedCategories,
         total: articles.length,
         diversity_applied: diversityApplied,
+        lastUpdated: lastUpdated,
       },
     } as FeedResponse);
 
-    // Set cache header
+    // Set cache headers
     response.headers.set("X-Cache", cacheHit ? "HIT" : "MISS");
+    response.headers.set("Last-Modified", lastUpdated);
+    response.headers.set("Cache-Control", "public, max-age=300"); // 5 minutes
 
     return response;
   } catch (error) {

@@ -34,6 +34,7 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [generatingId, setGeneratingId] = useState<string | undefined>();
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [lastUpdated, setLastUpdated] = useState<string>("");
 
   // Initialize selected categories from URL params
   useEffect(() => {
@@ -47,31 +48,40 @@ export default function Home() {
     }
   }, [searchParams]);
 
+  // Fetch articles function
+  const fetchArticles = useCallback(async () => {
+    try {
+      const categoriesParam =
+        selectedCategories.length > 0 ? selectedCategories.join(",") : "";
+      const url = categoriesParam
+        ? `/api/feed?categories=${encodeURIComponent(categoriesParam)}`
+        : "/api/feed";
+
+      const response = await fetch(url);
+      if (response.ok) {
+        const data = await response.json();
+        setArticles(data.articles || []);
+        setLastUpdated(data.meta?.lastUpdated || new Date().toISOString());
+      }
+    } catch (error) {
+      console.error("Failed to fetch articles:", error);
+      throw error;
+    }
+  }, [selectedCategories]);
+
   // Fetch articles when categories change
   useEffect(() => {
-    const fetchArticles = async () => {
+    const loadArticles = async () => {
       setIsLoading(true);
       try {
-        const categoriesParam =
-          selectedCategories.length > 0 ? selectedCategories.join(",") : "";
-        const url = categoriesParam
-          ? `/api/feed?categories=${encodeURIComponent(categoriesParam)}`
-          : "/api/feed";
-
-        const response = await fetch(url);
-        if (response.ok) {
-          const data = await response.json();
-          setArticles(data.articles || []);
-        }
-      } catch (error) {
-        console.error("Failed to fetch articles:", error);
+        await fetchArticles();
       } finally {
         setIsLoading(false);
       }
     };
 
-    fetchArticles();
-  }, [selectedCategories]);
+    loadArticles();
+  }, [fetchArticles]);
 
   const handleCategoryChange = useCallback(
     (categories: string[]) => {
@@ -133,6 +143,8 @@ export default function Home() {
               generatingId={generatingId}
               isLoading={isLoading}
               selectedCategories={selectedCategories}
+              onRefresh={fetchArticles}
+              lastUpdated={lastUpdated}
             />
           </div>
         </div>
