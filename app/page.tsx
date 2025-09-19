@@ -62,10 +62,17 @@ function HomeContent() {
         const data = await response.json();
         setArticles(data.articles || []);
         setLastUpdated(data.meta?.lastUpdated || new Date().toISOString());
+      } else {
+        console.error(
+          "Failed to fetch articles:",
+          response.status,
+          response.statusText,
+        );
+        setArticles([]); // Set empty array on error
       }
     } catch (error) {
       console.error("Failed to fetch articles:", error);
-      throw error;
+      setArticles([]); // Set empty array on error
     }
   }, [selectedCategories]);
 
@@ -75,6 +82,9 @@ function HomeContent() {
       setIsLoading(true);
       try {
         await fetchArticles();
+      } catch (error) {
+        console.error("Error loading articles:", error);
+        // fetchArticles now handles errors internally, so we just log here
       } finally {
         setIsLoading(false);
       }
