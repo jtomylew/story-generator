@@ -2,6 +2,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { useSearchParams } from "next/navigation";
 import type { GenerateReq } from "@/lib/types";
 import type { RequestState, ApiError } from "@/lib/ui-types";
 import {
@@ -18,9 +19,41 @@ const navigationTabs = [
 ];
 
 export default function PastePage() {
+  const searchParams = useSearchParams();
   const [requestState, setRequestState] = useState<RequestState>({
     status: "idle",
   });
+
+  // Check for pre-generated story data from URL params
+  useEffect(() => {
+    const storyParam = searchParams.get("story");
+    if (storyParam) {
+      try {
+        const storyData = JSON.parse(decodeURIComponent(storyParam));
+
+        // Map the story data to the expected format
+        const res = {
+          story: storyData.story,
+          ageBand: "elementary",
+          newsSummary: storyData.title,
+          sourceHash: "",
+          model: "gpt-4o",
+          safety: { flagged: false, reasons: [] },
+          cached: false,
+          createdAt: new Date().toISOString(),
+        };
+
+        const req = {
+          articleText: storyData.story,
+          readingLevel: "elementary" as const,
+        };
+
+        setRequestState({ status: "success", req, res });
+      } catch (error) {
+        console.error("Failed to parse story data:", error);
+      }
+    }
+  }, [searchParams]);
 
   // Clean up in-flight requests on unmount
   useEffect(() => {

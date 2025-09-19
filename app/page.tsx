@@ -115,12 +115,41 @@ function HomeContent() {
     setGeneratingId(article.id);
 
     try {
-      // Navigate to paste page with article content
-      // This is a simplified approach - in a real implementation,
-      // you might want to pass the article data via URL params or state
-      window.location.href = `/paste?article=${encodeURIComponent(article.content)}`;
+      // Call the generate API to create a story from the article
+      const response = await fetch("/api/generate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          articleText: article.content,
+          readingLevel: "elementary", // Default to elementary level
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+
+        // Navigate to paste page with the generated story
+        // We'll pass the story data via URL params for now
+        const storyData = {
+          title: article.title,
+          story: data.story,
+          questions: data.questions,
+          meta: data.meta,
+          source: article.source,
+        };
+
+        const encodedStory = encodeURIComponent(JSON.stringify(storyData));
+        window.location.href = `/paste?story=${encodedStory}`;
+      } else {
+        const errorData = await response.json();
+        console.error("Failed to generate story:", errorData);
+        alert("Failed to generate story. Please try again.");
+      }
     } catch (error) {
       console.error("Failed to generate story:", error);
+      alert("Failed to generate story. Please try again.");
     } finally {
       setGeneratingId(undefined);
     }
