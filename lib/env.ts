@@ -28,13 +28,25 @@ const parsed = EnvSchema.safeParse({
 });
 
 if (!parsed.success) {
-  console.error(
-    "❌ Invalid environment variables:",
+  console.warn(
+    "⚠️ Some environment variables are missing:",
     parsed.error.flatten().fieldErrors,
   );
-  throw new Error(
-    "Invalid environment variables. See server logs for details.",
-  );
+  console.warn("Continuing with default values...");
 }
 
-export const env = parsed.data;
+export const env = parsed.success
+  ? parsed.data
+  : {
+      OPENAI_API_KEY: process.env.OPENAI_API_KEY || "",
+      NEXT_PUBLIC_APP_NAME: process.env.NEXT_PUBLIC_APP_NAME || "Story Weaver",
+      NODE_ENV:
+        (process.env.NODE_ENV as "development" | "test" | "production") ||
+        "development",
+      DATABASE_URL: process.env.DATABASE_URL || "",
+      UPSTASH_REDIS_REST_URL: process.env.UPSTASH_REDIS_REST_URL || "",
+      UPSTASH_REDIS_REST_TOKEN: process.env.UPSTASH_REDIS_REST_TOKEN || "",
+      SENTRY_DSN: process.env.SENTRY_DSN || "",
+      SUPABASE_URL: process.env.SUPABASE_URL || "",
+      SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY || "",
+    };

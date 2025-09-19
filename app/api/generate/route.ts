@@ -16,30 +16,26 @@ const hasOpenAIKey =
   process.env.OPENAI_API_KEY && process.env.OPENAI_API_KEY.length > 0;
 
 export async function POST(req: Request) {
-  let requestHash: string;
-  let modelUsed: string;
-  let parsedData: { articleText: string; readingLevel: string };
-  let effectiveReadingLevel: string;
+  // If no OpenAI API key is available, return a mock response for development
+  if (!hasOpenAIKey) {
+    console.log("OpenAI API key not available, returning mock response");
 
-  try {
-    const raw = await req.json();
-    const parsed = GenerateReq.safeParse(raw);
-    if (!parsed.success) {
-      const error: ApiError = {
-        message: "Invalid request data",
-        code: "BAD_REQUEST",
-        issues: formatZodIssues(parsed.error),
-      };
-      return NextResponse.json(error, { status: 400 });
-    }
-    const { articleText, readingLevel } = parsed.data;
-    // Default to "elementary" (7-10 year olds) if no reading level specified
-    effectiveReadingLevel = readingLevel || "elementary";
-    parsedData = { articleText, readingLevel: effectiveReadingLevel };
+    try {
+      const raw = await req.json();
+      const parsed = GenerateReq.safeParse(raw);
+      if (!parsed.success) {
+        const error: ApiError = {
+          message: "Invalid request data",
+          code: "BAD_REQUEST",
+          issues: formatZodIssues(parsed.error),
+        };
+        return NextResponse.json(error, { status: 400 });
+      }
 
-    // If no OpenAI API key is available, return a mock response for development
-    if (!hasOpenAIKey) {
-      console.log("OpenAI API key not available, returning mock response");
+      const { articleText, readingLevel } = parsed.data;
+      const effectiveReadingLevel = readingLevel || "elementary";
+
+      console.log("Article text length:", articleText.length);
 
       const mockStory = `Once upon a time, there was a magical place where amazing things happened every day. The story begins with a brave little explorer who discovered something wonderful in the world around them.
 
@@ -62,7 +58,37 @@ And so, the adventure continues, with new stories to be told and new discoveries
       };
 
       return NextResponse.json(mockResponse);
+    } catch (error) {
+      console.error("Error in mock response generation:", error);
+      const apiError: ApiError = {
+        message: "Unable to generate story at this time. Please try again.",
+        code: "INTERNAL_ERROR",
+      };
+      return NextResponse.json(apiError, { status: 500 });
     }
+  }
+
+  // Normal flow when OpenAI API key is available
+  let requestHash: string;
+  let modelUsed: string;
+  let parsedData: { articleText: string; readingLevel: string };
+  let effectiveReadingLevel: string;
+
+  try {
+    const raw = await req.json();
+    const parsed = GenerateReq.safeParse(raw);
+    if (!parsed.success) {
+      const error: ApiError = {
+        message: "Invalid request data",
+        code: "BAD_REQUEST",
+        issues: formatZodIssues(parsed.error),
+      };
+      return NextResponse.json(error, { status: 400 });
+    }
+    const { articleText, readingLevel } = parsed.data;
+    // Default to "elementary" (7-10 year olds) if no reading level specified
+    effectiveReadingLevel = readingLevel || "elementary";
+    parsedData = { articleText, readingLevel: effectiveReadingLevel };
 
     // Safety screening
     const safetyCheck = maybeRefuse(articleText);
