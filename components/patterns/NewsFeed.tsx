@@ -3,6 +3,7 @@
 import React from "react";
 import type { Article } from "@/lib/db";
 import { ArticleCard, ArticleCardSkeleton, EmptyState } from "@/components";
+import { Button } from "@/components/ui";
 
 interface NewsFeedProps {
   articles: Article[];
@@ -36,12 +37,12 @@ export function NewsFeed({
         title="No Articles Available"
         description="We're working on bringing you fresh news articles. Check back soon!"
         action={
-          <button
+          <Button
             onClick={() => window.location.reload()}
-            className="px-4 py-2 bg-brand-600 text-white rounded-md hover:bg-brand-500 transition-colors duration-[var(--motion-fast)]"
+            variant="primary"
           >
             Refresh
-          </button>
+          </Button>
         }
       />
     );
