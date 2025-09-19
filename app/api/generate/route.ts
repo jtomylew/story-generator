@@ -15,6 +15,9 @@ import type { ApiError } from "@/lib/ui-types";
 const hasOpenAIKey =
   process.env.OPENAI_API_KEY && process.env.OPENAI_API_KEY.length > 0;
 
+console.log("OpenAI API key available:", hasOpenAIKey);
+console.log("API key length:", process.env.OPENAI_API_KEY?.length || 0);
+
 export async function POST(req: Request) {
   // If no OpenAI API key is available, return a mock response for development
   if (!hasOpenAIKey) {
@@ -37,9 +40,9 @@ export async function POST(req: Request) {
 
       console.log("Article text length:", articleText.length);
 
-      const mockStory = `Once upon a time, there was a magical place where amazing things happened every day. The story begins with a brave little explorer who discovered something wonderful in the world around them.
+      const mockStory = `Once upon a time, there was a magical place where amazing things happened every day. A brave little explorer discovered something wonderful in the world around them.
 
-This is a mock story generated for development purposes. In a real deployment, this would be a beautifully crafted story based on the article: "${articleText.substring(0, 100)}..."
+This is a mock story for development. In a real deployment, this would be a beautifully crafted story based on the article: "${articleText.substring(0, 50)}..."
 
 The little explorer learned that every day brings new adventures and opportunities to learn and grow. They discovered that the world is full of wonder and magic, just waiting to be explored by curious minds.
 
@@ -149,7 +152,18 @@ And so, the adventure continues, with new stories to be told and new discoveries
     // Parse JSON response
     let parsedResponse;
     try {
-      parsedResponse = JSON.parse(generatedContent);
+      // Clean up the content by removing markdown code blocks if present
+      let cleanContent = generatedContent;
+      if (cleanContent.includes("```json")) {
+        cleanContent = cleanContent
+          .replace(/```json\n?/g, "")
+          .replace(/```\n?/g, "");
+      }
+      if (cleanContent.includes("```")) {
+        cleanContent = cleanContent.replace(/```\n?/g, "");
+      }
+
+      parsedResponse = JSON.parse(cleanContent);
     } catch (parseError) {
       // If JSON parsing fails, try to extract story and create questions
       parsedResponse = {
@@ -228,7 +242,18 @@ And so, the adventure continues, with new stories to be told and new discoveries
 
         const retryContent = retryCompletion.choices[0]?.message?.content;
         if (retryContent) {
-          const retryParsed = JSON.parse(retryContent);
+          // Clean up the content by removing markdown code blocks if present
+          let cleanRetryContent = retryContent;
+          if (cleanRetryContent.includes("```json")) {
+            cleanRetryContent = cleanRetryContent
+              .replace(/```json\n?/g, "")
+              .replace(/```\n?/g, "");
+          }
+          if (cleanRetryContent.includes("```")) {
+            cleanRetryContent = cleanRetryContent.replace(/```\n?/g, "");
+          }
+
+          const retryParsed = JSON.parse(cleanRetryContent);
           const retryValidated = GenerateRes.parse(retryParsed);
           const wordCount = retryValidated.story.split(/\s+/).length;
           const retryResponse = {
