@@ -4,9 +4,9 @@ export type GenerateResType = typeof GenerateRes._type;
 export type GenerateReqType = typeof GenerateReq._type;
 
 const WORD_RANGES = {
-  preschool: { min: 60, max: 140 },
-  "early-elementary": { min: 120, max: 220 },
-  elementary: { min: 180, max: 320 },
+  preschool: { min: 100, max: 300 },
+  "early-elementary": { min: 200, max: 500 },
+  elementary: { min: 300, max: 800 },
 } as const;
 
 export function postCheck(res: GenerateResType, level: string): void {

@@ -12,8 +12,8 @@ Create an allegorical story for {{readingLevel}} children that:
 - Includes a clear moral lesson that children can understand
 - Has a positive, hopeful ending
 - Is suitable for bedtime reading or classroom discussion
-- Stays within the word count limit: Preschool (60-140 words), Early Elementary (120-220 words), Elementary (180-320 words)
+- Stays within the word count limit for a 5-minute reading experience: Preschool (100-300 words), Early Elementary (200-500 words), Elementary (300-800 words)
 
 Please format the story with proper paragraphs and make it easy to read aloud. Include exactly 2 discussion questions that help children think about the story's themes and apply the lessons to their own lives.
 
-CRITICAL: Your story must be within the exact word count range for {{readingLevel}} level. Count your words carefully and be concise while maintaining quality.
+IMPORTANT: Create a well-developed, engaging story that can be read comfortably in 5 minutes or less. Focus on quality storytelling within the word count range.

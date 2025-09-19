@@ -219,7 +219,7 @@ And so, the adventure continues, with new stories to be told and new discoveries
             readingLevel: effectiveReadingLevel,
             articleText: parsedData.articleText,
           }) +
-          `\n\nCRITICAL: The story MUST be within the exact word count range for ${effectiveReadingLevel} level. Current limits: Preschool (60-140 words), Early Elementary (120-220 words), Elementary (180-320 words). Count your words carefully and be concise while maintaining quality. Include exactly 2 discussion questions.`;
+          `\n\nIMPORTANT: The story MUST be within the word count range for a 5-minute reading experience. Current limits: Preschool (100-300 words), Early Elementary (200-500 words), Elementary (300-800 words). Create a well-developed, engaging story that can be read comfortably in 5 minutes or less. Include exactly 2 discussion questions.`;
 
         const client = createClient({
           model: process.env.MODEL_NAME || "gpt-4o",
