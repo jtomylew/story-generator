@@ -24,13 +24,10 @@ export function NavTabs({ tabs, className }: NavTabsProps) {
         const isActive = pathname === tab.href;
         return (
           <Link key={tab.href} href={tab.href}>
-            <Tabs.Item active={isActive}>
-              {tab.label}
-            </Tabs.Item>
+            <Tabs.Item active={isActive}>{tab.label}</Tabs.Item>
           </Link>
         );
       })}
     </Tabs>
   );
 }
-

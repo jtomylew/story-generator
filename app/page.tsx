@@ -36,7 +36,7 @@ export default function Home() {
 
   const handleGenerateStory = useCallback(async (article: Article) => {
     setGeneratingId(article.id);
-    
+
     try {
       // Navigate to paste page with article content
       // This is a simplified approach - in a real implementation,

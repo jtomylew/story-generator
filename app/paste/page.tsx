@@ -4,7 +4,13 @@
 import { useState, useEffect, useCallback } from "react";
 import type { GenerateReq } from "@/lib/types";
 import type { RequestState, ApiError } from "@/lib/ui-types";
-import { StoryForm, StoryOutput, Page, SectionHeader, NavTabs } from "@/components";
+import {
+  StoryForm,
+  StoryOutput,
+  Page,
+  SectionHeader,
+  NavTabs,
+} from "@/components";
 
 const navigationTabs = [
   { label: "News Feed", href: "/" },
@@ -113,4 +119,3 @@ export default function PastePage() {
     </div>
   );
 }
-

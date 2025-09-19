@@ -39,7 +39,7 @@ export function NewsFeed({
         action={
           <Button
             onClick={() => window.location.reload()}
-            variant="primary"
+            variant="brand-primary"
           >
             Refresh
           </Button>
