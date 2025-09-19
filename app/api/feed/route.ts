@@ -102,13 +102,14 @@ export async function GET(request: NextRequest) {
     const cacheKey = `feed:${appliedCategories.length > 0 ? appliedCategories.sort().join(",") : "all"}:${limit}`;
 
     // For now, skip cache and return mock data for testing
-    let articles: ArticleInput[];
+    let articles: (ArticleInput & { id: string })[];
     let cacheHit = false;
     let diversityApplied = false;
 
     // Generate mock articles based on categories
-    const mockArticles: ArticleInput[] = [
+    const mockArticles: (ArticleInput & { id: string })[] = [
       {
+        id: "mock-article-1",
         title: "Breakthrough in Quantum Computing",
         content:
           "Scientists have made a significant breakthrough in quantum computing technology...",
@@ -118,6 +119,7 @@ export async function GET(request: NextRequest) {
         category: "science" as ArticleCategory,
       },
       {
+        id: "mock-article-2",
         title: "New Species Discovered in Amazon Rainforest",
         content:
           "Researchers have discovered a new species of frog in the Amazon rainforest...",
@@ -127,6 +129,7 @@ export async function GET(request: NextRequest) {
         category: "nature" as ArticleCategory,
       },
       {
+        id: "mock-article-3",
         title: "Olympic Games Update",
         content: "The latest updates from the Olympic Games...",
         source: "Sports Central",
@@ -135,6 +138,7 @@ export async function GET(request: NextRequest) {
         category: "sports" as ArticleCategory,
       },
       {
+        id: "mock-article-4",
         title: "New Art Exhibition Opens",
         content:
           "A new art exhibition featuring contemporary artists opens this week...",
@@ -144,6 +148,7 @@ export async function GET(request: NextRequest) {
         category: "arts" as ArticleCategory,
       },
       {
+        id: "mock-article-5",
         title: "Educational Technology Trends",
         content:
           "The latest trends in educational technology are transforming classrooms...",
@@ -153,6 +158,7 @@ export async function GET(request: NextRequest) {
         category: "education" as ArticleCategory,
       },
       {
+        id: "mock-article-6",
         title: "AI Breakthrough in Healthcare",
         content:
           "Artificial intelligence is revolutionizing healthcare with new diagnostic tools...",
@@ -162,6 +168,7 @@ export async function GET(request: NextRequest) {
         category: "technology" as ArticleCategory,
       },
       {
+        id: "mock-article-7",
         title: "Endangered Species Recovery Program",
         content:
           "A new program is helping endangered species recover in the wild...",
