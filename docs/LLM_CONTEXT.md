@@ -12,8 +12,9 @@ Allegorical News → Kids' 5-Minute Stories
 
 - **\*What**: Web app that turns news articles into age-appropriate allegorical stories for kids under 10
 - **Tech Stack**: Next.js + TypeScript + OpenAI API + Vercel
-- **Current Status**: ✅ MVP deployed; ✅ Design system foundation and cascade complete; ✅ UI modernized to shadcn/ui standards; ✅ Story persistence with Supabase; ✅ Production deployment infrastructure; ✅ Feed-first UI components (NewsFeed, ArticleCard) implemented; ✅ Homepage conversion with NavTabs; ✅ Category filtering system with URL state management; ✅ Loading & refresh system with skeleton states, pull-to-refresh, auto-refresh, and toast notifications; 📜 Planned: Import options and advanced features
+- **Current Status**: ✅ MVP deployed; ✅ Design system foundation and cascade complete; ✅ UI modernized to shadcn/ui standards; ✅ Story persistence with Supabase; ✅ Production deployment infrastructure; ✅ Feed-first UI components (NewsFeed, ArticleCard) implemented; ✅ Homepage conversion with NavTabs; ✅ Category filtering system with URL state management; ✅ Loading & refresh system with skeleton states, pull-to-refresh, auto-refresh, and toast notifications; ✅ Story generation integration with proper OpenAI API integration; ✅ Word count optimization for 5-minute reading experience; 📜 Planned: Import options and advanced features
 - **API**: POST /api/generate {articleText, readingLevel?} → {story, metadata}; POST /api/stories/save; GET /api/stories
+- **Story Generation Flow**: Click "Generate Story" on news article → AI creates child-friendly story → Redirect to paste page with generated story displayed (paste form hidden for focus)
 - **Next**: Enhanced user experience, analytics, performance optimization
 
 ## Purpose (what we're building)
@@ -27,9 +28,11 @@ Turn a current news article (pasted text for now) into a gentle, age-appropriate
 - Safety: No real names/places; no graphic, frightening, or political propaganda content
 - Output: Title, Story (within level word range), exactly 2 kid-friendly questions
 
-## Reading level & word ranges
+## Reading level & word ranges (5-minute reading experience)
 
-- **Elementary (7–10):** 180–320 words; age-appropriate vocabulary and sentence structure
+- **Preschool (3–5):** 100–300 words (2-3 minutes reading time)
+- **Early Elementary (5–7):** 200–500 words (3-4 minutes reading time)
+- **Elementary (7–10):** 300–800 words (4-5 minutes reading time)
 - **Note**: Reading level selection has been removed from the UI. All stories now target elementary level (7-10 year olds) by default. The infrastructure for multiple reading levels remains intact for easy restoration if needed.
 
 ---

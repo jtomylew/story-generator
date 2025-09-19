@@ -26,6 +26,20 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## Features
 
+### Story Generation
+
+Transform news articles into engaging, age-appropriate stories for children:
+
+- **AI-powered storytelling**: Uses OpenAI to create magical, educational stories from real news
+- **Reading level targeting**: Stories tailored for Preschool, Early Elementary, and Elementary levels
+- **5-minute reading experience**: Word counts optimized for comfortable reading sessions
+  - Preschool: 100-300 words (2-3 minutes)
+  - Early Elementary: 200-500 words (3-4 minutes)
+  - Elementary: 300-800 words (4-5 minutes)
+- **Discussion questions**: Each story includes 2 thoughtful questions for learning
+- **One-click generation**: Simply click "Generate Story" on any news article
+- **Smart UI**: When viewing a generated story, the paste form is hidden to focus on the story
+
 ### Category Filtering
 
 The homepage includes a category filter system that allows you to filter news articles by topic:

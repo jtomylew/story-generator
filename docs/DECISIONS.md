@@ -861,6 +861,33 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 - Show "New articles available" toast
 - **Completed**: Enhanced NewsFeed with skeleton loading, pull-to-refresh, auto-refresh, toast notifications, Last-Modified headers, 304 support, and comprehensive verification script
 
+**Chunk 11: Story Generation Integration** ✅
+
+- Fixed useSearchParams Suspense boundary errors in homepage and paste page
+- Implemented proper story generation from news articles (not just redirect to paste)
+- Fixed JSON parsing to handle OpenAI markdown code block responses
+- Added mock response support when OpenAI API key is not available
+- Made environment validation non-blocking with graceful fallbacks
+- **Completed**: Full story generation flow from news articles to paste page with generated stories
+
+**Chunk 12: Word Count Optimization** ✅
+
+- Updated word count limits for 5-minute reading experience
+- Preschool: 100-300 words (2-3 minutes reading time)
+- Early Elementary: 200-500 words (3-4 minutes reading time)
+- Elementary: 300-800 words (4-5 minutes reading time)
+- Enhanced prompts with specific word count guidance and reading time targets
+- Improved retry logic with detailed word count instructions
+- **Completed**: Optimized story generation for comfortable 5-minute reading sessions with better storytelling quality
+
+**Chunk 13: UX Improvement - Smart Paste Page** ✅
+
+- Hide StoryForm when viewing generated stories from news articles
+- Detect pre-generated stories via URL parameters
+- Focus user attention on the generated story content
+- Maintain StoryForm for manual story generation
+- **Completed**: Improved UX by hiding unnecessary form when viewing generated stories
+
 ### Deployment & Build Issues
 
 **ADR-031: Suspense Boundary for useSearchParams** ✅
@@ -872,6 +899,34 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
   - Added `LoadingFallback()` component with skeleton states
   - Wrapped `HomeContent` in `<Suspense fallback={<LoadingFallback />}>`
 - **Result**: Resolved Next.js build error and improved loading UX
+- **Date**: 2025-09-19
+
+**ADR-032: Word Count Optimization for 5-Minute Reading Experience** ✅
+
+- **Problem**: Original word count limits were too restrictive (60-320 words), resulting in stories that were too short for engaging storytelling and didn't provide a satisfying reading experience.
+- **Solution**: Updated word count ranges to support a 5-minute reading experience:
+  - Preschool: 100-300 words (2-3 minutes)
+  - Early Elementary: 200-500 words (3-4 minutes)
+  - Elementary: 300-800 words (4-5 minutes)
+- **Implementation**:
+  - Updated `lib/postcheck.ts` with new word count ranges
+  - Enhanced system and user prompts with specific word count guidance
+  - Added reading time targets to prompt instructions
+  - Improved retry logic with detailed word count instructions
+  - Emphasized quality storytelling over strict word limits
+- **Result**: Stories now provide a more engaging, well-developed reading experience that can be comfortably read in 5 minutes or less, with better character development and plot structure.
+- **Date**: 2025-09-19
+
+**ADR-033: Smart Paste Page UX** ✅
+
+- **Problem**: When users click "Generate Story" from news articles and are redirected to the paste page, they see both the generated story and the paste form, creating confusion and visual clutter.
+- **Solution**: Hide the StoryForm component when the paste page is accessed with a pre-generated story (detected via URL parameters).
+- **Implementation**:
+  - Check for `story` parameter in URL to detect pre-generated stories
+  - Conditionally render StoryForm only when no pre-generated story exists
+  - Maintain StoryForm functionality for manual story generation
+  - Keep StoryOutput always visible for both generated and manual stories
+- **Result**: Cleaner, more focused user experience when viewing generated stories, with reduced cognitive load and better content focus.
 - **Date**: 2025-09-19
 
 ### Content Diversity & Safety

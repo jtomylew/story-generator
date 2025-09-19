@@ -75,6 +75,30 @@ Verify: [simple test command or curl]
 
 ---
 
+## Current Story Generation Features
+
+### Word Count Optimization (5-Minute Reading Experience)
+
+- **Preschool**: 100-300 words (2-3 minutes reading time)
+- **Early Elementary**: 200-500 words (3-4 minutes reading time)
+- **Elementary**: 300-800 words (4-5 minutes reading time)
+
+### Story Generation Flow
+
+1. **Homepage**: Browse news articles with category filtering
+2. **ArticleCard**: Click "Generate Story" button
+3. **AI Processing**: OpenAI creates child-friendly allegorical story
+4. **Paste Page**: Display generated story with discussion questions (paste form hidden for focus)
+5. **Save/Share**: Users can save or share the generated stories
+
+### Key Components
+
+- **NewsFeed**: Grid layout with skeleton loading and pull-to-refresh
+- **CategoryFilter**: Multi-select filtering with URL persistence
+- **ArticleCard**: News article display with generation button
+- **StoryOutput**: Generated story display with questions
+- **Suspense Boundaries**: Proper loading states for useSearchParams
+
 ## 1. Design System Contract (summary)
 
 > Full rules live in `/docs/LLM_CONTEXT.md` and ADR-014/015 in `/docs/DECISIONS.md`.  

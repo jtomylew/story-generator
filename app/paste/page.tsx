@@ -130,14 +130,20 @@ function PasteContent() {
     setRequestState({ status: "idle" });
   };
 
+  // Check if we have a pre-generated story (coming from news article)
+  const hasGeneratedStory = searchParams.get("story") !== null;
+
   return (
     <div className="space-y-6">
       <NavTabs tabs={navigationTabs} className="mb-6" />
 
-      <StoryForm
-        onSubmit={handleSubmit}
-        isSubmitting={requestState.status === "loading"}
-      />
+      {/* Only show StoryForm if we don't have a pre-generated story */}
+      {!hasGeneratedStory && (
+        <StoryForm
+          onSubmit={handleSubmit}
+          isSubmitting={requestState.status === "loading"}
+        />
+      )}
 
       <StoryOutput state={requestState} onReset={resetForm} />
     </div>
