@@ -861,6 +861,19 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 - Show "New articles available" toast
 - **Completed**: Enhanced NewsFeed with skeleton loading, pull-to-refresh, auto-refresh, toast notifications, Last-Modified headers, 304 support, and comprehensive verification script
 
+### Deployment & Build Issues
+
+**ADR-031: Suspense Boundary for useSearchParams** ✅
+
+- **Problem**: Vercel build failures due to `useSearchParams()` hook not being wrapped in Suspense boundary
+- **Solution**: Split homepage into `HomeContent` component wrapped in `<Suspense>` with proper loading fallback
+- **Implementation**:
+  - Created `HomeContent()` component containing all `useSearchParams()` logic
+  - Added `LoadingFallback()` component with skeleton states
+  - Wrapped `HomeContent` in `<Suspense fallback={<LoadingFallback />}>`
+- **Result**: Resolved Next.js build error and improved loading UX
+- **Date**: 2025-09-19
+
 ### Content Diversity & Safety
 
 **Chunk 11: Diversity Algorithm**

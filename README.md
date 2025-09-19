@@ -35,6 +35,16 @@ The homepage includes a category filter system that allows you to filter news ar
 - **URL persistence**: Filter selections are saved in the URL for sharing and bookmarking
 - **Keyboard accessible**: Full keyboard navigation support with Tab, Enter, and Space keys
 
+### Loading & Refresh System
+
+The application includes a comprehensive loading and refresh system:
+
+- **Skeleton loading states**: Custom skeleton components during data loading
+- **Pull-to-refresh**: Mobile-friendly pull-to-refresh functionality (70px threshold)
+- **Auto-refresh**: Automatic content refresh every 30 minutes (30 seconds for testing)
+- **Toast notifications**: User-friendly notifications for new content
+- **Performance optimized**: Last-Modified headers, 304 Not Modified support, and caching
+
 ### Troubleshooting Directory Issues
 
 If you experience recurring directory issues where npm commands fail, see [docs/DIRECTORY_ISSUE_SOLUTION.md](docs/DIRECTORY_ISSUE_SOLUTION.md) for comprehensive solutions and prevention strategies.

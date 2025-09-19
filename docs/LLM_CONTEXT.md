@@ -12,7 +12,7 @@ Allegorical News → Kids' 5-Minute Stories
 
 - **\*What**: Web app that turns news articles into age-appropriate allegorical stories for kids under 10
 - **Tech Stack**: Next.js + TypeScript + OpenAI API + Vercel
-- **Current Status**: ✅ MVP deployed; ✅ Design system foundation and cascade complete; ✅ UI modernized to shadcn/ui standards; ✅ Story persistence with Supabase; ✅ Production deployment infrastructure; ✅ Feed-first UI components (NewsFeed, ArticleCard) implemented; ✅ Homepage conversion with NavTabs; ✅ Category filtering system with URL state management; 📜 Planned: Loading states, refresh functionality, and import options
+- **Current Status**: ✅ MVP deployed; ✅ Design system foundation and cascade complete; ✅ UI modernized to shadcn/ui standards; ✅ Story persistence with Supabase; ✅ Production deployment infrastructure; ✅ Feed-first UI components (NewsFeed, ArticleCard) implemented; ✅ Homepage conversion with NavTabs; ✅ Category filtering system with URL state management; ✅ Loading & refresh system with skeleton states, pull-to-refresh, auto-refresh, and toast notifications; 📜 Planned: Import options and advanced features
 - **API**: POST /api/generate {articleText, readingLevel?} → {story, metadata}; POST /api/stories/save; GET /api/stories
 - **Next**: Enhanced user experience, analytics, performance optimization
 
