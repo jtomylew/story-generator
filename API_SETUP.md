@@ -2,7 +2,7 @@
 
 ## Environment Configuration
 
-To use the `/api/generate-story` endpoint, you need to configure your OpenAI API key:
+To use the `/api/generate` endpoint, you need to configure your OpenAI API key:
 
 1. Create a `.env.local` file in your project root
 2. Add your OpenAI API key:

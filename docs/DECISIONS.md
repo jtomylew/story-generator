@@ -168,7 +168,7 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
   - Added `server-only` package dependency
 - **Rationale**: Fail fast on missing vars; simplify onboarding; improve security
 - **Learning outcome**: Successfully implemented type-safe environment variable access with clear error messages
-- **Files**: `.env.example`, `lib/env.ts`, updated `app/api/generate-story/route.js`
+- **Files**: `.env.example`, `lib/env.ts`, updated `app/api/generate/route.ts`
 
 ### ADR-008: API Request/Response Validation ✅
 
@@ -189,7 +189,7 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
   - All responses now use `NextResponse.json()` for consistency
 - **Rationale**: Beginner-proof inputs; consistent error shapes; safer refactors
 - **Learning outcome**: Successfully implemented comprehensive API validation with clear error messages
-- **Files**: `lib/schema.ts`, updated `app/api/generate-story/route.js`, updated `app/page.js`
+- **Files**: `lib/schema.ts`, updated `app/api/generate/route.ts`, updated `app/page.tsx`
 
 ### ADR-009: Type-Safe Architecture with Request State Management ✅
 
