@@ -4,7 +4,6 @@ import {
   type ArticleInput,
   type ArticleCategory,
 } from "@/lib/feeds";
-import { getDb } from "@/lib/db";
 
 // Valid categories from our enum
 const VALID_CATEGORIES: ArticleCategory[] = [
