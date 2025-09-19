@@ -1,6 +1,7 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import { Page, SectionHeader, Card, EmptyState } from "@/components";
-import { getDb } from "@/lib/db";
-import { getOrCreateDeviceId } from "@/lib/device";
 
 interface Story {
   id: string;
@@ -8,32 +9,6 @@ interface Story {
   readingLevel: string;
   createdAt: string;
   snippet: string;
-}
-
-async function getStories(): Promise<Story[]> {
-  const deviceId = await getOrCreateDeviceId();
-  const supabase = getDb();
-
-  const { data, error } = await supabase
-    .from("stories")
-    .select("id, article_hash, reading_level, created_at, story")
-    .eq("device_id", deviceId)
-    .order("created_at", { ascending: false })
-    .limit(10);
-
-  if (error) {
-    console.error("Database error:", error);
-    return [];
-  }
-
-  return data.map((story) => ({
-    id: story.id,
-    articleHash: story.article_hash,
-    readingLevel: story.reading_level,
-    createdAt: story.created_at,
-    snippet:
-      story.story.substring(0, 160) + (story.story.length > 160 ? "..." : ""),
-  }));
 }
 
 function formatDate(dateString: string): string {
@@ -55,8 +30,43 @@ function formatReadingLevel(level: string): string {
   return levels[level as keyof typeof levels] || level;
 }
 
-export default async function StoriesPage() {
-  const stories = await getStories();
+export default function StoriesPage() {
+  const [stories, setStories] = useState<Story[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchStories = async () => {
+      try {
+        const response = await fetch("/api/stories");
+        if (response.ok) {
+          const data = await response.json();
+          setStories(data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch stories:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchStories();
+  }, []);
+
+  if (isLoading) {
+    return (
+      <Page>
+        <SectionHeader
+          title="Your Saved Stories"
+          description="Browse through your previously generated stories"
+        />
+        <EmptyState
+          icon="⏳"
+          title="Loading stories..."
+          description="Please wait while we fetch your saved stories"
+        />
+      </Page>
+    );
+  }
 
   return (
     <Page>

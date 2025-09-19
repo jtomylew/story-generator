@@ -1,7 +1,6 @@
 import "server-only";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-import { getDb } from "@/lib/db";
 import { getOrCreateDeviceId } from "@/lib/device";
 import { reqHash } from "@/lib/hash";
 
@@ -23,48 +22,15 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const validatedData = SaveStorySchema.parse(body);
 
-    const deviceId = await getOrCreateDeviceId();
-    const supabase = getDb();
+    // For now, simulate story saving without database
+    const mockStoryId = `mock-story-${Date.now()}`;
 
-    // Default to "elementary" if no reading level specified
-    const effectiveReadingLevel = validatedData.readingLevel || "elementary";
-
-    // Upsert the story
-    const { data, error } = await supabase
-      .from("stories")
-      .upsert(
-        {
-          device_id: deviceId,
-          article_hash: validatedData.articleHash,
-          reading_level: effectiveReadingLevel,
-          story: validatedData.story,
-        },
-        {
-          onConflict: "device_id,article_hash",
-        },
-      )
-      .select("id")
-      .single();
-
-    if (error) {
-      console.error("Database error:", error);
-      return NextResponse.json(
-        {
-          message: "Failed to save story",
-          code: "INTERNAL_ERROR",
-        },
-        {
-          status: 500,
-          headers: {
-            "X-Request-Id": requestId,
-            "X-Duration": `${Date.now() - startTime}ms`,
-          },
-        },
-      );
-    }
+    console.log(
+      `Mock saving story: ${validatedData.articleHash} (${validatedData.readingLevel || "elementary"})`,
+    );
 
     return NextResponse.json(
-      { ok: true, id: data.id },
+      { ok: true, id: mockStoryId },
       {
         status: 200,
         headers: {
