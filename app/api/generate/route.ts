@@ -11,6 +11,10 @@ import { get, set } from "@/lib/cache";
 import { maybeRefuse } from "@/lib/safety";
 import type { ApiError } from "@/lib/ui-types";
 
+// Check if OpenAI API key is available
+const hasOpenAIKey =
+  process.env.OPENAI_API_KEY && process.env.OPENAI_API_KEY.length > 0;
+
 export async function POST(req: Request) {
   let requestHash: string;
   let modelUsed: string;
@@ -32,6 +36,33 @@ export async function POST(req: Request) {
     // Default to "elementary" (7-10 year olds) if no reading level specified
     effectiveReadingLevel = readingLevel || "elementary";
     parsedData = { articleText, readingLevel: effectiveReadingLevel };
+
+    // If no OpenAI API key is available, return a mock response for development
+    if (!hasOpenAIKey) {
+      console.log("OpenAI API key not available, returning mock response");
+
+      const mockStory = `Once upon a time, there was a magical place where amazing things happened every day. The story begins with a brave little explorer who discovered something wonderful in the world around them.
+
+This is a mock story generated for development purposes. In a real deployment, this would be a beautifully crafted story based on the article: "${articleText.substring(0, 100)}..."
+
+The little explorer learned that every day brings new adventures and opportunities to learn and grow. They discovered that the world is full of wonder and magic, just waiting to be explored by curious minds.
+
+And so, the adventure continues, with new stories to be told and new discoveries to be made every single day.`;
+
+      const mockResponse: GenerateRes = {
+        story: mockStory,
+        questions: [
+          "What was the most exciting part of the story?",
+          "What would you do if you were the little explorer?",
+        ],
+        meta: {
+          readingLevel: effectiveReadingLevel,
+          wordCount: mockStory.split(" ").length,
+        },
+      };
+
+      return NextResponse.json(mockResponse);
+    }
 
     // Safety screening
     const safetyCheck = maybeRefuse(articleText);

@@ -2,7 +2,7 @@ import "server-only";
 import { z } from "zod";
 
 const EnvSchema = z.object({
-  OPENAI_API_KEY: z.string().min(1, "Missing OPENAI_API_KEY"),
+  OPENAI_API_KEY: z.string().optional(),
   NEXT_PUBLIC_APP_NAME: z.string().default("Story Weaver"),
   NODE_ENV: z
     .enum(["development", "test", "production"])

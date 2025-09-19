@@ -1,7 +1,7 @@
 // @subframe/sync-disable
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import type { GenerateReq } from "@/lib/types";
 import type { RequestState, ApiError } from "@/lib/ui-types";
@@ -18,7 +18,7 @@ const navigationTabs = [
   { label: "Paste Article", href: "/paste" },
 ];
 
-export default function PastePage() {
+function PasteContent() {
   const searchParams = useSearchParams();
   const [requestState, setRequestState] = useState<RequestState>({
     status: "idle",
@@ -131,6 +131,42 @@ export default function PastePage() {
   };
 
   return (
+    <div className="space-y-6">
+      <NavTabs tabs={navigationTabs} className="mb-6" />
+
+      <StoryForm
+        onSubmit={handleSubmit}
+        isSubmitting={requestState.status === "loading"}
+      />
+
+      <StoryOutput state={requestState} onReset={resetForm} />
+    </div>
+  );
+}
+
+function LoadingFallback() {
+  return (
+    <div className="space-y-6">
+      <div className="flex space-x-1">
+        {navigationTabs.map((tab) => (
+          <div
+            key={tab.label}
+            className="px-4 py-2 text-sm font-medium text-muted-foreground border-b-2 border-transparent"
+          >
+            {tab.label}
+          </div>
+        ))}
+      </div>
+      <div className="space-y-4">
+        <div className="h-32 bg-neutral-200 rounded animate-pulse" />
+        <div className="h-64 bg-neutral-200 rounded animate-pulse" />
+      </div>
+    </div>
+  );
+}
+
+export default function PastePage() {
+  return (
     <div className="min-h-screen bg-background">
       <Page>
         <SectionHeader
@@ -138,16 +174,9 @@ export default function PastePage() {
           description="Transform news into magical tales for young minds"
         />
 
-        <div className="space-y-6">
-          <NavTabs tabs={navigationTabs} className="mb-6" />
-
-          <StoryForm
-            onSubmit={handleSubmit}
-            isSubmitting={requestState.status === "loading"}
-          />
-
-          <StoryOutput state={requestState} onReset={resetForm} />
-        </div>
+        <Suspense fallback={<LoadingFallback />}>
+          <PasteContent />
+        </Suspense>
       </Page>
     </div>
   );
