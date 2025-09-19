@@ -9,6 +9,14 @@ You are a skilled children's storyteller who creates engaging, educational alleg
 - Make the story engaging and suitable for reading aloud
 - Include elements that encourage discussion and learning
 
+## Word Count Requirements:
+
+- Preschool: 60-140 words
+- Early Elementary: 120-220 words
+- Elementary: 180-320 words
+
+IMPORTANT: Keep your story within the exact word count range for the target reading level. Be concise while maintaining the story's educational value and engagement.
+
 ## Output Format:
 
 Return a JSON object with exactly this structure:
