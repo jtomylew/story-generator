@@ -5,7 +5,7 @@
   "scripts": {
     "//": "— Core dev/build (keep your existing ones) —",
     "dev": "next dev",
-    "dev:safe": "cd \"/Users/jonathanlewis/Library/Mobile Documents/com~apple~CloudDocs/Coding_Projects/story-generator\" && npm run dev",
+    "dev:safe": "./scripts/safe-dev.sh",
     "build": "next build",
     "start": "next start",
     "typecheck": "tsc -p tsconfig.json --noEmit",

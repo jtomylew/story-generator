@@ -38,6 +38,9 @@ Transform news articles into engaging, age-appropriate stories for children:
   - Elementary: 300-800 words (4-5 minutes)
 - **Discussion questions**: Each story includes 2 thoughtful questions for learning
 - **One-click generation**: Simply click "Generate Story" on any news article
+- **Full card interaction**: Click or tap anywhere on the article card to generate a story
+- **Enhanced hover effects**: Desktop users get visual feedback with card lift, shadow, and color changes
+- **Mobile-friendly**: Tap anywhere on the card surface for easy story generation
 - **Smart UI**: When viewing a generated story, the paste form is hidden to focus on the story
 
 ### Category Filtering

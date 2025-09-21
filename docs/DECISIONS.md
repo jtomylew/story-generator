@@ -705,6 +705,54 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 - **Learning outcome**: Successfully identified and resolved a recurring infrastructure issue that was blocking productive development sessions.
 - **Files**: `docs/DIRECTORY_ISSUE_SOLUTION.md`, `package.json`, `scripts/start-dev.sh`, `docs/AI_UI_Guide.md`, `README.md`
 
+### ADR-033: Foolproof Directory Navigation with Bash Pattern ✅
+
+**Week 2, Day 9**
+
+- **Decision**: Implement foolproof bash command pattern to completely eliminate directory navigation issues.
+- **Previous limitation**: Even with safe scripts, npm commands still failed due to shell session context loss.
+- **Implementation**:
+  - **Bash Pattern**: Established `bash -c "cd '/full/path' && [command]"` pattern for all npm/git commands
+  - **Directory Verification Scripts**: Created `scripts/verify-directory.sh` and `scripts/safe-dev.sh` with comprehensive error handling
+  - **Updated Package Scripts**: Modified `dev:safe` to use robust shell script
+  - **Documentation Updates**: Enhanced `docs/DIRECTORY_ISSUE_SOLUTION.md` with bash pattern as recommended approach
+  - **Process Management**: Added automatic cleanup of existing dev servers before starting new ones
+- **Bash Pattern Benefits**:
+  - **Isolated Context**: Each command runs in fresh bash context with guaranteed directory
+  - **No Session Loss**: Eliminates shell session state issues completely
+  - **Path Safety**: Handles spaces in project path correctly
+  - **Universal**: Works for npm, git, and any other commands
+- **Rationale**: The bash pattern provides complete isolation from shell session issues and guarantees correct directory context for every command.
+- **Learning outcome**: Successfully eliminated all directory navigation issues with a simple, reliable pattern that works consistently.
+- **Files**: `scripts/safe-dev.sh`, `scripts/verify-directory.sh`, `package.json`, `docs/DIRECTORY_ISSUE_SOLUTION.md`
+
+### ADR-034: Full Card Interaction with Enhanced Hover Effects ✅
+
+**Week 2, Day 9**
+
+- **Decision**: Make entire ArticleCard clickable with comprehensive hover interactions and improved mobile experience.
+- **Previous limitation**: Users had to click on small button area instead of entire card, creating poor UX especially on mobile.
+- **Implementation**:
+  - **Full Card Clickability**: Added `onClick` handler to Card root element with proper event handling
+  - **Enhanced Hover Effects**: Implemented comprehensive hover interactions (card lift, shadow, border, title color change)
+  - **Accessibility**: Added ARIA labels, keyboard navigation (Enter/Space), and focus management
+  - **Mobile Optimization**: Added active scale feedback and full card tap area
+  - **Smart Event Handling**: Prevented double-triggering with `e.stopPropagation()` on button clicks
+  - **Visual Feedback**: Enhanced button shadow when parent card is hovered
+- **Hover Effects**:
+  - **Card lift**: `hover:-translate-y-1` (4px upward movement)
+  - **Enhanced shadow**: `hover:shadow-lg` (stronger shadow)
+  - **Brand border**: `hover:border-brand-200` (subtle brand-colored border)
+  - **Title color**: `group-hover:text-brand-600` (title becomes brand color)
+  - **Button enhancement**: `group-hover:shadow-md` (additional button shadow)
+- **Mobile Experience**:
+  - **Full tap area**: Users can tap anywhere on card surface
+  - **Active feedback**: `active:scale-[0.98]` for immediate tactile response
+  - **Touch optimization**: `active:transition-none` for instant feedback
+- **Rationale**: Full card interaction provides intuitive UX that users expect, while enhanced hover effects give clear visual feedback that the entire card is interactive.
+- **Learning outcome**: Successfully implemented comprehensive card interaction that works seamlessly across desktop and mobile with proper accessibility support.
+- **Files**: `components/patterns/ArticleCard.tsx`, `README.md`, `docs/DECISIONS.md`
+
 ---
 
 ## Current Status & Technical Debt
@@ -1020,6 +1068,8 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 
 ## Changelog (append-only)
 
+- **Week 2, Day 9**: Completed ADR-034 - enhanced ArticleCard component with full card clickability and comprehensive hover interactions; implemented entire card as clickable area with proper accessibility (ARIA labels, keyboard navigation, focus management); added enhanced hover effects (card lift, shadow, border, title color change); improved mobile experience with full card tap area and active scale feedback; prevented double-triggering with smart event handling; all cards now provide intuitive interaction across entire surface ✅
+- **Week 2, Day 9**: Completed ADR-033 - resolved recurring directory navigation issues by implementing foolproof bash command pattern; created comprehensive directory verification scripts; updated documentation with robust prevention strategies; established bash -c pattern for all npm/git commands to prevent shell session context loss; created safe-dev.sh and verify-directory.sh scripts; all directory issues now prevented with reliable command execution ✅
 - **Week 2, Day 9**: Completed ADR-029 - removed reading level selection UI and set all stories to target elementary level (7-10 year olds) by default; simplified user experience by eliminating decision fatigue while maintaining consistent age-appropriate output; preserved all infrastructure for easy future restoration; API maintains backward compatibility ✅
 - **Week 2, Day 8**: Completed ADR-027 - fixed environment variable naming mismatch between Supabase integration and application code, made Supabase variables optional for build time while maintaining runtime validation, resolved all Vercel deployment failures; all deployments now successful ✅
 - **Week 2, Day 8**: Completed ADR-026 - resolved deployment failures by setting up Supabase project with Vercel integration, configured environment variables, created database schema with proper RLS policies, and fixed preflight script to handle expected Storybook compatibility issues gracefully; all deployments now successful with full story persistence functionality ✅

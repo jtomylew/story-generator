@@ -339,7 +339,24 @@ bash -c "cd '/Users/jonathanlewis/Library/Mobile Documents/com~apple~CloudDocs/C
 3. Kill existing processes before starting new ones: `pkill -f "next dev"`
 4. Add error handling for directory operations: `cd "$PROJECT_ROOT" || { echo "Failed to change directory"; exit 1; }`
 
-**For AI Tools**: Always start commands with directory verification and use absolute paths to prevent this recurring issue.
+**For AI Tools**: Always use the foolproof bash pattern to prevent this recurring issue:
+
+```bash
+# ✅ RECOMMENDED: Always use this pattern for any npm/git commands
+bash -c "cd '/Users/jonathanlewis/Library/Mobile Documents/com~apple~CloudDocs/Coding_Projects/story-generator' && [COMMAND]"
+
+# Examples:
+bash -c "cd '/Users/jonathanlewis/Library/Mobile Documents/com~apple~CloudDocs/Coding_Projects/story-generator' && npm run dev"
+bash -c "cd '/Users/jonathanlewis/Library/Mobile Documents/com~apple~CloudDocs/Coding_Projects/story-generator' && git status"
+bash -c "cd '/Users/jonathanlewis/Library/Mobile Documents/com~apple~CloudDocs/Coding_Projects/story-generator' && npm run build"
+```
+
+This pattern ensures:
+
+- ✅ Always in correct directory
+- ✅ No shell session context loss
+- ✅ Handles spaces in path correctly
+- ✅ Works for npm, git, and any other commands
 
 ---
 

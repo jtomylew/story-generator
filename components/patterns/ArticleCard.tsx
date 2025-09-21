@@ -61,11 +61,25 @@ export function ArticleCard({
   isGenerating = false,
 }: ArticleCardProps) {
   const handleGenerateStory = () => {
-    onGenerateStory(article);
+    if (!isGenerating) {
+      onGenerateStory(article);
+    }
   };
 
   return (
-    <Card className="group transition-all duration-[var(--motion-medium)] ease-[var(--ease-standard)] hover:shadow-md hover:-translate-y-1">
+    <Card
+      className="group cursor-pointer transition-all duration-[var(--motion-medium)] ease-[var(--ease-standard)] hover:shadow-lg hover:-translate-y-1 hover:border-brand-200 active:scale-[0.98] active:transition-none"
+      onClick={handleGenerateStory}
+      role="button"
+      tabIndex={0}
+      aria-label={`Generate story from article: ${article.title}`}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          handleGenerateStory();
+        }
+      }}
+    >
       <Card.Header>
         <div className="flex items-start justify-between gap-3">
           <div className="flex-1 min-w-0">
@@ -91,12 +105,15 @@ export function ArticleCard({
       <Card.Content>
         <div className="flex justify-center">
           <Button
-            onClick={handleGenerateStory}
+            onClick={(e) => {
+              e.stopPropagation(); // Prevent double-triggering
+              handleGenerateStory();
+            }}
             disabled={isGenerating}
             variant="brand-primary"
             size="medium"
             loading={isGenerating}
-            className="min-w-[140px] transition-all duration-[var(--motion-fast)] ease-[var(--ease-standard)] hover:scale-105"
+            className="min-w-[140px] transition-all duration-[var(--motion-fast)] ease-[var(--ease-standard)] hover:scale-105 group-hover:shadow-md"
           >
             {isGenerating ? "Weaving..." : "Generate Story"}
           </Button>

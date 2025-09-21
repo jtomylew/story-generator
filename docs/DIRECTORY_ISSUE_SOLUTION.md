@@ -94,6 +94,19 @@ npm run dev
 
 ## Best Practices for AI Tools
 
+### Always Use Bash with Absolute Paths (RECOMMENDED)
+
+```bash
+# ✅ CORRECT: Always use bash with absolute path
+bash -c "cd '/Users/jonathanlewis/Library/Mobile Documents/com~apple~CloudDocs/Coding_Projects/story-generator' && npm run dev"
+
+# ✅ CORRECT: For any npm command
+bash -c "cd '/Users/jonathanlewis/Library/Mobile Documents/com~apple~CloudDocs/Coding_Projects/story-generator' && npm run build"
+
+# ✅ CORRECT: For git commands
+bash -c "cd '/Users/jonathanlewis/Library/Mobile Documents/com~apple~CloudDocs/Coding_Projects/story-generator' && git status"
+```
+
 ### Always Verify Directory
 
 ```bash
@@ -102,7 +115,7 @@ pwd
 ls -la package.json
 ```
 
-### Use Absolute Paths
+### Use Absolute Paths (Alternative)
 
 ```bash
 # Instead of: npm run dev
