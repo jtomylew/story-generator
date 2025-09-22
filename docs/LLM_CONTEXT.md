@@ -1,9 +1,10 @@
 ---
 ⚠️ **Assistant Instruction**  
 When preparing Cursor prompts based on this document:  
-- Default to **Minimal level** (intent + guardrails + doc update + verify).  
-- Use **Standard or Detailed** only if explicitly requested or if the chunk introduces brand-new patterns, libraries, or safety-critical logic.  
-- Do **not** include line-by-line code unless explicitly asked. Cursor should infer implementation from ADRs, this guide, and existing codebase patterns.
+- Default to **Minimal Plus level** (intent + critical requirements + guardrails + verify).  
+- Include business rules that can't be inferred from code (thresholds, limits, algorithms).
+- Use **Standard or Detailed** only if explicitly requested or introducing new patterns/libraries.
+- Do **not** include implementation details Cursor can infer from existing patterns.
 ---
 
 Allegorical News → Kids' 5-Minute Stories
@@ -526,23 +527,25 @@ Implement Chunk X – [short description] from docs/DECISIONS.md Feature Roadmap
 
 ## Cursor Prompt Guidelines (Summary)
 
-- **Minimal is default:** intent + guardrails + doc update note + simple verify.
-- **Standard:** add explicit constraints and file references if necessary.
-- **Detailed:** only when introducing brand-new patterns, libraries, or complex logic.
+- **Minimal Plus is default:** intent + critical business requirements + essential guardrails + verify
+- **What to include:** Non-inferrable rules (limits, algorithms, business logic)
+- **What to exclude:** Implementation details Cursor can infer from existing code
+- **Standard/Detailed:** Only for new patterns, libraries, or safety-critical features
 
-Minimal prompt skeleton:
+**Minimal Plus prompt template:**
 Implement [Chunk Name] from docs/DECISIONS.md.
-
 Create [file path]:
-• [what it does]
-• [key guardrails]
-Return: [expected output]
 
+[Core function/API + return types]
+Business rules: [specific requirements like limits, thresholds]
+[Integration points or code to extract/modify]
+Guardrails: [no new deps, type safety, other constraints]
+
+Update [other files affected].
 Update docs/DECISIONS.md: Mark [Chunk] ✅
-Verify: [quick check]
+Verify: [typecheck + functional test]
 
-Cursor should infer validation, error handling, and async patterns from ADRs and `AI_UI_Guide.md`.  
-See **AI_UI_Guide.md → AI Assistant Prompting Style & Cursor Prompt Guidelines** for the full ladder.
+**Key principle:** Provide what Cursor cannot infer (business logic, external requirements) while trusting it to follow established patterns for everything else.
 
 # LLM Test Instruction Style Guide
 

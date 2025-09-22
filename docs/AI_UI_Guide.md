@@ -7,11 +7,11 @@ It summarizes the design system contract from `/docs/LLM_CONTEXT.md` and ADR-014
 ---
 
 ⚠️ **Assistant Instruction**  
-When preparing Cursor prompts based on this document:
-
-- Default to **Minimal level** (intent + guardrails + doc update + verify).
-- Use **Standard or Detailed** only if explicitly requested or if the chunk introduces brand-new patterns, libraries, or safety-critical logic.
-- Do **not** include line-by-line code unless explicitly asked. Cursor should infer implementation from ADRs, this guide, and existing codebase patterns.
+When preparing Cursor prompts based on this document:  
+- Default to **Minimal Plus level** (intent + critical requirements + guardrails + verify).  
+- Include business rules that can't be inferred from code (thresholds, limits, algorithms).
+- Use **Standard or Detailed** only if explicitly requested or introducing new patterns/libraries.
+- Do **not** include implementation details Cursor can infer from existing patterns.
 
 ---
 
@@ -29,49 +29,44 @@ When generating Cursor prompts, follow these principles:
 
 ### Prompt Detail Levels
 
-- **Minimal (preferred / default)**
-  - State **WHAT** to build, not **HOW**
-  - Requirements as bullet points
-  - Reference existing patterns in the repo
-  - ~5–10 lines total
-  - Let Cursor infer implementation from ADRs and guides
+- **Minimal (avoid - often too vague)**
+  - State WHAT to build without critical requirements
+  - Missing business rules that can't be inferred
+  - ~3-5 lines total
+  - Risk: May require multiple iterations
 
-- **Standard**
-  - Add key technical requirements
-  - Specify important constraints (e.g., "server-only", "max 2 per source")
-  - Reference specific files/functions if needed
-  - ~10–15 lines total
-  - Include a verification step
+- **Minimal Plus (preferred default) ✅**
+  - State WHAT to build + critical business requirements
+  - Include non-inferrable rules (limits, thresholds, algorithms)
+  - Reference existing patterns/files to modify
+  - Essential guardrails only (no new deps, type safety)
+  - ~6-10 lines total
+  - Let Cursor infer implementation from codebase patterns
 
-- **Detailed (only for new patterns)**
-  - Include type definitions or code structure
-  - Explain complex algorithms or workflows
+- **Standard (when introducing new patterns)**
+  - Add technical architecture decisions
+  - Specify integration points and data flow
+  - ~10-20 lines total
+  - Use for: new libraries, new architectural patterns, breaking changes
+
+- **Detailed (rare - only for critical/novel work)**
+  - Include type definitions or algorithmic steps
+  - Explain complex business logic
   - ~20+ lines
-  - Use only when introducing new libraries, security/safety-sensitive code, or novel patterns
+  - Use only for: security-critical, safety-sensitive, or completely novel features
 
-### Example Minimal Prompt
+### Example Minimal Plus Prompt
+Implement [Feature] from docs/DECISIONS.md.
+Create [file]:
 
-Implement [Chunk Name] from docs/DECISIONS.md.
+[main function signature + return type]
+Business rules: [specific non-inferrable requirements]
+[where to extract/integrate existing code]
+Guardrails: [essential constraints only]
 
-Create [file path]:
-• [core functionality]
-• [key guardrails]
-Return: [expected output]
-
+Update [integration points].
 Update docs/DECISIONS.md: Mark [Chunk] ✅
-Verify: [simple test command or curl]
-**When to add detail:**
-
-- New patterns not yet in the repo
-- Security/safety-critical features
-- Complex algorithms needing clear guidance
-
-**When to stay minimal:**
-
-- CRUD operations
-- Standard API endpoints
-- UI components following existing patterns
-- Features using established libraries
+Verify: [simple test]
 
 ---
 

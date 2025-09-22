@@ -1,9 +1,10 @@
 ---
 ⚠️ **Assistant Instruction**  
 When preparing Cursor prompts based on this document:  
-- Default to **Minimal level** (intent + guardrails + doc update + verify).  
-- Use **Standard or Detailed** only if explicitly requested or if the chunk introduces brand-new patterns, libraries, or safety-critical logic.  
-- Do **not** include line-by-line code unless explicitly asked. Cursor should infer implementation from ADRs, this guide, and existing codebase patterns.
+- Default to **Minimal Plus level** (intent + critical requirements + guardrails + verify).  
+- Include business rules that can't be inferred from code (thresholds, limits, algorithms).
+- Use **Standard or Detailed** only if explicitly requested or introducing new patterns/libraries.
+- Do **not** include implementation details Cursor can infer from existing patterns.
 ---
 
 A lightweight running log of technical decisions, tradeoffs, and status snapshots for the **Allegorical News → Kids' 5-Minute Stories** app.
