@@ -996,12 +996,14 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 - Age-appropriate scoring
 - **Completed**: Extended `lib/safety.ts` with `feedContentFilter()` and `filterUnsafe()` functions implementing sophisticated content filtering. Business rules: allow war/conflict topics (tagged as hard news), block domestic/sexual violence, severity scoring for death/attack keywords. Age scoring 0-100 with proper categorization. Wired into `app/api/feed/route.ts` BEFORE diversity algorithm with safety metadata in response.
 
-**Chunk 13: User History Tracking**
+**Chunk 13: User History Tracking** ✅
 
-- Add converted_articles table (device_id, article_id, converted_at)
-- Track which articles have been used
-- Filter from feed display
-- Add "Already converted" indicator
+- Create database migration: converted_articles table (device_id, article_hash, story_id, converted_at)
+- Update lib/db.ts: markArticleConverted(), getConvertedHashes(), hashArticle() functions
+- Wire into story generation: mark articles as converted on successful generation
+- Update app/api/feed/route.ts: filter converted articles with ?exclude_converted param
+- Update ArticleCard.tsx: show "Already converted" badge and disable button
+- **Completed**: Implemented comprehensive user history tracking system. Database migration created with proper indexes and RLS policies. Conversion tracking functions added to lib/db.ts with SHA-256 hashing. Wired into story generation API to mark articles as converted on success. Feed API filters converted articles by default with metadata tracking. ArticleCard shows converted status with disabled state and visual indicators.
 
 ### Import Options
 

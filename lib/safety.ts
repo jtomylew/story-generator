@@ -188,7 +188,7 @@ export interface FeedFilterResult<T extends ArticleInput = ArticleInput> {
 
 /**
  * Filter content for feed articles with age-appropriate scoring
- * 
+ *
  * Business rules:
  * - Allow: war/conflict topics (tag as 'hard_news', educational value)
  * - Block: domestic/sexual violence (no allegorical value)
@@ -250,7 +250,9 @@ export function feedContentFilter(article: ArticleInput): FeedSafetyResult {
     );
 
     if (hasSafeContext) {
-      reasons.push(`Contains sensitive topics in news context: ${foundUnsafe.join(", ")}`);
+      reasons.push(
+        `Contains sensitive topics in news context: ${foundUnsafe.join(", ")}`,
+      );
       ageScore += foundUnsafe.length * 10; // 10 points per unsafe keyword
       if (severity === "low") severity = "medium";
     } else {
@@ -278,19 +280,23 @@ export function feedContentFilter(article: ArticleInput): FeedSafetyResult {
 /**
  * Filter unsafe articles from a list, returning safe articles with metadata
  */
-export function filterUnsafe<T extends ArticleInput>(articles: T[]): FeedFilterResult<T> {
+export function filterUnsafe<T extends ArticleInput>(
+  articles: T[],
+): FeedFilterResult<T> {
   const safeArticles: T[] = [];
   let filteredCount = 0;
 
   for (const article of articles) {
     const safetyResult = feedContentFilter(article);
-    
+
     if (safetyResult.safe) {
       safeArticles.push(article);
     } else {
       filteredCount++;
       // Log filtered articles for monitoring (in production, this could go to analytics)
-      console.log(`Filtered article: ${article.title} - Reasons: ${safetyResult.reasons.join(", ")}`);
+      console.log(
+        `Filtered article: ${article.title} - Reasons: ${safetyResult.reasons.join(", ")}`,
+      );
     }
   }
 

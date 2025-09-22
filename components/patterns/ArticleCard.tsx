@@ -8,6 +8,7 @@ interface ArticleCardProps {
   article: ArticleInput;
   onGenerateStory: (article: ArticleInput) => void;
   isGenerating?: boolean;
+  converted?: boolean;
 }
 
 // Helper function to format relative time
@@ -59,16 +60,21 @@ export function ArticleCard({
   article,
   onGenerateStory,
   isGenerating = false,
+  converted = false,
 }: ArticleCardProps) {
   const handleGenerateStory = () => {
-    if (!isGenerating) {
+    if (!isGenerating && !converted) {
       onGenerateStory(article);
     }
   };
 
   return (
     <Card
-      className="group cursor-pointer transition-all duration-[var(--motion-medium)] ease-[var(--ease-standard)] hover:shadow-lg hover:-translate-y-1 hover:border-brand-200 active:scale-[0.98] active:transition-none"
+      className={`group transition-all duration-[var(--motion-medium)] ease-[var(--ease-standard)] ${
+        converted 
+          ? "cursor-default opacity-75" 
+          : "cursor-pointer hover:shadow-lg hover:-translate-y-1 hover:border-brand-200 active:scale-[0.98] active:transition-none"
+      }`}
       onClick={handleGenerateStory}
       role="button"
       tabIndex={0}
@@ -96,9 +102,16 @@ export function ArticleCard({
               </span>
             </div>
           </div>
-          <Badge variant={getCategoryVariant(article.category)}>
-            {capitalizeCategory(article.category)}
-          </Badge>
+          <div className="flex flex-col gap-1">
+            <Badge variant={getCategoryVariant(article.category)}>
+              {capitalizeCategory(article.category)}
+            </Badge>
+            {converted && (
+              <Badge variant="success" className="text-xs">
+                Already converted
+              </Badge>
+            )}
+          </div>
         </div>
       </Card.Header>
 
@@ -109,13 +122,13 @@ export function ArticleCard({
               e.stopPropagation(); // Prevent double-triggering
               handleGenerateStory();
             }}
-            disabled={isGenerating}
-            variant="brand-primary"
+            disabled={isGenerating || converted}
+            variant={converted ? "neutral-secondary" : "brand-primary"}
             size="medium"
             loading={isGenerating}
             className="min-w-[140px] transition-all duration-[var(--motion-fast)] ease-[var(--ease-standard)] hover:scale-105 group-hover:shadow-md"
           >
-            {isGenerating ? "Weaving..." : "Generate Story"}
+            {isGenerating ? "Weaving..." : converted ? "Already Converted" : "Generate Story"}
           </Button>
         </div>
       </Card.Content>

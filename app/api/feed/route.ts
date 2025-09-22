@@ -6,6 +6,8 @@ import {
 } from "@/lib/feeds";
 import { diversify } from "@/lib/diversity";
 import { filterUnsafe } from "@/lib/safety";
+import { getConvertedHashes, hashArticle } from "@/lib/db";
+import { getDeviceId } from "@/lib/device";
 
 // Valid categories from our enum
 const VALID_CATEGORIES: ArticleCategory[] = [
@@ -28,6 +30,7 @@ interface FeedResponse {
     diversity_applied: boolean;
     safety_applied: boolean;
     safety_filtered: number;
+    converted_filtered: number;
     lastUpdated: string;
   };
 }
@@ -91,6 +94,7 @@ export async function GET(request: NextRequest) {
     let diversityApplied = false;
     let safetyApplied = false;
     let safetyFiltered = 0;
+    let convertedFiltered = 0;
 
     // Generate mock articles based on categories
     const mockArticles: (ArticleInput & { id: string })[] = [
@@ -206,13 +210,36 @@ export async function GET(request: NextRequest) {
       freshnessDecayHours: 48,
       categoryRotation: true,
     });
-    
+
     articles = diversityResult.articles;
     diversityApplied = diversityResult.diversityApplied;
-    
+
     // Update applied categories from diversity result
     if (diversityResult.appliedCategories.length > 0) {
       appliedCategories = diversityResult.appliedCategories;
+    }
+
+    // Filter converted articles (if exclude_converted is true, which is default)
+    const excludeConverted = searchParams.get("exclude_converted") !== "false";
+    if (excludeConverted) {
+      try {
+        const deviceId = await getDeviceId();
+        if (deviceId) {
+          const convertedHashes = await getConvertedHashes(deviceId);
+          const originalCount = articles.length;
+          
+          articles = articles.filter((article) => {
+            const articleHash = hashArticle(article);
+            return !convertedHashes.has(articleHash);
+          });
+          
+          convertedFiltered = originalCount - articles.length;
+          console.log(`Filtered ${convertedFiltered} converted articles for device ${deviceId}`);
+        }
+      } catch (conversionError) {
+        console.warn("Failed to filter converted articles:", conversionError);
+        // Don't fail the request if conversion filtering fails
+      }
     }
 
     // Limit to requested amount
@@ -242,6 +269,7 @@ export async function GET(request: NextRequest) {
         diversity_applied: diversityApplied,
         safety_applied: safetyApplied,
         safety_filtered: safetyFiltered,
+        converted_filtered: convertedFiltered,
         lastUpdated: lastUpdated,
       },
     } as FeedResponse);

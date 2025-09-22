@@ -9,6 +9,8 @@ import { postCheck } from "@/lib/postcheck";
 import { reqHash } from "@/lib/hash";
 import { get, set } from "@/lib/cache";
 import { maybeRefuse } from "@/lib/safety";
+import { markArticleConverted, hashArticle } from "@/lib/db";
+import { getDeviceId } from "@/lib/device";
 import type { ApiError } from "@/lib/ui-types";
 
 // Check if OpenAI API key is available
@@ -198,6 +200,30 @@ And so, the adventure continues, with new stories to be told and new discoveries
       console.warn("Failed to cache result:", cacheError);
     }
 
+    // Mark article as converted (don't fail if device ID is missing)
+    try {
+      const deviceId = await getDeviceId();
+      if (deviceId) {
+        // Create a mock article object for hashing
+        const mockArticle = {
+          url: "", // No URL for pasted text
+          title: `Pasted Article: ${parsedData.articleText.substring(0, 50)}...`,
+          content: parsedData.articleText,
+          source: "User Input",
+          category: "positive" as const,
+        };
+        
+        const articleHash = hashArticle(mockArticle);
+        const storyId = requestHash; // Use request hash as story identifier
+        
+        await markArticleConverted(deviceId, articleHash, storyId);
+        console.log(`Marked article as converted for device ${deviceId}`);
+      }
+    } catch (conversionError) {
+      console.warn("Failed to mark article as converted:", conversionError);
+      // Don't fail the request if conversion tracking fails
+    }
+
     // Return response with headers
     const response = NextResponse.json(responseWithMeta);
     response.headers.set("X-Cache", "MISS");
@@ -263,6 +289,30 @@ And so, the adventure continues, with new stories to be told and new discoveries
 
           postCheck(retryResponse, effectiveReadingLevel);
           set(requestHash, retryResponse);
+
+          // Mark article as converted (don't fail if device ID is missing)
+          try {
+            const deviceId = await getDeviceId();
+            if (deviceId) {
+              // Create a mock article object for hashing
+              const mockArticle = {
+                url: "", // No URL for pasted text
+                title: `Pasted Article: ${parsedData.articleText.substring(0, 50)}...`,
+                content: parsedData.articleText,
+                source: "User Input",
+                category: "positive" as const,
+              };
+              
+              const articleHash = hashArticle(mockArticle);
+              const storyId = requestHash; // Use request hash as story identifier
+              
+              await markArticleConverted(deviceId, articleHash, storyId);
+              console.log(`Marked article as converted for device ${deviceId} (retry)`);
+            }
+          } catch (conversionError) {
+            console.warn("Failed to mark article as converted (retry):", conversionError);
+            // Don't fail the request if conversion tracking fails
+          }
 
           const response = NextResponse.json(retryResponse);
           response.headers.set("X-Cache", "MISS");

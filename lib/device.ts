@@ -21,3 +21,8 @@ export async function getOrCreateDeviceId(): Promise<string> {
 
   return deviceId;
 }
+
+export async function getDeviceId(): Promise<string | null> {
+  const cookieStore = await cookies();
+  return cookieStore.get(DEVICE_ID_COOKIE)?.value || null;
+}
