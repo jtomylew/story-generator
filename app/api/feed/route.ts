@@ -4,6 +4,7 @@ import {
   type ArticleInput,
   type ArticleCategory,
 } from "@/lib/feeds";
+import { diversify } from "@/lib/diversity";
 
 // Valid categories from our enum
 const VALID_CATEGORIES: ArticleCategory[] = [
@@ -26,26 +27,6 @@ interface FeedResponse {
     diversity_applied: boolean;
     lastUpdated: string;
   };
-}
-
-/**
- * Apply diversity algorithm: max 2 articles per source
- */
-function applyDiversity(articles: ArticleInput[]): ArticleInput[] {
-  const sourceCounts: Record<string, number> = {};
-  const diverseArticles: ArticleInput[] = [];
-
-  for (const article of articles) {
-    const source = article.source;
-    const currentCount = sourceCounts[source] || 0;
-
-    if (currentCount < 2) {
-      sourceCounts[source] = currentCount + 1;
-      diverseArticles.push(article);
-    }
-  }
-
-  return diverseArticles;
 }
 
 /**
@@ -186,6 +167,21 @@ export async function GET(request: NextRequest) {
       );
     } else {
       articles = mockArticles;
+    }
+
+    // Apply diversity algorithm
+    const diversityResult = diversify(articles, {
+      maxPerSource: 2,
+      freshnessDecayHours: 48,
+      categoryRotation: true,
+    });
+
+    articles = diversityResult.articles;
+    diversityApplied = diversityResult.diversityApplied;
+
+    // Update applied categories from diversity result
+    if (diversityResult.appliedCategories.length > 0) {
+      appliedCategories = diversityResult.appliedCategories;
     }
 
     // Limit to requested amount

@@ -980,12 +980,13 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 
 ### Content Diversity & Safety
 
-**Chunk 11: Diversity Algorithm**
+**Chunk 11: Diversity Algorithm** ✅
 
 - Create `lib/diversity.ts`
 - Implement category rotation
 - Add source distribution rules
 - Freshness scoring (newer = higher)
+- **Completed**: Created `lib/diversity.ts` with `diversify()` function implementing category rotation, max 2/source limit, and 48h freshness decay scoring. Wired into `app/api/feed/route.ts` with proper integration.
 
 **Chunk 12: Content Filtering**
 

@@ -7,8 +7,9 @@ It summarizes the design system contract from `/docs/LLM_CONTEXT.md` and ADR-014
 ---
 
 ⚠️ **Assistant Instruction**  
-When preparing Cursor prompts based on this document:  
-- Default to **Minimal Plus level** (intent + critical requirements + guardrails + verify).  
+When preparing Cursor prompts based on this document:
+
+- Default to **Minimal Plus level** (intent + critical requirements + guardrails + verify).
 - Include business rules that can't be inferred from code (thresholds, limits, algorithms).
 - Use **Standard or Detailed** only if explicitly requested or introducing new patterns/libraries.
 - Do **not** include implementation details Cursor can infer from existing patterns.
@@ -56,6 +57,7 @@ When generating Cursor prompts, follow these principles:
   - Use only for: security-critical, safety-sensitive, or completely novel features
 
 ### Example Minimal Plus Prompt
+
 Implement [Feature] from docs/DECISIONS.md.
 Create [file]:
 
