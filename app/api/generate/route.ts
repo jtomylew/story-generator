@@ -212,10 +212,10 @@ And so, the adventure continues, with new stories to be told and new discoveries
           source: "User Input",
           category: "positive" as const,
         };
-        
+
         const articleHash = hashArticle(mockArticle);
         const storyId = requestHash; // Use request hash as story identifier
-        
+
         await markArticleConverted(deviceId, articleHash, storyId);
         console.log(`Marked article as converted for device ${deviceId}`);
       }
@@ -302,15 +302,20 @@ And so, the adventure continues, with new stories to be told and new discoveries
                 source: "User Input",
                 category: "positive" as const,
               };
-              
+
               const articleHash = hashArticle(mockArticle);
               const storyId = requestHash; // Use request hash as story identifier
-              
+
               await markArticleConverted(deviceId, articleHash, storyId);
-              console.log(`Marked article as converted for device ${deviceId} (retry)`);
+              console.log(
+                `Marked article as converted for device ${deviceId} (retry)`,
+              );
             }
           } catch (conversionError) {
-            console.warn("Failed to mark article as converted (retry):", conversionError);
+            console.warn(
+              "Failed to mark article as converted (retry):",
+              conversionError,
+            );
             // Don't fail the request if conversion tracking fails
           }
 

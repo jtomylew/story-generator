@@ -227,14 +227,16 @@ export async function GET(request: NextRequest) {
         if (deviceId) {
           const convertedHashes = await getConvertedHashes(deviceId);
           const originalCount = articles.length;
-          
+
           articles = articles.filter((article) => {
             const articleHash = hashArticle(article);
             return !convertedHashes.has(articleHash);
           });
-          
+
           convertedFiltered = originalCount - articles.length;
-          console.log(`Filtered ${convertedFiltered} converted articles for device ${deviceId}`);
+          console.log(
+            `Filtered ${convertedFiltered} converted articles for device ${deviceId}`,
+          );
         }
       } catch (conversionError) {
         console.warn("Failed to filter converted articles:", conversionError);

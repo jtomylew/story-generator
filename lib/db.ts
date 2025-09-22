@@ -161,7 +161,9 @@ export async function markArticleConverted(
  * Get all article hashes that have been converted by a device
  * Returns a Set for efficient lookup
  */
-export async function getConvertedHashes(deviceId: string): Promise<Set<string>> {
+export async function getConvertedHashes(
+  deviceId: string,
+): Promise<Set<string>> {
   const db = getDb();
 
   const { data, error } = await db

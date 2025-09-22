@@ -71,8 +71,8 @@ export function ArticleCard({
   return (
     <Card
       className={`group transition-all duration-[var(--motion-medium)] ease-[var(--ease-standard)] ${
-        converted 
-          ? "cursor-default opacity-75" 
+        converted
+          ? "cursor-default opacity-75"
           : "cursor-pointer hover:shadow-lg hover:-translate-y-1 hover:border-brand-200 active:scale-[0.98] active:transition-none"
       }`}
       onClick={handleGenerateStory}
@@ -128,7 +128,11 @@ export function ArticleCard({
             loading={isGenerating}
             className="min-w-[140px] transition-all duration-[var(--motion-fast)] ease-[var(--ease-standard)] hover:scale-105 group-hover:shadow-md"
           >
-            {isGenerating ? "Weaving..." : converted ? "Already Converted" : "Generate Story"}
+            {isGenerating
+              ? "Weaving..."
+              : converted
+                ? "Already Converted"
+                : "Generate Story"}
           </Button>
         </div>
       </Card.Content>
