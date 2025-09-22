@@ -5,6 +5,7 @@ import {
   type ArticleCategory,
 } from "@/lib/feeds";
 import { diversify } from "@/lib/diversity";
+import { filterUnsafe } from "@/lib/safety";
 
 // Valid categories from our enum
 const VALID_CATEGORIES: ArticleCategory[] = [
@@ -25,6 +26,8 @@ interface FeedResponse {
     appliedCategories: string[];
     total: number;
     diversity_applied: boolean;
+    safety_applied: boolean;
+    safety_filtered: number;
     lastUpdated: string;
   };
 }
@@ -86,6 +89,8 @@ export async function GET(request: NextRequest) {
     let articles: (ArticleInput & { id: string })[];
     let cacheHit = false;
     let diversityApplied = false;
+    let safetyApplied = false;
+    let safetyFiltered = 0;
 
     // Generate mock articles based on categories
     const mockArticles: (ArticleInput & { id: string })[] = [
@@ -158,6 +163,26 @@ export async function GET(request: NextRequest) {
         published_at: new Date().toISOString(),
         category: "animals" as ArticleCategory,
       },
+      {
+        id: "mock-article-8",
+        title: "International Peace Treaty Signed",
+        content:
+          "World leaders have signed a historic peace treaty to end the long-standing conflict between nations. The agreement includes provisions for refugee resettlement and military withdrawal from occupied territories.",
+        source: "Global News",
+        url: "https://example.com/peace-treaty",
+        published_at: new Date().toISOString(),
+        category: "positive" as ArticleCategory,
+      },
+      {
+        id: "mock-article-9",
+        title: "Domestic Violence Support Program",
+        content:
+          "A new support program has been launched to help victims of domestic violence and sexual assault. The program provides counseling and legal assistance to survivors.",
+        source: "Community News",
+        url: "https://example.com/domestic-violence",
+        published_at: new Date().toISOString(),
+        category: "positive" as ArticleCategory,
+      },
     ];
 
     // Filter articles by categories if specified
@@ -169,16 +194,22 @@ export async function GET(request: NextRequest) {
       articles = mockArticles;
     }
 
-    // Apply diversity algorithm
+    // Apply safety filtering FIRST
+    const safetyResult = filterUnsafe(articles);
+    articles = safetyResult.articles;
+    safetyApplied = safetyResult.meta.safetyApplied;
+    safetyFiltered = safetyResult.meta.filteredCount;
+
+    // Apply diversity algorithm AFTER safety filtering
     const diversityResult = diversify(articles, {
       maxPerSource: 2,
       freshnessDecayHours: 48,
       categoryRotation: true,
     });
-
+    
     articles = diversityResult.articles;
     diversityApplied = diversityResult.diversityApplied;
-
+    
     // Update applied categories from diversity result
     if (diversityResult.appliedCategories.length > 0) {
       appliedCategories = diversityResult.appliedCategories;
@@ -209,6 +240,8 @@ export async function GET(request: NextRequest) {
         appliedCategories: appliedCategories,
         total: articles.length,
         diversity_applied: diversityApplied,
+        safety_applied: safetyApplied,
+        safety_filtered: safetyFiltered,
         lastUpdated: lastUpdated,
       },
     } as FeedResponse);

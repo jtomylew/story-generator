@@ -988,12 +988,13 @@ A lightweight running log of technical decisions, tradeoffs, and status snapshot
 - Freshness scoring (newer = higher)
 - **Completed**: Created `lib/diversity.ts` with `diversify()` function implementing category rotation, max 2/source limit, and 48h freshness decay scoring. Wired into `app/api/feed/route.ts` with proper integration.
 
-**Chunk 12: Content Filtering**
+**Chunk 12: Content Filtering** ✅
 
 - Extend `lib/safety.ts` with feed keyword filters
 - Block list: ['war','death','killed','murder','attack']
 - Implement title/content scanning
 - Age-appropriate scoring
+- **Completed**: Extended `lib/safety.ts` with `feedContentFilter()` and `filterUnsafe()` functions implementing sophisticated content filtering. Business rules: allow war/conflict topics (tagged as hard news), block domestic/sexual violence, severity scoring for death/attack keywords. Age scoring 0-100 with proper categorization. Wired into `app/api/feed/route.ts` BEFORE diversity algorithm with safety metadata in response.
 
 **Chunk 13: User History Tracking**
 
