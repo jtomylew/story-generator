@@ -225,8 +225,9 @@ export function NewsFeed({
             onClick={handleManualRefresh}
             variant="brand-primary"
             disabled={isRefreshing}
+            loading={isRefreshing}
           >
-            {isRefreshing ? "Refreshing..." : "Refresh"}
+            {isRefreshing ? "Finding fresh stories..." : "Refresh"}
           </Button>
         }
       />

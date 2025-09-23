@@ -92,7 +92,9 @@ export function StoryForm({
               loading={isSubmitting}
               className="min-w-[200px]"
             >
-              {isSubmitting ? "Weaving..." : "Weave Story"}
+              {isSubmitting
+                ? "Generating your awesome story..."
+                : "Weave Story"}
             </Button>
           </div>
         </form>

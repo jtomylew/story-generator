@@ -116,7 +116,7 @@ export function ArticleCard({
       </Card.Header>
 
       <Card.Content>
-        <div className="flex justify-center">
+        <div className="flex flex-col items-center gap-3">
           <Button
             onClick={(e) => {
               e.stopPropagation(); // Prevent double-triggering
@@ -129,11 +129,16 @@ export function ArticleCard({
             className="min-w-[140px] transition-all duration-[var(--motion-fast)] ease-[var(--ease-standard)] hover:scale-105 group-hover:shadow-md"
           >
             {isGenerating
-              ? "Weaving..."
+              ? "Generating your awesome story..."
               : converted
                 ? "Already Converted"
                 : "Generate Story"}
           </Button>
+          {isGenerating && (
+            <p className="text-sm text-muted-foreground text-center animate-pulse">
+              ✨ Crafting a magical story just for you...
+            </p>
+          )}
         </div>
       </Card.Content>
     </Card>
